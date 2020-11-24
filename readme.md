@@ -2,6 +2,16 @@
 With MapDicer, cartographers will be able to add a level of detail 
 (LOD) on a per-region basis and import from various scales and formats.
 
+
+## System Requirements
+### Windows
+#### Recommended
+- Windows 10, version 1903 (10.0, Build 18362)
+
+#### Minimum
+- Windows 10, version 1809 (10.0, Build 17763)
+
+
 ## Compiling
 
 ### Running Your Own Build
