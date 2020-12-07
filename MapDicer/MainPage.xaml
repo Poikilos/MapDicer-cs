@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:Name="mainPage"
     x:Class="MapDicer.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,9 +6,34 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    SizeChanged="Page_SizeChanged"
+    Background="Black"
+      Height="624" Width="692">
+    <StackPanel x:Name="mainSP" Orientation="Vertical">
+        <StackPanel x:Name="menusBarSP" Orientation="Horizontal" Height="72" Background="LightSlateGray" Width="689" >
+            <Ellipse x:Name="brushColorShape" VerticalAlignment="Bottom" Height="32" Stroke="DarkSlateGray" Fill="Green" Width="33"/>
+            <StackPanel x:Name="menusSP" Orientation="Vertical" Height="72" Background="LightSlateGray">
+                <StackPanel x:Name="selectSP" Orientation="Horizontal" Height="36" Background="LightSlateGray" HorizontalAlignment="Right">
+                    <ComboBox x:Name="detailCB" Width="150">
+                    </ComboBox>
+                    <ComboBox x:Name="regionCB" Width="145"/>
+                    <ComboBox x:Name="blockCB" Width="196"/>
+                    <Button x:Name="settingsButton" Height="33" Click="settingsButton_Click">
+                        <Border BorderThickness="1" BorderBrush="Black"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel x:Name="navSP" Orientation="Horizontal" Height="36" Background="LightSlateGray">
+                    <ComboBox x:Name="brushTerrainCB" Width="200" SelectionChanged="brushTerrainCB_SelectionChanged">
+                    </ComboBox>
+                    <Image x:Name="brushSizeImage" Height="35" Width="29"/>
+                    <Slider x:Name="brushSizeSlider" Width="197" ValueChanged="brushSizeSlider_ValueChanged" ManipulationCompleted="brushSizeSlider_ManipulationCompleted"/>
+                    <Image x:Name="brushParamImage" Height="35" Width="29"/>
+                    <Slider x:Name="brushParamSlider" Width="188"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <Image x:Name="image" Width="382" Height="265"/>
 
-    <Grid>
+    </StackPanel>
 
-    </Grid>
 </Page>
