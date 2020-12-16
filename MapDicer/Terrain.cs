@@ -11,6 +11,8 @@ namespace MapDicer
     /// </summary>
     class Terrain : Windows.UI.Xaml.Controls.Button
     {
+        public const string newItemContent = "(Add New)";
+
         public byte R;
         public byte G;
         public byte B;
@@ -21,6 +23,17 @@ namespace MapDicer
             this.G = (byte)G;
             this.B = (byte)B;
             this.Content = Content;
+            this.Loaded += Terrain_Loaded;
+        }
+
+        private void Terrain_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if ((string)Content != newItemContent)
+            {
+                this.BorderBrush.Opacity = 0;
+                this.Background.Opacity = 0;
+            }
+
         }
     }
 }

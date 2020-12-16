@@ -34,6 +34,11 @@ Windows Registry Editor Version 5.00
 
 ## Developer Notes
 
+### SVG
+- Inside of the SVG file, the `width` and `height` must be set to
+  `"auto"` for it to scale at all (the `viewBox` must also have all of
+  the geometry inside of it or it may not scale as expected).
+
 ### Diagrams
 See ./doc/development.
 Check the Changelog for changes if noted there.

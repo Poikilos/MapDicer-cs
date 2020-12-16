@@ -1,0 +1,5 @@
+            <Rectangle Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+                <ImageBrush ImageSource="Assets/detail.svg"/>
+            </Rectangle>
+            <Image Source="Assets/plus.svg" Grid.Row="0" Grid.Column="6" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
+            <Image Source="Assets/detail.svg" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">

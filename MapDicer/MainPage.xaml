@@ -17,6 +17,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".05*"/>
                 <ColumnDefinition Width=".3*"/>
                 <ColumnDefinition Width=".05*"/>
                 <ColumnDefinition Width=".3*"/>
@@ -24,14 +25,19 @@
                 <ColumnDefinition Width=".3*"/>
                 <ColumnDefinition Width=".05*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
-            <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"/>
-            <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="4" HorizontalAlignment="Stretch"/>
-            <Image x:Name="settingsImage" Source="/Assets/gear-simple.svg" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch" Width="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" Height="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" />
-            <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" ValueChanged="brushSizeSlider_ValueChanged" ManipulationCompleted="brushSizeSlider_ManipulationCompleted"/>
-            <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
-            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
-            <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Grid.Row="1" Grid.Column="5" Width="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" Height="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" />
+            <Image Source="Assets/detail.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
+            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <Image Source="Assets/region.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
+            <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <Image Source="Assets/mapblock.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
+            <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
+            <Image x:Name="settingsImage" Source="Assets/gear-simple.svg" Grid.Row="0" Grid.Column="6" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
+            <Image x:Name="terrainBrushSizeImage" Source="Assets/size.svg" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
+            <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="brushSizeSlider_ValueChanged" ManipulationCompleted="brushSizeSlider_ManipulationCompleted"/>
+            <Image x:Name="terrainParamImage" Source="Assets/elevation.svg" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
+            <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" />
+            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
         </Grid>
            
         

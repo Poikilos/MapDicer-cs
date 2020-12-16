@@ -122,13 +122,10 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewTerrainPage.xaml.cs">
-      <DependentUpon>NewTerrainPage.xaml</DependentUpon>
+    <Compile Include="NewTerrainContentDialog.xaml.cs">
+      <DependentUpon>NewTerrainContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +134,13 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\detail.svg" />
+    <Content Include="Assets\elevation.svg" />
+    <Content Include="Assets\gear-simple.svg" />
+    <Content Include="Assets\mapblock.svg" />
+    <Content Include="Assets\plus.svg" />
+    <Content Include="Assets\region.svg" />
+    <Content Include="Assets\size.svg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -155,11 +159,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="NewTerrainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SettingsPage.xaml">
+    <Page Include="NewTerrainContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
