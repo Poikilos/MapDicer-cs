@@ -48,6 +48,12 @@ installer"](https://gitlab.gnome.org/neduard/dia/-/issues/3) on
 the Gnome project for the status of Windows builds.
 
 
+## Credits
+- gear-simple.svg is Public Domain by Openclipart via
+  https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
+  
+
+
 ## References
 - Brink. (2019, March 15). Cannot turn off Developer mode—"managed by
   your organization" [Reply]. Windows Ten Forums. 

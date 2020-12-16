@@ -8,31 +8,34 @@
     mc:Ignorable="d"
     SizeChanged="Page_SizeChanged"
     Background="Black"
-      Height="624" Width="692">
+    
+    >
     <StackPanel x:Name="mainSP" Orientation="Vertical">
-        <StackPanel x:Name="menusBarSP" Orientation="Horizontal" Height="72" Background="LightSlateGray" Width="689" >
-            <Ellipse x:Name="brushColorShape" VerticalAlignment="Bottom" Height="32" Stroke="DarkSlateGray" Fill="Green" Width="33"/>
-            <StackPanel x:Name="menusSP" Orientation="Vertical" Height="72" Background="LightSlateGray">
-                <StackPanel x:Name="selectSP" Orientation="Horizontal" Height="36" Background="LightSlateGray" HorizontalAlignment="Right">
-                    <ComboBox x:Name="detailCB" Width="150">
-                    </ComboBox>
-                    <ComboBox x:Name="regionCB" Width="145"/>
-                    <ComboBox x:Name="blockCB" Width="196"/>
-                    <Button x:Name="settingsButton" Height="33" Click="settingsButton_Click">
-                        <Border BorderThickness="1" BorderBrush="Black"/>
-                    </Button>
-                </StackPanel>
-                <StackPanel x:Name="navSP" Orientation="Horizontal" Height="36" Background="LightSlateGray">
-                    <ComboBox x:Name="brushTerrainCB" Width="200" SelectionChanged="brushTerrainCB_SelectionChanged">
-                    </ComboBox>
-                    <Image x:Name="brushSizeImage" Height="35" Width="29"/>
-                    <Slider x:Name="brushSizeSlider" Width="197" ValueChanged="brushSizeSlider_ValueChanged" ManipulationCompleted="brushSizeSlider_ManipulationCompleted"/>
-                    <Image x:Name="brushParamImage" Height="35" Width="29"/>
-                    <Slider x:Name="brushParamSlider" Width="188"/>
-                </StackPanel>
-            </StackPanel>
-        </StackPanel>
-        <Image x:Name="image" Width="382" Height="265"/>
+        <Grid x:Name="menuGrid" Width="Auto" Height="Auto" Background="LightSlateGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".3*"/>
+                <ColumnDefinition Width=".05*"/>
+                <ColumnDefinition Width=".3*"/>
+                <ColumnDefinition Width=".05*"/>
+                <ColumnDefinition Width=".3*"/>
+                <ColumnDefinition Width=".05*"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
+            <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"/>
+            <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="4" HorizontalAlignment="Stretch"/>
+            <Image x:Name="settingsImage" Source="/Assets/gear-simple.svg" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch" Width="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" Height="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" />
+            <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" ValueChanged="brushSizeSlider_ValueChanged" ManipulationCompleted="brushSizeSlider_ManipulationCompleted"/>
+            <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
+            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
+            <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Grid.Row="1" Grid.Column="5" Width="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" Height="{Binding Path=ActualHeight, ElementName=brushTerrainCBx}" />
+        </Grid>
+           
+        
+        <Image x:Name="image" Width="256" Height="256"/>
 
     </StackPanel>
 

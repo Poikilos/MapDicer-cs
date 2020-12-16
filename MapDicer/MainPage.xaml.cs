@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,9 +27,9 @@ namespace MapDicer
         private int touchSize = 16;
         public static MainPage thisMP = null;
         private const string newItemContent = "(Add New)";
+        public static Ellipse brushColorShape = new Ellipse();
         private void afterBrushSize()
         {
-            this.menusSP.Width = this.menusBarSP.Width - this.brushColorShape.Width;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -37,7 +38,7 @@ namespace MapDicer
             // CC BY-SA 3.0 Vadim Martynov
             try
             {
-                this.brushTerrainCB.Items.Add(e.Parameter as Terrain);
+                this.terrainCBx.Items.Add(e.Parameter as Terrain);
             }
             catch (System.ArgumentException ex)
             {
@@ -46,20 +47,27 @@ namespace MapDicer
         }
         private void afterSize(bool InitializeBrush)
         {
-            
             this.touchSize = Math.Max((int)this.Height / 800, 1) * 16;
+            this.terrainBrushSizeSlider.Minimum = 1;
+            this.terrainBrushSizeSlider.Maximum = touchSize * 8;
+            if (InitializeBrush)
+            {
+                MainPage.brushColorShape.Width = touchSize * 2;
+            }
+
+            // Always set H since W changes elsewhere:
+            MainPage.brushColorShape.Height = MainPage.brushColorShape.Width;
+            /*
+
+            this.brushSizeImage.Width = this.touchSize * 2;
+            this.brushSizeImage.Height = this.brushSizeImage.Width;
+            */
+            /*
             this.mainSP.Width = this.Width;
             this.menusBarSP.Width = this.mainSP.Width;
             this.menusBarSP.Height = touchSize * 4;
-            this.brushParamSlider.Minimum = 0;
+            this.brushParamSlider.Minimum = 0; //
             this.brushParamSlider.Maximum = 65535;
-            this.brushSizeSlider.Minimum = 1;
-            this.brushSizeSlider.Maximum = touchSize * 4;
-            if (InitializeBrush) {
-                this.brushColorShape.Width = touchSize * 2;
-            }
-            // Always set H since W changes elsewhere:
-            this.brushColorShape.Height = this.brushColorShape.Width;
             double slackW = this.menusBarSP.Width - this.brushColorShape.Width;
             this.navSP.Width = slackW;
             this.navSP.Height = this.touchSize * 2;
@@ -76,8 +84,6 @@ namespace MapDicer
             this.blockCB.Height = this.detailCB.Height;
             this.settingsButton.Height = this.touchSize * 2;
             this.settingsButton.FontSize = touchSize;
-            this.brushSizeImage.Width = this.touchSize * 2;
-            this.brushSizeImage.Height = this.brushSizeImage.Width;
             this.brushParamImage.Width = this.brushSizeImage.Width;
             this.brushParamImage.Height = this.brushParamImage.Width;
             double slackWithoutTwoW = slackW - this.brushSizeImage.Width - this.brushParamImage.Width;
@@ -87,8 +93,10 @@ namespace MapDicer
             this.brushParamSlider.Height = this.brushTerrainCB.Height;
             this.brushSizeSlider.Width = Math.Round((double)slackWithoutTwoW * .33);
             this.brushSizeSlider.Height = this.brushTerrainCB.Height;
+            */
+
             if (InitializeBrush) { 
-                this.brushSizeSlider.Value = this.brushColorShape.Width;
+                this.terrainBrushSizeSlider.Value = MainPage.brushColorShape.Width;
             }
             this.afterBrushSize();
         }
@@ -99,7 +107,7 @@ namespace MapDicer
             MainPage.thisMP = this;
             Terrain newTerrain = new Terrain(newItemContent, 0, 0, 0);
             newTerrain.Click += NewTerrain_Click;
-            this.brushTerrainCB.Items.Add(newTerrain);
+            this.terrainCBx.Items.Add(newTerrain);
             // Button: MessageDialog dialog = new MessageDialog((this.brushTerrainCB.Items[0]).GetType().ToString());
             // var result = dialog.ShowAsync();
 
@@ -123,25 +131,25 @@ namespace MapDicer
 
         private void brushSizeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            this.brushColorShape.Width = this.brushSizeSlider.Value;
+            MainPage.brushColorShape.Width = this.terrainBrushSizeSlider.Value;
             this.afterSize(false);
 
         }
 
         internal static void AddTerrain(string name, double r, double g, double b)
         {
-            thisMP.brushColorShape.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, (byte)r, (byte)g, (byte)b));
-            thisMP.brushTerrainCB.Items.Add(new Terrain("name", r, g, b));
+            MainPage.brushColorShape.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, (byte)r, (byte)g, (byte)b));
+            thisMP.terrainCBx.Items.Add(new Terrain("name", r, g, b));
         }
 
-        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        private void settingsImage_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SettingsPage), null);
         }
 
         private void brushTerrainCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((this.brushTerrainCB.SelectedItem != null) && (((Terrain)this.brushTerrainCB.SelectedItem).Content.Equals(newItemContent)))
+            if ((this.terrainCBx.SelectedItem != null) && (((Terrain)this.terrainCBx.SelectedItem).Content.Equals(newItemContent)))
             {
                 goToAddTerrain();
             }
