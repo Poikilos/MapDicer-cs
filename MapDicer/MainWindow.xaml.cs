@@ -26,6 +26,7 @@ namespace MapDicer
         public static double prefillTerrainRed = 128;
         public static double prefillTerrainGreen = 128;
         public static double prefillTerrainBlue = 128;
+        private bool suppressNewWindow = false;
         private void afterBrushSize()
         {
         }
@@ -51,9 +52,14 @@ namespace MapDicer
             InitializeComponent();
             this.afterSize(true);
             MainWindow.thisMP = this;
-            Terrain newTerrain = new Terrain(Terrain.newItemContent, 0, 0, 0);
-            newTerrain.Click += NewTerrain_Click;
-            this.terrainCBx.Items.Add(newTerrain);
+
+            // TerrainButton newTerrain = new TerrainButton(Terrain.newItemContent, 0, 0, 0);
+            // newTerrain.Click += NewTerrain_Click;
+            // this.terrainCBx.Items.Add(newTerrain);
+            // this.suppressNewWindow = true;
+            // this.terrainCBx.SelectedIndex = 0;
+            // this.suppressNewWindow = false;
+
             // Button: MessageDialog dialog = new MessageDialog((this.brushTerrainCB.Items[0]).GetType().ToString());
             // var result = dialog.ShowAsync();
             // this.brushTerrainCB.Items.Add(typeof this.brushTerrainCB.Items[0]);
@@ -77,10 +83,10 @@ namespace MapDicer
         private void AddTerrain(string name, double r, double g, double b)
         {
             MainWindow.brushColorShape.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)r, (byte)g, (byte)b));
-            this.terrainCBx.Items.Add(new Terrain(name, r, g, b));
+            this.terrainCBx.Items.Add(new TerrainButton(name, r, g, b));
             for (int i = 0; i < this.terrainCBx.Items.Count; i++)
             {
-                if ((string)((Terrain)this.terrainCBx.Items[i]).Content == name)
+                if ((string)((TerrainButton)this.terrainCBx.Items[i]).Content == name)
                 {
                     this.terrainCBx.SelectedIndex = i;
                     break;
@@ -91,11 +97,14 @@ namespace MapDicer
 
         private void brushTerrainCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((this.terrainCBx.SelectedItem != null) && (((Terrain)this.terrainCBx.SelectedItem).Content.Equals(Terrain.newItemContent)))
+            if ((this.terrainCBx.SelectedItem != null) && (((TerrainButton)this.terrainCBx.SelectedItem).Content.Equals(TerrainButton.newItemContent)))
             {
                 try
                 {
-                    goToAddTerrain();
+                    if (!suppressNewWindow)
+                    {
+                        goToAddTerrain();
+                    }
                 }
                 catch (System.ArgumentException ex)
                 {
@@ -129,7 +138,7 @@ namespace MapDicer
             }
             else if (result == false)
             {
-                MessageBox.Show("You cancelled adding the terrain.");
+                // MessageBox.Show("You cancelled adding the terrain.");
             }
             else
             {

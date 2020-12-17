@@ -8,7 +8,7 @@ namespace MapDicer
     /// <summary>
     /// It must be a button to be a combo box Item.
     /// </summary>
-    class Terrain : System.Windows.Controls.Button
+    class TerrainButton : System.Windows.Controls.Button
     {
         public const string newItemContent = "(Add New)";
 
@@ -16,7 +16,7 @@ namespace MapDicer
         public byte G;
         public byte B;
         // inherits Text from Button
-        public Terrain(string Content, double R, double G, double B)
+        public TerrainButton(string Content, double R, double G, double B)
         {
             this.R = (byte)R;
             this.G = (byte)G;
