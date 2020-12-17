@@ -1,30 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace MapDicer
 {
-    public sealed partial class NewTerrainContentDialog : ContentDialog
+    /// <summary>
+    /// Interaction logic for Window1.xaml
+    /// </summary>
+    public partial class NewTerrainWindow : Window
     {
+        /*
+        public enum Result
+        {
+            Primary,
+            Secondary
+        }
+        */
+        // public Result DialogResult = Result.Primary;
         public static double prefillTerrainRed = 128;
         public static double prefillTerrainGreen = 128;
         public static double prefillTerrainBlue = 128;
         private static TextBox[] colorTBs = null;
         private static Slider[] colorSliders = null;
-        public int Red {
+        public int Red
+        {
             get
             {
                 return (int)Math.Round(this.redSlider.Value);
@@ -34,7 +42,8 @@ namespace MapDicer
                 this.redSlider.Value = (double)value;
             }
         }
-        public int Green {
+        public int Green
+        {
             get
             {
                 return (int)Math.Round(this.greenSlider.Value);
@@ -44,7 +53,8 @@ namespace MapDicer
                 this.greenSlider.Value = (double)value;
             }
         }
-        public int Blue {
+        public int Blue
+        {
             get
             {
                 return (int)Math.Round(this.blueSlider.Value);
@@ -57,11 +67,10 @@ namespace MapDicer
         public string TerrainName { get; private set; }
         private bool suppressToText = false; // suppress transfer of slider to text while doing the opposite
         private bool suppressToSlider = false; // suppress transfer of text to slider while doing the opposite
-        // ^ See <https://docs.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls.
-        //   contentdialog?view=winui-3.0-preview>
-        public NewTerrainContentDialog()
+
+        public NewTerrainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             colorTBs = new TextBox[3];
             colorSliders = new Slider[3];
             colorTBs[0] = this.redTB;
@@ -71,29 +80,32 @@ namespace MapDicer
             colorSliders[1] = this.greenSlider;
             colorSliders[2] = this.blueSlider;
         }
-        
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+
+        private void addBtn_Click(object sender, RoutedEventArgs e)
         {
             Red = (int)Math.Round(this.redSlider.Value);
             Green = (int)Math.Round(this.greenSlider.Value);
             Blue = (int)Math.Round(this.blueSlider.Value);
             TerrainName = this.nameTB.Text;
+            this.DialogResult = true;
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
             Red = (int)Math.Round(this.redSlider.Value);
             Green = (int)Math.Round(this.greenSlider.Value);
             Blue = (int)Math.Round(this.blueSlider.Value);
             TerrainName = this.nameTB.Text;
+            this.DialogResult = false;
         }
 
-        private void ContentDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.redSlider.Value = prefillTerrainRed;
             this.greenSlider.Value = prefillTerrainGreen;
             this.blueSlider.Value = prefillTerrainBlue;
         }
+
         public void prefill(double r, double g, double b)
         {
             // The sliders are null before Opened, apparently, so set properties instead:
@@ -115,27 +127,26 @@ namespace MapDicer
             updateColor();
         }
 
-        private void redSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        private void redSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             afterSliderChanged(0);
         }
-
-        private void greenSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        private void greenSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             afterSliderChanged(1);
         }
-
-        private void blueSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        private void blueSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             afterSliderChanged(2);
         }
-
         private void afterTextBoxChanged(int index)
         {
             // Update the slider to match the Text Box, given the format and range is correct,
             // otherwise revert the typed text.
             if (suppressToSlider) return;
             // ^ doesn't seem to be necessary in UWP somehow, but try to prevent a feedback look anyway.
+            if (colorTBs == null) return;
+            // ^ null on load.
             suppressToText = true;
             try
             {
@@ -171,7 +182,6 @@ namespace MapDicer
         {
             afterTextBoxChanged(0);
         }
-
         private void greenTB_TextChanged(object sender, TextChangedEventArgs e)
         {
             afterTextBoxChanged(1);
@@ -188,7 +198,7 @@ namespace MapDicer
             // ^ null before initialized (Red, Green, and Blue ty to use the values).
             if (this.terrainColorEllipse == null) return;
             // ^ null before initialized
-            this.terrainColorEllipse.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, (byte)Red, (byte)Green, (byte)Blue));
+            this.terrainColorEllipse.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)Red, (byte)Green, (byte)Blue));
         }
     }
 }

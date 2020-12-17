@@ -1,15 +1,13 @@
-﻿<Page x:Name="mainPage"
-    x:Class="MapDicer.MainPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MapDicer"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    SizeChanged="Page_SizeChanged"
-    Background="Black"
-    
-    >
+﻿<Window x:Class="MapDicer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapDicer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        SizeChanged="Window_SizeChanged"
+        >
     <StackPanel x:Name="mainSP" Orientation="Vertical">
         <Grid x:Name="menuGrid" Width="Auto" Height="Auto" Background="LightSlateGray">
             <Grid.RowDefinitions>
@@ -29,22 +27,21 @@
             <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
             <Image Source="Assets/region.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
             <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch"/>
-            <Image Source="Assets/mapblock.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
+            <Image Source="./Assets/mapblock.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
             <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
-            <Button x:Name="settingsButton" Grid.Row="0" Grid.Column="6" CornerRadius="8" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="settingsButton_Click">
+            <Button x:Name="settingsButton" Grid.Row="0" Grid.Column="6" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="settingsButton_Click">
                 <Image x:Name="settingsImage" Source="Assets/gear-simple.svg" Width="{Binding ElementName=settingsButton,Path=ActualWidth}" Height="{Binding ElementName=settingsButton,Path=ActualWidth}"/>
             </Button>
             <Image x:Name="terrainBrushSizeImage" Source="Assets/size.svg" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
-            <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="brushSizeSlider_ValueChanged" ManipulationCompleted="brushSizeSlider_ManipulationCompleted"/>
+            <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="terrainBrushSizeSlider_ValueChanged" />
             <Image x:Name="terrainParamImage" Source="Assets/elevation.svg" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
             <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
             <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" />
             <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
         </Grid>
-           
-        
+
+
         <Image x:Name="image" Width="256" Height="256"/>
 
     </StackPanel>
-
-</Page>
+</Window>

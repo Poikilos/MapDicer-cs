@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MapDicer
 {
     /// <summary>
     /// It must be a button to be a combo box Item.
     /// </summary>
-    class Terrain : Windows.UI.Xaml.Controls.Button
+    class Terrain : System.Windows.Controls.Button
     {
         public const string newItemContent = "(Add New)";
 
@@ -26,12 +25,14 @@ namespace MapDicer
             this.Loaded += Terrain_Loaded;
         }
 
-        private void Terrain_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void Terrain_Loaded(object sender, EventArgs e)
         {
             if ((string)Content != newItemContent)
             {
-                this.BorderBrush.Opacity = 0;
-                this.Background.Opacity = 0;
+                // this.BorderBrush.Opacity = 0;
+                // this.Background.Opacity = 0;
+                // ^ in WPF (not UWP): "System.InvalidOperationException: 'Cannot set a property
+                //   on object...because it is in a read-only state.'" where "..." is an address.
             }
         }
         

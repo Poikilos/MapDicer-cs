@@ -1,41 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Shapes;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace MapDicer
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public sealed partial class MainPage : Page
+    public partial class MainWindow : Window
     {
         private int touchSize = 16;
-        public static MainPage thisMP = null;
-        
+        public static MainWindow thisMP = null;
+
         public static Ellipse brushColorShape = new Ellipse();
         public static double prefillTerrainRed = 128;
         public static double prefillTerrainGreen = 128;
         public static double prefillTerrainBlue = 128;
         private void afterBrushSize()
-        {
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
         private void afterSize(bool InitializeBrush)
@@ -45,20 +36,21 @@ namespace MapDicer
             this.terrainBrushSizeSlider.Maximum = touchSize * 8;
             if (InitializeBrush)
             {
-                MainPage.brushColorShape.Width = touchSize * 2;
+                MainWindow.brushColorShape.Width = touchSize * 2;
             }
             // Always set H since W changes elsewhere:
-            MainPage.brushColorShape.Height = MainPage.brushColorShape.Width;
-            if (InitializeBrush) { 
-                this.terrainBrushSizeSlider.Value = MainPage.brushColorShape.Width;
+            MainWindow.brushColorShape.Height = MainWindow.brushColorShape.Width;
+            if (InitializeBrush)
+            {
+                this.terrainBrushSizeSlider.Value = MainWindow.brushColorShape.Width;
             }
             this.afterBrushSize();
         }
-        public MainPage()
+        public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             this.afterSize(true);
-            MainPage.thisMP = this;
+            MainWindow.thisMP = this;
             Terrain newTerrain = new Terrain(Terrain.newItemContent, 0, 0, 0);
             newTerrain.Click += NewTerrain_Click;
             this.terrainCBx.Items.Add(newTerrain);
@@ -66,31 +58,25 @@ namespace MapDicer
             // var result = dialog.ShowAsync();
             // this.brushTerrainCB.Items.Add(typeof this.brushTerrainCB.Items[0]);
         }
-
         private void NewTerrain_Click(object sender, RoutedEventArgs e)
         {
             goToAddTerrain();
         }
 
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             this.afterSize(true);
         }
 
-        private void brushSizeSlider_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        private void terrainBrushSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-        }
-
-        private void brushSizeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            MainPage.brushColorShape.Width = this.terrainBrushSizeSlider.Value;
+            MainWindow.brushColorShape.Width = this.terrainBrushSizeSlider.Value;
             this.afterSize(false);
-
         }
 
         private void AddTerrain(string name, double r, double g, double b)
         {
-            MainPage.brushColorShape.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, (byte)r, (byte)g, (byte)b));
+            MainWindow.brushColorShape.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)r, (byte)g, (byte)b));
             this.terrainCBx.Items.Add(new Terrain(name, r, g, b));
             for (int i = 0; i < this.terrainCBx.Items.Count; i++)
             {
@@ -118,18 +104,18 @@ namespace MapDicer
             }
         }
 
-        private async void goToAddTerrain()
+        private void goToAddTerrain()
         {
             // this.Frame.Navigate(typeof(NewTerrainPage), null);
             // ^ Don't do that, it generates a new page.
-            NewTerrainContentDialog contentDialog = new NewTerrainContentDialog();
+            NewTerrainWindow contentDialog = new NewTerrainWindow();
             contentDialog.prefill(prefillTerrainRed, prefillTerrainGreen, prefillTerrainBlue);
             // ^ widgets are null at this point apparently
-            var result = await contentDialog.ShowAsync();
+            var result = contentDialog.ShowDialog();
             prefillTerrainRed = contentDialog.Red;
             prefillTerrainGreen = contentDialog.Green;
             prefillTerrainBlue = contentDialog.Blue;
-            if (result == ContentDialogResult.Primary)
+            if (result == true)
             {
                 string textTrim = contentDialog.TerrainName;
                 if (textTrim.Length > 0)
@@ -138,15 +124,16 @@ namespace MapDicer
                 }
                 else
                 {
-                    MessageDialog dialog = new MessageDialog("You must give the terrain a name.");
-                    var result2 = dialog.ShowAsync();
+                    MessageBox.Show("You must give the terrain a name.");
                 }
             }
-            else if (result == ContentDialogResult.Secondary)
+            else if (result == false)
             {
+                MessageBox.Show("You cancelled adding the terrain.");
             }
             else
             {
+                MessageBox.Show("The result of the dialog was null.");
             }
         }
 
