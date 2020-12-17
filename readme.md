@@ -38,6 +38,21 @@ Windows Registry Editor Version 5.00
 - Inside of the SVG file, the `width` and `height` must be set to
   `"auto"` for it to scale at all (the `viewBox` must also have all of
   the geometry inside of it or it may not scale as expected).
+  
+### Colors
+- See https://plantuml.com/color for a UML color palette.
+
+### Dependencies
+- Uno.SQLitePCLRaw.wasm for cross-platform SQLite support.
+  - SQLitePCLRaw.core.2.0.3
+  - SQLitePCLRaw.provider.e_sqlite3.2.0.3
+  - System.Memory.4.5.3
+  - System.Runtime.CompilerServices.Unsafe.4.5.2
+  - Uno.sqlite-wasm.1.1.0-dev.16828
+  - Uno.SQLitePCLRaw.provider.wasm.3.0.14
+- Microsoft.EntityFrameworkCore.5.0.1
+  - Apache 2.0 license, by Microsoft
+
 
 ### Diagrams
 See ./doc/development.
@@ -53,10 +68,12 @@ installer"](https://gitlab.gnome.org/neduard/dia/-/issues/3) on
 the Gnome project for the status of Windows builds.
 
 
-## Credits
+## Authors & License
+- The MapDicer logo is [Creative Commons
+  Attribution-NonCommercial-NoDerivatives
+  4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
 - gear-simple.svg is Public Domain by Openclipart via
   https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
-  
 
 
 ## References

@@ -103,11 +103,6 @@ namespace MapDicer
 
         }
 
-        private void settingsImage_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void brushTerrainCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((this.terrainCBx.SelectedItem != null) && (((Terrain)this.terrainCBx.SelectedItem).Content.Equals(Terrain.newItemContent)))
@@ -153,6 +148,11 @@ namespace MapDicer
             else
             {
             }
+        }
+
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

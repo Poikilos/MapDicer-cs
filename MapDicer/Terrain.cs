@@ -33,7 +33,7 @@ namespace MapDicer
                 this.BorderBrush.Opacity = 0;
                 this.Background.Opacity = 0;
             }
-
         }
+        
     }
 }
