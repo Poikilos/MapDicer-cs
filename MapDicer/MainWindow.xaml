@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapDicer"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         SizeChanged="Window_SizeChanged"
@@ -23,21 +24,34 @@
                 <ColumnDefinition Width=".3*"/>
                 <ColumnDefinition Width=".05*"/>
             </Grid.ColumnDefinitions>
-            <Image Source="Assets/detail.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
-            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
-            <Image Source="Assets/region.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
-            <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch"/>
-            <Image Source="./Assets/mapblock.svg" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
-            <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
-            <Button x:Name="settingsButton" Grid.Row="0" Grid.Column="6" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="settingsButton_Click">
-                <Image x:Name="settingsImage" Source="Assets/gear-simple.svg" Width="{Binding ElementName=settingsButton,Path=ActualWidth}" Height="{Binding ElementName=settingsButton,Path=ActualWidth}"/>
+            <Button x:Name="detailBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+                <Image Source="{svgc:SvgImage Assets/detail.svg}" Width="{Binding Path=ActualHeight, ElementName=detailBtn}" Height="{Binding Path=ActualHeight, ElementName=detailBtn}"/>
             </Button>
-            <Image x:Name="terrainBrushSizeImage" Source="Assets/size.svg" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
+            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <Button x:Name="regionBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+                <Image Source="{svgc:SvgImage Assets/region.svg}"  Width="{Binding Path=ActualHeight, ElementName=regionBtn}" Height="{Binding Path=ActualHeight, ElementName=regionBtn}"/>
+            </Button>
+            <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <Button x:Name="mapblockBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+                <Image Source="{svgc:SvgImage Assets/mapblock.svg}" Width="{Binding Path=ActualHeight, ElementName=mapblockBtn}" Height="{Binding Path=ActualHeight, ElementName=mapblockBtn}"/>
+            </Button>
+            <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
+            <Button Background="Transparent" Margin="0" Padding="0" x:Name="settingsButton" Grid.Row="0" Grid.Column="6" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="settingsButton_Click">
+                <Image x:Name="settingsImage" Source="{svgc:SvgImage Assets/gear-simple.svg}" Width="{Binding Path=ActualHeight, ElementName=settingsButton}" Height="{Binding Path=ActualHeight, ElementName=settingsButton}"/>
+            </Button>
+            <!--<Image Source="{svgc:SvgImage Source=/Images/Save.svg, AppName=WpfTestSvgSample}" Height="24" Width="24"/> -->
+            <Button Background="Transparent" Padding="0" x:Name="terrainBrushSizeButton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="settingsButton_Click">
+                <Image x:Name="terrainBrushSizeImage" Source="{svgc:SvgImage Assets/size.svg}"  />
+            </Button>
             <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="terrainBrushSizeSlider_ValueChanged" />
-            <Image x:Name="terrainParamImage" Source="Assets/elevation.svg" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" />
+            <Button x:Name="elevationBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}">
+                <Image x:Name="terrainParamImage" Source="{svgc:SvgImage Assets/elevation.svg}"  />
+            </Button>
             <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
-            <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" />
-            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
+            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}">
+                <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}"/>
+            </Button>
+            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" Height="16pt" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
         </Grid>
 
 

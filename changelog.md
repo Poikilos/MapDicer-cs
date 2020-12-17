@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [git] - 2020-12-16
 ### Added
-- Add NuGet package SharpVectors to display SVG files in XAML
+- SharpVectors NuGet package to display SVG files in XAML
   (See <https://github.com/ElinamLLC/SharpVectors>).
 
 ### Changed
@@ -22,6 +22,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   isn't well-suited for sandboxed environment nor for a platform with
   arbitrary missing pieces that may make additional useful libraries not
   work even if EntityFrameworkCore could work using the workaround.
+
+### Fixed
+- Remove width and height from SVG files to allow SharpVectors to work
+  (crashes with disallowed width or height format otherwise).
 
 
 ## [git] - 2020-12-16
