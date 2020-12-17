@@ -75,7 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Terrain.cs" />
+    <Compile Include="TerrainButton.cs" />
     <Compile Include="NewTerrainWindow.xaml.cs">
       <DependentUpon>NewTerrainWindow.xaml</DependentUpon>
     </Compile>
