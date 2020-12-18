@@ -51,7 +51,9 @@ Windows Registry Editor Version 5.00
   - Mobile development with .NET (Xamarin)
   - "ASP.NET and web workload installed,"
   - "along with .NET Core 2.2 or later (for WASM development)"
-    [.NET Core](https://dotnet.microsoft.com/download/dotnet-core)
+    (available in the same menu or at
+    [.NET Core](https://dotnet.microsoft.com/download/dotnet-core) as
+    cited by the Uno get-started page)
 
 
 ## Developer Notes
