@@ -48,7 +48,7 @@
                 <Image x:Name="terrainParamImage" Source="{svgc:SvgImage Assets/elevation.svg}"  />
             </Button>
             <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
-            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}">
+            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainBtn_Click">
                 <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}"/>
             </Button>
             <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" Height="16pt" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>

@@ -54,7 +54,7 @@ namespace MapDicer
             MainWindow.thisMP = this;
 
             // TerrainButton newTerrain = new TerrainButton(Terrain.newItemContent, 0, 0, 0);
-            // newTerrain.Click += NewTerrain_Click;
+            // newTerrain.Click += terrainBtn_Click;
             // this.terrainCBx.Items.Add(newTerrain);
             // this.suppressNewWindow = true;
             // this.terrainCBx.SelectedIndex = 0;
@@ -64,7 +64,7 @@ namespace MapDicer
             // var result = dialog.ShowAsync();
             // this.brushTerrainCB.Items.Add(typeof this.brushTerrainCB.Items[0]);
         }
-        private void NewTerrain_Click(object sender, RoutedEventArgs e)
+        private void terrainBtn_Click(object sender, RoutedEventArgs e)
         {
             goToAddTerrain();
         }
@@ -150,5 +150,7 @@ namespace MapDicer
         {
 
         }
+
+        
     }
 }
