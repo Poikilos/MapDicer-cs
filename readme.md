@@ -14,10 +14,16 @@ With MapDicer, cartographers will be able to add a level of detail
 
 ## Compiling
 
-### Running Your Own Build
-In "Settings," "Update & Security, "For developers" in Windows 10,
-the "Use developer features" setting must be "Sideload Apps" or
-**"Developer Mode"** (only Developer Mode is tested).
+To allow the Visual Studio build to see the assets (such as vector 
+icons), first run vs-prebuild.bat (makes symbolic links in the Debug 
+and Release directories to the Assets directory).
+
+### Compiling the UWP Branch
+The UWP Branch is deprecated and does not do anything. See changelog 
+for 2020-12-16 for why. In "Settings," "Update & Security, "For 
+developers" in Windows 10, the "Use developer features" setting must be 
+"Sideload Apps" or **"Developer Mode"** (only Developer Mode is 
+tested).
 - If the settings are grayed out, you must **delete** the registry DWORD:
   ```
 Windows Registry Editor Version 5.00
