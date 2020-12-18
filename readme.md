@@ -18,7 +18,7 @@ To allow the Visual Studio build to see the assets (such as vector
 icons), first run vs-prebuild.bat (makes symbolic links in the Debug 
 and Release directories to the Assets directory).
 
-### Running the UWP Branch
+### Compiling the UWP Branch
 The UWP Branch is deprecated and does not do anything. See changelog 
 for 2020-12-16 for why. In "Settings," "Update & Security, "For 
 developers" in Windows 10, the "Use developer features" setting must be 
@@ -37,6 +37,21 @@ Windows Registry Editor Version 5.00
     `MapDicer/doc/development/assets/developer_mode-UNDO.reg`.
   - Then restart Windows 10.
 
+
+### Compiling the Uno Branch
+- Install Visual Studio 2019
+- Right-click Start
+- Apps & Features
+- Choose "Microsoft Visual Studio installer"
+- Click "Change"
+- Select "Visual Studio Community 2019"
+- Click "Modify" and install the necessary workloads
+  as per <https://platform.uno/docs/articles/get-started.html>:
+  - Universal Windows Platform
+  - Mobile development with .NET (Xamarin)
+  - "ASP.NET and web workload installed,"
+  - "along with .NET Core 2.2 or later (for WASM development)"
+    [.NET Core](https://dotnet.microsoft.com/download/dotnet-core)
 
 
 ## Developer Notes
