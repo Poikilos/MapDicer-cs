@@ -2,6 +2,7 @@
 With MapDicer, cartographers will be able to add a level of detail 
 (LOD) on a per-region basis and import from various scales and formats.
 
+
 ## Authors & License
 - Code in the mtcompat directory is Copyright Perttu "Celeron55" Ahola
 - The MapDicer logo is [Creative Commons
@@ -11,13 +12,19 @@ With MapDicer, cartographers will be able to add a level of detail
 - gear-simple.svg is Public Domain by Openclipart via
   https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
 
-### Differences between Mtcompat and Minetest
+### Differences in Mtcompat vs Minetest
 - MapNode is a class, not a struct, and is a subclass of Mapblock.
 - There is a LiquidMapNode subclass of MapNode to try to increase speed
   of non-liquid nodes through polymorphism.
 - Irrlicht types (other than those reimplemented in the Irrcompat
   directory) are changed to native C# types (s64 to long, u64 to ulong,
   u8 to byte, s16 to short, u16 to ushort, etc).
+- Files, Constants and enums are renamed to PascalCase to match C#
+  style, and of course, defines are changed to constants since that is
+  necessary in C#.
+  - See one or more commit name with the substring
+    "Rename mtcompat constants".
+
 
 ## System Requirements
 ### Windows
@@ -26,6 +33,14 @@ With MapDicer, cartographers will be able to add a level of detail
 
 #### Minimum
 - Windows 10, version 1809 (10.0, Build 17763)
+
+
+## Saving
+The save file format is SQLite. The connection string sets this, such
+as `Data Source=Default.db;Cache=Shared` (See
+<https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings>).
+The setting is stored in `Properties\Settings.settings` (Available via
+Gear button, Editor Settings).
 
 
 ## Compiling
@@ -53,7 +68,6 @@ Windows Registry Editor Version 5.00
     `MapDicer/doc/development/assets/developer_mode-UNDO.reg`.
   - Then restart Windows 10.
 
-
 ### Compiling the Uno Branch
 (not yet complete)
 - Install Visual Studio 2019
@@ -74,7 +88,6 @@ Windows Registry Editor Version 5.00
 
 
 ## Developer Notes
-
 
 ### Image Buttons
 - Binding the Width and Height to something will only work if the

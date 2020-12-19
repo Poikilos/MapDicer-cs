@@ -15,9 +15,15 @@ namespace MapDicer
         public DbSet<Lod> Lods { get; set; }
         public DbSet<Mapblock> Mapblocks { get; set; }
 
+        public MapDicerContext()
+            : base(SettingModel.SqlConnectionString)
+        {
+
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // Chinook Database does not pluralize table names
+            // Do not pluralize table names.
             modelBuilder.Conventions
                 .Remove<PluralizingTableNameConvention>();
         }

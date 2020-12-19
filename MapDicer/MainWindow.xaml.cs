@@ -165,9 +165,9 @@ namespace MapDicer
             this.settingsCM.IsOpen = true;
         }
 
-        private void settingsEditorOptionsMI_Click(object sender, RoutedEventArgs e)
+        private void settingsEditorSettingsMI_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void settingsSourcesMI_Click(object sender, RoutedEventArgs e)
@@ -178,6 +178,16 @@ namespace MapDicer
         private void terrainPreviewCnv_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void detailBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LodWindow dlg = new LodWindow();
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                // Do nothing, it saves on its own.
+            }
         }
     }
 }

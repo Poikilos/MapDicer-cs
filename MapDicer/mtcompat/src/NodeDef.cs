@@ -63,7 +63,7 @@ namespace MapDicer.mtcompat.src
     }
     public class NodeDef
     {
-        
+        // TODO: Implement this if importing Nodes from Minetest Lua mods.
     }
     interface INodeDefManager
     {

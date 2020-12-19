@@ -8,6 +8,8 @@ namespace MapDicer
 {
     class SettingModel
     {
+        public const string NewIdStr = "(New)";
+        public static string SqlConnectionString = "";
         private static short maxLayerCount = 128;
         /// <summary>
         /// Get the number of layers per level of detail (also determines y skip to next LOD).
@@ -19,6 +21,13 @@ namespace MapDicer
             {
                 return maxLayerCount;
             }
+        }
+        public static void LoadSettings()
+        {
+            SettingModel.SqlConnectionString = Properties.Settings.Default.LastConnectionString;
+        }
+        static SettingModel() {
+            LoadSettings();
         }
         public static byte IntFromHexPair(string hexPairStr)
         {

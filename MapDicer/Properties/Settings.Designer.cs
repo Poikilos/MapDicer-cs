@@ -22,5 +22,17 @@ namespace MapDicer.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Default.db;Cache=Shared")]
+        public string LastConnectionString {
+            get {
+                return ((string)(this["LastConnectionString"]));
+            }
+            set {
+                this["LastConnectionString"] = value;
+            }
+        }
     }
 }

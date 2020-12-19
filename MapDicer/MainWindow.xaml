@@ -24,7 +24,7 @@
                 <ColumnDefinition Width=".3*"/>
                 <ColumnDefinition Width=".05*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="detailBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+            <Button x:Name="detailBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="detailBtn_Click">
                 <Image Source="{svgc:SvgImage Assets/detail.svg}" Width="{Binding Path=ActualHeight, ElementName=detailBtn}" Height="{Binding Path=ActualHeight, ElementName=detailBtn}"/>
             </Button>
             <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
@@ -44,8 +44,8 @@
                 </Button.Template>
                 <Button.ContextMenu>
                     <ContextMenu x:Name="settingsCM" StaysOpen="true">
-                        <MenuItem x:Name="settingsEditorOptionsMI" Header="Editor Options" 
-                            Click="settingsEditorOptionsMI_Click"
+                        <MenuItem x:Name="settingsEditorSettingsMI" Header="Editor Settings" 
+                            Click="settingsEditorSettingsMI_Click"
                         >
                         </MenuItem>
                         <MenuItem x:Name="settingsSourcesMI" Header="Sources" 

@@ -1,0 +1,34 @@
+﻿<Window x:Class="MapDicer.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapDicer"
+        mc:Ignorable="d"
+        Title="Editor Settings"
+        Width="800"
+        Height="154"
+        Loaded="Window_Loaded"
+    >
+    <Grid
+        Width="Auto"
+        MinHeight="100"
+        >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".3*"/>
+            <ColumnDefinition Width=".2*"/>
+            <ColumnDefinition Width=".2*"/>
+            <ColumnDefinition Width=".3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="DB Connection String" Grid.Row="1" Grid.Column="0" Width="Auto"/>
+        <TextBox x:Name="LastConnectionStringTB" Grid.Row="1" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
+        <Button x:Name="saveBtn" Content="Save" Grid.Row="3" Grid.Column="1" Click="saveBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Grid.Row="3" Grid.Column="2" Click="cancelBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+    </Grid>
+</Window>
