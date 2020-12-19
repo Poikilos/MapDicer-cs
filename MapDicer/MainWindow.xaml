@@ -64,16 +64,13 @@
                 <Image x:Name="terrainParamImage" Source="{svgc:SvgImage Assets/elevation.svg}"  />
             </Button>
             <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
-            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="1" Margin="0" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainBtn_Click">
-                <Image x:Name="terrainImage" Source="Assets/terrain.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="0" Margin="0" Grid.Row="1" Background="Transparent" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainBtn_Click">
+                <Image x:Name="terrainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </Button>
+
             <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" Height="16pt" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
-            <Button x:Name="terrainColorBtn" Background="Transparent" Grid.Column="6" Grid.Row="1"  HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
-                <Button.Template>
-                    <ControlTemplate>
-                        <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainColorBtn}" Height="{Binding Path=ActualHeight, ElementName=terrainColorBtn}"/>
-                    </ControlTemplate>
-                </Button.Template>
+            <Button x:Name="terrainColorBtn" Margin="0" Padding="0" BorderThickness="0" Background="Transparent" Grid.Column="6" Grid.Row="1"  HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
+                <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainColorBtn}" Height="{Binding Path=ActualHeight, ElementName=terrainColorBtn}"/>
             </Button>
         </Grid>
 

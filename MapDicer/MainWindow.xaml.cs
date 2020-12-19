@@ -63,6 +63,9 @@ namespace MapDicer
             // Button: MessageDialog dialog = new MessageDialog((this.brushTerrainCB.Items[0]).GetType().ToString());
             // var result = dialog.ShowAsync();
             // this.brushTerrainCB.Items.Add(typeof this.brushTerrainCB.Items[0]);
+            this.terrainImage.Source = new BitmapImage(
+                new Uri(System.IO.Path.Combine(System.Environment.CurrentDirectory, "Assets", "terrain.png"))
+            );
         }
         private void terrainColorBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -165,5 +168,9 @@ namespace MapDicer
 
         }
 
+        private void terrainPreviewCnv_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
