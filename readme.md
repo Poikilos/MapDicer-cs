@@ -2,6 +2,22 @@
 With MapDicer, cartographers will be able to add a level of detail 
 (LOD) on a per-region basis and import from various scales and formats.
 
+## Authors & License
+- Code in the mtcompat directory is Copyright Perttu "Celeron55" Ahola
+- The MapDicer logo is [Creative Commons
+  Attribution-NonCommercial-NoDerivatives
+  4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
+  by Jake "Poikilos" Gustafson
+- gear-simple.svg is Public Domain by Openclipart via
+  https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
+
+### Differences between Mtcompat and Minetest
+- MapNode is a class, not a struct, and is a subclass of Mapblock.
+- There is a LiquidMapNode subclass of MapNode to try to increase speed
+  of non-liquid nodes through polymorphism.
+- Irrlicht types (other than those reimplemented in the Irrcompat
+  directory) are changed to native C# types (s64 to long, u64 to ulong,
+  u8 to byte, s16 to short, u16 to ushort, etc).
 
 ## System Requirements
 ### Windows
@@ -165,16 +181,8 @@ installer"](https://gitlab.gnome.org/neduard/dia/-/issues/3) on
 the Gnome project for the status of Windows builds.
 
 
-## Authors & License
-- The MapDicer logo is [Creative Commons
-  Attribution-NonCommercial-NoDerivatives
-  4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
-  by Jake "Poikilos" Gustafson
-- gear-simple.svg is Public Domain by Openclipart via
-  https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
-
-
 ## References
 - Brink. (2019, March 15). Cannot turn off Developer mode—"managed by
   your organization" [Reply]. Windows Ten Forums. 
   https://www.tenforums.com/general-support/128943-cannot-turn-off-developer-mode-managed-your-organization.html
+- *Linq to db*. (n.d.). GitHub. Retrieved November 30, 2020, from https://linq2db.github.io/

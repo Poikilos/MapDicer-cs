@@ -94,7 +94,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="irrcompat\IrrcompatTypes.cs" />
+    <Compile Include="Lod.cs" />
+    <Compile Include="Mapblock.cs" />
     <Compile Include="MapDicerContext.cs" />
+    <Compile Include="MapDicerTypes.cs" />
+    <Compile Include="mtcompat\src\ContentFeatures.cs" />
+    <Compile Include="mtcompat\src\Database.cs" />
+    <Compile Include="mtcompat\src\NodeDef.cs" />
+    <Compile Include="mtcompat\src\MapNode.cs" />
     <Compile Include="SettingController.cs" />
     <Compile Include="SettingModel.cs" />
     <Compile Include="TerrainButton.cs" />
