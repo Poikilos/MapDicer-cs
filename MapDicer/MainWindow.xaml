@@ -28,10 +28,10 @@
                 <Image Source="{svgc:SvgImage Assets/detail.svg}" Width="{Binding Path=ActualHeight, ElementName=detailBtn}" Height="{Binding Path=ActualHeight, ElementName=detailBtn}"/>
             </Button>
             <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
-            <Button x:Name="layerBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
-                <Image Source="{svgc:SvgImage Assets/layer.svg}"  Width="{Binding Path=ActualHeight, ElementName=layerBtn}" Height="{Binding Path=ActualHeight, ElementName=layerBtn}"/>
+            <Button x:Name="regionBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+                <Image Source="{svgc:SvgImage Assets/region.svg}"  Width="{Binding Path=ActualHeight, ElementName=regionBtn}" Height="{Binding Path=ActualHeight, ElementName=regionBtn}"/>
             </Button>
-            <ComboBox x:Name="layerCBx" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <ComboBox x:Name="regionCBx" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Stretch"/>
             <Button x:Name="mapblockBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
                 <Image Source="{svgc:SvgImage Assets/mapblock.svg}" Width="{Binding Path=ActualHeight, ElementName=mapblockBtn}" Height="{Binding Path=ActualHeight, ElementName=mapblockBtn}"/>
             </Button>

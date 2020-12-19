@@ -10,8 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   (See <https://github.com/ElinamLLC/SharpVectors>).
 
 ### Changed
-- Switch to WPF to avoid problems with UWP limiting external files and
-  database access libraries. See 
+- Switch to WPF in main branch to avoid problems with UWP limiting
+  external files and database access libraries. See 
   <https://sqliteefcore-wasm.platform.uno/>. You must import and 
   install EntityFrameworkCore via Console Core not Universal 
   Windows--see <https://github.com/dotnet/efcore/issues/9666> cited by 
@@ -24,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   work even if EntityFrameworkCore could work using the workaround.
 
 ### Fixed
-- Remove width and height from SVG files to allow SharpVectors to work
+- (WPF) Remove width and height from SVG files to allow SharpVectors to work
   (crashes with disallowed width or height format otherwise).
 
 

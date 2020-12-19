@@ -39,6 +39,7 @@ Windows Registry Editor Version 5.00
 
 
 ### Compiling the Uno Branch
+(not yet complete)
 - Install Visual Studio 2019
 - Right-click Start
 - Apps & Features
@@ -59,24 +60,32 @@ Windows Registry Editor Version 5.00
 ## Developer Notes
 
 
-### SVG
-- Inside of the SVG file, the `width` and `height` must be set to
-  `"auto"` for it to scale at all (the `viewBox` must also have all of
-  the geometry inside of it or it may not scale as expected).
+### Image Buttons
 - Binding the Width and Height to something will only work if the
   element is declared previously. Therefore, placing it inside of a 
   button may work better, then binding `height` or `width` and `height`
   to that button's (where button has
   `Padding="0" BorderThickness="0" Margin="0"`).
+- Making it the button Template removes the named
+  image variable within C#.
+
+#### SVG Image Buttons
+- Inside of the SVG file, the `width` and `height` must be set to
+  `"auto"` for it to scale at all (the `viewBox` must also have all of
+  the geometry inside of it or it may not scale as expected).
 
 ### Colors
-- See https://plantuml.com/color for a UML color palette.
+- See
+  <https://docs.microsoft.com/en-us/uwp/api/windows.ui.colors?view=winrt-19041>
+  for a Windows.UI color palette.
 
-### Dependencies (NuGet)
+### Main branch (WPF) dependencies (NuGet)
 - SharpVectors (SharpVectors.Reloaded says to use the SharpVectors
   package instead). See <https://github.com/ElinamLLC/SharpVectors>.
+- System.Data.SQLite.Linq
+  - Microsoft.EntityFrameworkCore
 
-### UWP (deprecated) Dependencies (NuGet)
+### UWP branch (deprecated) Dependencies (NuGet)
 - Uno.SQLitePCLRaw.wasm for cross-platform SQLite support.
   - SQLitePCLRaw.core.2.0.3
   - SQLitePCLRaw.provider.e_sqlite3.2.0.3
@@ -88,7 +97,7 @@ Windows Registry Editor Version 5.00
   - Apache 2.0 license, by Microsoft
 
 
-### SharpVectors Notes
+### SharpVectors Notes (WPF only)
 #### Building Samples
 Upon trying to build SharpVectors samples, the following message appears
 (multiple times):
@@ -133,15 +142,13 @@ From SharpVectors\Samples\WpfTestSvgSample\SvgPage.xaml:
     </Window.Resources>
 ```
 
-Problem:
+Known Issues:
 ```
 Severity	Code	Description	Project	File	Line	Suppression State
 Error	XDG0006	The namespace prefix "svgc" is not defined.	MapDicer	C:\Users\Jatlivecom\GitHub\MapDicer\MapDicer\MainWindow.xaml	2	
 Error	XDG0008	SvgImage is not supported in a Windows Presentation Foundation (WPF) project.	MapDicer	C:\Users\Jatlivecom\GitHub\MapDicer\MapDicer\MainWindow.xaml	36	
 Error	XLS0414	The type 'svgc:SvgImage' was not found. Verify that you are not missing an assembly reference and that all referenced assemblies have been built.	MapDicer	C:\Users\Jatlivecom\GitHub\MapDicer\MapDicer\MainWindow.xaml	36	
 ```
-
-Solution:
 
 
 ### Diagrams
@@ -162,6 +169,7 @@ the Gnome project for the status of Windows builds.
 - The MapDicer logo is [Creative Commons
   Attribution-NonCommercial-NoDerivatives
   4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
+  by Jake "Poikilos" Gustafson
 - gear-simple.svg is Public Domain by Openclipart via
   https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
 
