@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace MapDicer
         public OptionsWindow()
         {
             InitializeComponent();
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -35,19 +37,23 @@ namespace MapDicer
 
         private void writeSettings()
         {
+            Properties.Settings.Default.LastConnectionString = this.LastConnectionStringTB.Text.Trim();
             Properties.Settings.Default.Save();
-            Properties.Settings.Default.Reload();
-        }
-
-        private void cancelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            this.readSettings();
-            this.Close();
+            // MessageBox.Show(String.Format("Saved {0}", Properties.Settings.Default.LastConnectionString));
+            // Properties.Settings.Default.Reload();
         }
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
             this.writeSettings();
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void cancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.readSettings();
+            this.DialogResult = false;
             this.Close();
         }
     }

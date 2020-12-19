@@ -31,9 +31,20 @@ namespace MapDicer
             this.suppressLoad = true;
             if (reloadIds)
             {
+                Lod.errors.Clear();
                 this.IdCbx.Items.Clear();
                 this.IdCbx.Items.Add(SettingModel.NewIdStr);
                 List<Lod> items = Lod.All();
+                if (Lod.errors.Count > 0)
+                {
+                    string msg = Lod.errors.Dequeue();
+                    MessageBox.Show(String.Format("There is a problem with the database or database"
+                                                  + " connection string in settings (Gear button,"
+                                                  + " Editor Settings): {0}", msg));
+                    Lod.errors.Clear();
+                    this.DialogResult = false;
+                    this.Close();
+                }
                 if (items != null)
                 {
                     foreach (var item in items)

@@ -18,7 +18,7 @@ namespace MapDicer
         public MapDicerContext()
             : base(SettingModel.SqlConnectionString)
         {
-
+            // MessageBox.Show(String.Format("Connection string: {0}", SettingModel.SqlConnectionString));
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

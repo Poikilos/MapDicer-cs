@@ -167,7 +167,12 @@ namespace MapDicer
 
         private void settingsEditorSettingsMI_Click(object sender, RoutedEventArgs e)
         {
-            
+            OptionsWindow dlg = new OptionsWindow();
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                // Do nothing, it saves on its own.
+            }
         }
 
         private void settingsSourcesMI_Click(object sender, RoutedEventArgs e)

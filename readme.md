@@ -10,7 +10,7 @@ With MapDicer, cartographers will be able to add a level of detail
   4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
   by Jake "Poikilos" Gustafson
 - gear-simple.svg is Public Domain by Openclipart via
-  https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html
+  <https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html>
 
 ### Differences in Mtcompat vs Minetest
 - MapNode is a class, not a struct, and is a subclass of Mapblock.

@@ -76,16 +76,31 @@ namespace MapDicer
             // return null;
         }
 
+        public static Queue<string> errors = new Queue<string>();
+
         public static List<Lod> All()
         {
-            using (var context = new MapDicerContext())
+            try
             {
-                var query = from entry in context.Lods
-                                // where entry.Id < 25
-                            orderby entry.LodId ascending // the Last method depends on ascending.
-                            select entry;
-                return query.ToList();
+                using (var context = new MapDicerContext())
+                {
+                    var query = from entry in context.Lods
+                                    // where entry.Id < 25
+                                orderby entry.LodId ascending // the Last method depends on ascending.
+                                select entry;
+                    return query.ToList();
+                }
             }
+            catch (System.ArgumentException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                    return null;
+                }
+            }
+            return null;
         } // (*Linq to db*, 2020)
         public static Lod Last()
         {

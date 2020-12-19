@@ -9,7 +9,13 @@ namespace MapDicer
     class SettingModel
     {
         public const string NewIdStr = "(New)";
-        public static string SqlConnectionString = "";
+        public static string SqlConnectionString
+        {
+            get
+            {
+                return Properties.Settings.Default.LastConnectionString;
+            }
+        }
         private static short maxLayerCount = 128;
         /// <summary>
         /// Get the number of layers per level of detail (also determines y skip to next LOD).
@@ -24,11 +30,19 @@ namespace MapDicer
         }
         public static void LoadSettings()
         {
-            SettingModel.SqlConnectionString = Properties.Settings.Default.LastConnectionString;
+            // SettingModel.SqlConnectionString = Properties.Settings.Default.LastConnectionString;
         }
         static SettingModel() {
             LoadSettings();
+            // Properties.Settings.Default.PropertyChanged += SettingModel.PropertyChangedCallback_Event;
+            // ^ never happens
         }
+        /*
+        private static void PropertyChangedCallback_Event(object sender, PropertyChangedEventArgs e)
+        {
+            MessageBox.Show(sender.GetType().Name);
+        }
+        */
         public static byte IntFromHexPair(string hexPairStr)
         {
             return (byte)Convert.ToInt32(hexPairStr, 16);
