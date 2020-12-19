@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapDicer"
         mc:Ignorable="d"
-        Title="Window1" Height="238.668" Width="214.134"
+        Title="New Terrain" Height="238.668" Width="214.134"
         Loaded="Window_Loaded"
         >
     <StackPanel x:Name="terrainsAddButtonMainSP" Orientation="Vertical">
