@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.SQLite;
+using System.Data.SQLite.Linq;
 using System.Text;
 
 namespace MapDicer
@@ -84,6 +86,12 @@ namespace MapDicer
             {
                 using (var context = new MapDicerContext())
                 {
+                    if (!context.Database.Exists())
+                    {
+                        string msg = String.Format("The database is missing {0}", context.Database.Log);
+                        return null;
+                    }
+                    ///MessageBox.Show(String.Format("context: {0}", context.Database.Exists()));
                     var query = from entry in context.Lods
                                     // where entry.Id < 25
                                 orderby entry.LodId ascending // the Last method depends on ascending.
@@ -97,8 +105,8 @@ namespace MapDicer
                 if (!errors.Contains(msg))
                 {
                     errors.Enqueue(msg);
-                    return null;
                 }
+                return null;
             }
             return null;
         } // (*Linq to db*, 2020)
