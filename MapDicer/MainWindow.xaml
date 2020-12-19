@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MapDicer"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MapDicer" Height="450" Width="800"
         SizeChanged="Window_SizeChanged"
         >
     <StackPanel x:Name="mainSP" Orientation="Vertical">
@@ -37,7 +37,23 @@
             </Button>
             <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
             <Button Background="Transparent" Margin="0" Padding="0" x:Name="settingsButton" Grid.Row="0" Grid.Column="6" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="settingsButton_Click">
-                <Image x:Name="settingsImage" Source="{svgc:SvgImage Assets/gear-simple.svg}" Width="{Binding Path=ActualHeight, ElementName=settingsButton}" Height="{Binding Path=ActualHeight, ElementName=settingsButton}"/>
+                <Button.Template>
+                    <ControlTemplate>
+                        <Image x:Name="settingsImage" Source="{svgc:SvgImage Assets/gear-simple.svg}" Width="{Binding Path=ActualHeight, ElementName=settingsButton}" Height="{Binding Path=ActualHeight, ElementName=settingsButton}"/>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="settingsCM" StaysOpen="true">
+                        <MenuItem x:Name="settingsEditorOptionsMI" Header="Editor Options" 
+                            Click="settingsEditorOptionsMI_Click"
+                        >
+                        </MenuItem>
+                        <MenuItem x:Name="settingsSourcesMI" Header="Sources" 
+                            Click="settingsSourcesMI_Click"
+                        >
+                        </MenuItem>
+                    </ContextMenu>
+                </Button.ContextMenu>
             </Button>
             <!--<Image Source="{svgc:SvgImage Source=/Images/Save.svg, AppName=WpfTestSvgSample}" Height="24" Width="24"/> -->
             <Button Background="Transparent" Padding="0" x:Name="terrainBrushSizeButton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="settingsButton_Click">
@@ -48,10 +64,17 @@
                 <Image x:Name="terrainParamImage" Source="{svgc:SvgImage Assets/elevation.svg}"  />
             </Button>
             <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
-            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainBtn_Click">
-                <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}"/>
+            <Button x:Name="terrainBtn"  Padding="0" BorderThickness="1" Margin="0" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainBtn_Click">
+                <Image x:Name="terrainImage" Source="Assets/terrain.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </Button>
             <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" Height="16pt" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
+            <Button x:Name="terrainColorBtn" Background="Transparent" Grid.Column="6" Grid.Row="1"  HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainColorBtn}" Height="{Binding Path=ActualHeight, ElementName=terrainColorBtn}"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
 
 

@@ -3,3 +3,22 @@
             </Rectangle>
             <Image Source="Assets/plus.svg" Grid.Row="0" Grid.Column="6" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}"/>
             <Image Source="Assets/detail.svg" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
+
+
+{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}
+
+{StaticResource terrainImageBrushR}
+
+{StaticResource terrainImageR}
+
+<!--See:
+https://stackoverflow.com/questions/15636047/image-in-wpf-button-not-visible-at-runtime
+-->
+<Button x:Name="terrainBtn"  Padding="0" BorderThickness="1" Margin="0" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Right" Width="16" Height="16" Click="terrainBtn_Click">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Image x:Name="terrainImage" Source="/Assets/terrain.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+             Source="/MapDicer;component/Assets/terrain.png"

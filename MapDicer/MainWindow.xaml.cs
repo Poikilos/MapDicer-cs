@@ -64,9 +64,13 @@ namespace MapDicer
             // var result = dialog.ShowAsync();
             // this.brushTerrainCB.Items.Add(typeof this.brushTerrainCB.Items[0]);
         }
+        private void terrainColorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // goToAddTerrain();
+        }
         private void terrainBtn_Click(object sender, RoutedEventArgs e)
         {
-            goToAddTerrain();
+
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -148,9 +152,18 @@ namespace MapDicer
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
+            this.settingsCM.IsOpen = true;
+        }
+
+        private void settingsEditorOptionsMI_Click(object sender, RoutedEventArgs e)
+        {
 
         }
 
-        
+        private void settingsSourcesMI_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }
