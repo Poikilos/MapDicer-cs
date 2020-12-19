@@ -17,9 +17,9 @@ namespace MapDicer
     /// <summary>
     /// Interaction logic for OptionsWindow.xaml
     /// </summary>
-    public partial class OptionsWindow : Window
+    public partial class EditorSettingsWindow : Window
     {
-        public OptionsWindow()
+        public EditorSettingsWindow()
         {
             InitializeComponent();
             

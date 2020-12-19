@@ -106,8 +106,8 @@
     <Compile Include="mtcompat\src\Database.cs" />
     <Compile Include="mtcompat\src\NodeDef.cs" />
     <Compile Include="mtcompat\src\MapNode.cs" />
-    <Compile Include="views\OptionsWindow.xaml.cs">
-      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    <Compile Include="views\EditorSettingsWindow.xaml.cs">
+      <DependentUpon>EditorSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingController.cs" />
     <Compile Include="models\SettingModel.cs" />
@@ -135,7 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="views\OptionsWindow.xaml">
+    <Page Include="views\EditorSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
