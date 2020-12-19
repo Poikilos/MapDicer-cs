@@ -56,7 +56,7 @@
                 </Button.ContextMenu>
             </Button>
             <!--<Image Source="{svgc:SvgImage Source=/Images/Save.svg, AppName=WpfTestSvgSample}" Height="24" Width="24"/> -->
-            <Button Background="Transparent" Padding="0" x:Name="terrainBrushSizeButton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="settingsButton_Click">
+            <Button Background="Transparent" Padding="0" x:Name="terrainBrushSizeButton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" >
                 <Image x:Name="terrainBrushSizeImage" Source="{svgc:SvgImage Assets/size.svg}"  />
             </Button>
             <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="terrainBrushSizeSlider_ValueChanged" />
