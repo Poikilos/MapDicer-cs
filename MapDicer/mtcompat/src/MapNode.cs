@@ -28,8 +28,8 @@ namespace MapDicer.mtcompat.src
 
     enum LightBank
     {
-        LIGHTBANK_DAY,
-        LIGHTBANK_NIGHT
+        Day,
+        Night
     }
 
     /*
@@ -37,11 +37,11 @@ namespace MapDicer.mtcompat.src
     */
     enum Rotation
     {
-        ROTATE_0,
-        ROTATE_90,
-        ROTATE_180,
-        ROTATE_270,
-        ROTATE_RAND,
+        Rotate0,
+        Rotate90,
+        Rotate180,
+        Rotate270,
+        RotateRand,
     }
 
 
@@ -62,7 +62,7 @@ namespace MapDicer.mtcompat.src
             there is enough room for dummy node IDs, which are created when
             a MapBlock containing unknown node names is loaded from disk.
         */
-        public static uint MAX_REGISTERED_CONTENT = 0x7fffU;
+        public static uint MaxRegisteredContent = 0x7fffU;
 
         /*
             A solid walkable node with the texture unknown_node.png.
@@ -71,13 +71,13 @@ namespace MapDicer.mtcompat.src
             (instead of expanding the vector of node definitions each time
             such a node is received).
         */
-        public static uint CONTENT_UNKNOWN = 125;
+        public static uint ContentUnknown = 125;
 
         /*
             The common material through which the player can walk and which
             is transparent to light
         */
-        public static uint CONTENT_AIR = 126;
+        public static uint ContentAir = 126;
 
         /*
             Ignored node.
@@ -89,23 +89,23 @@ namespace MapDicer.mtcompat.src
             Doesn't create faces with anything and is considered being
             out-of-map in the game map.
         */
-        public static byte CONTENT_IGNORE = 127;
-        public static byte LIQUID_LEVEL_MASK = 0x07;
-        public static byte LIQUID_FLOW_DOWN_MASK = 0x08;
+        public static byte ContentIgnore = 127;
+        public static byte LiquidLevelMask = 0x07;
+        public static byte LiquidFlowDownMask = 0x08;
 
         //public static uint LIQUID_LEVEL_MASK 0x3f // better finite water
         //public static uint LIQUID_FLOW_DOWN_MASK 0x40 // not used when finite water
 
         /* maximum amount of liquid in a block */
-        public static byte LIQUID_LEVEL_MAX = LIQUID_LEVEL_MASK;
-        public static byte LIQUID_LEVEL_SOURCE() {
-            return (byte)(LIQUID_LEVEL_MAX + 1);
+        public static byte LiquidLevelMax = LiquidLevelMask;
+        public static byte LiquidLevelSource() {
+            return (byte)(LiquidLevelMax + 1);
         }
-        public static uint LIQUID_INFINITY_MASK = 0x80; //0b10000000
+        public static uint LiquidInfinityMask = 0x80; //0b10000000
 
         // mask for leveled nodebox param2
-        public static byte LEVELED_MASK = 0x7F;
-        public static byte LEVELED_MAX = LEVELED_MASK;
+        public static byte LeveledMask = 0x7F;
+        public static byte LeveledMax = LeveledMask;
 
         public virtual byte GetLevel(INodeDefManager nodemgr)
         {
@@ -123,20 +123,20 @@ namespace MapDicer.mtcompat.src
         public override byte GetLevel(INodeDefManager nodemgr)
         {
             ContentFeatures f = nodemgr.Get(this);
-            if (f.liquid_type == LiquidType.LIQUID_SOURCE)
-                return LIQUID_LEVEL_SOURCE();
-            if (f.param_type_2 == ContentParamType2.CPT2_FLOWINGLIQUID)
-                return (byte)(getParam2() & LIQUID_LEVEL_MASK);
-            if (f.liquid_type == LiquidType.LIQUID_FLOWING) // can remove if all param_type_2 setted
-                return (byte)(getParam2() & LIQUID_LEVEL_MASK);
-            if (f.param_type_2 == ContentParamType2.CPT2_LEVELED)
+            if (f.liquid_type == LiquidType.Source)
+                return LiquidLevelSource();
+            if (f.param_type_2 == ContentParamType2.FlowingLiquid)
+                return (byte)(getParam2() & MapNode.LiquidLevelMask);
+            if (f.liquid_type == LiquidType.Flowing) // can remove if all param_type_2 setted
+                return (byte)(getParam2() & MapNode.LiquidLevelMask);
+            if (f.param_type_2 == ContentParamType2.Leveled)
             {
-                byte level = (byte)(getParam2() & LEVELED_MASK);
+                byte level = (byte)(getParam2() & MapNode.LeveledMask);
                 if (level != 0)
                     return level;
             }
-            if (f.leveled > MapNode.LEVELED_MAX)
-                return MapNode.LEVELED_MAX;
+            if (f.leveled > MapNode.LeveledMax)
+                return MapNode.LeveledMax;
             return f.leveled;
 
         }

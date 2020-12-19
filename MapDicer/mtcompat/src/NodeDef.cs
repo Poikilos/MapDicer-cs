@@ -26,40 +26,40 @@ namespace MapDicer.mtcompat.src
 {
     enum ContentParamType
     {
-        CPT_NONE,
-        CPT_LIGHT,
+        None,
+        Light,
     };
     enum ContentParamType2
     {
-        CPT2_NONE,
+        None,
         // Need 8-bit param2
-        CPT2_FULL,
+        Full,
         // Flowing liquid properties
-        CPT2_FLOWINGLIQUID,
+        FlowingLiquid,
         // Direction for chests and furnaces and such
-        CPT2_FACEDIR,
+        FaceDir,
         // Direction for signs, torches and such
-        CPT2_WALLMOUNTED,
+        WallMounted,
         // Block level like FLOWINGLIQUID
-        CPT2_LEVELED,
+        Leveled,
         // 2D rotation for things like plants
-        CPT2_DEGROTATE,
+        DegRotate,
         // Mesh options for plants
-        CPT2_MESHOPTIONS,
+        MeshOptions,
         // Index for palette
-        CPT2_COLOR,
+        Color,
         // 3 bits of palette index, then facedir
-        CPT2_COLORED_FACEDIR,
+        ColoredFaceDir,
         // 5 bits of palette index, then wallmounted
-        CPT2_COLORED_WALLMOUNTED,
+        ColoredWallMounted,
         // Glasslike framed drawtype internal liquid level, param2 values 0 to 63
-        CPT2_GLASSLIKE_LIQUID_LEVEL,
+        GlasslikeLiquidLevel,
     }
     enum LiquidType
     {
-        LIQUID_NONE,
-        LIQUID_FLOWING,
-        LIQUID_SOURCE,
+        None,
+        Flowing,
+        Source,
     }
     public class NodeDef
     {
