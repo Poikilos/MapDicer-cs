@@ -29,8 +29,8 @@
         </Grid.RowDefinitions>
         <TextBlock Text="DB Connection String" Grid.Row="1" Grid.Column="0" Width="Auto"/>
         <TextBox x:Name="LastConnectionStringTB" Grid.Row="1" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
-        <TextBlock Text="Settings File" Grid.Row="2" Grid.Column="0" Width="Auto"/>
-        <TextBox x:Name="settingsFileTB" Grid.Row="2" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3" IsEnabled="False"/>
+        <TextBlock Visibility="Hidden" Text="Settings File" Grid.Row="2" Grid.Column="0" Width="Auto"/>
+        <TextBox Visibility="Hidden" x:Name="settingsFileTB" Grid.Row="2" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3" IsEnabled="False"/>
         <Button x:Name="saveBtn" Content="Save" Grid.Row="3" Grid.Column="1" Click="saveBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
         <Button x:Name="cancelBtn" Content="Cancel" Grid.Row="3" Grid.Column="2" Click="cancelBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
     </Grid>

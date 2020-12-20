@@ -39,8 +39,8 @@ namespace MapDicer
                 {
                     string msg = Lod.errors.Dequeue();
                     MessageBox.Show(String.Format("There is a problem with the database or database"
-                                                  + " connection string in settings (Gear button,"
-                                                  + " Editor Settings): {0}", msg));
+                                                    + " connection string in settings (Gear button,"
+                                                    + " Editor Settings): {0}", msg));
                     Lod.errors.Clear();
                     this.DialogResult = false;
                     this.Close();
@@ -94,7 +94,11 @@ namespace MapDicer
             short short1 = -1;
             long long1 = -1;
             string string1 = null;
-            if (short.TryParse(this.IdCbx.Text, out short1))
+            if (this.IdCbx.Text == SettingModel.NewIdStr)
+            {
+                entity.LodId = -1;
+            }
+            else if (short.TryParse(this.IdCbx.Text, out short1))
             {
                 entity.LodId = short1;
                 if (!allowDup)

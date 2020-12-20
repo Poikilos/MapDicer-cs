@@ -96,6 +96,7 @@
     </ApplicationDefinition>
     <Compile Include="irrcompat\IrrcompatTypes.cs" />
     <Compile Include="models\Lod.cs" />
+    <Compile Include="models\Region.cs" />
     <Compile Include="views\LodWindow.xaml.cs">
       <DependentUpon>LodWindow.xaml</DependentUpon>
     </Compile>

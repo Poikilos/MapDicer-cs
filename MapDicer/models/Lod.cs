@@ -5,14 +5,21 @@ using System.Data.SQLite;
 using System.Data.SQLite.Linq;
 using System.Text;
 
-namespace MapDicer
+namespace MapDicer.models
 {
     public class Lod
     {
         public Lod()
         {
+            // Mapblocks = new List<Mapblock>();
+            Regions = new List<Region>();
+        }
+        /*
+        public void populateMapblocks()
+        {
             Mapblocks = new List<Mapblock>();
         }
+        */
 
         public short LodId { get; set; }
         public short Id
@@ -48,7 +55,8 @@ namespace MapDicer
         private bool IsLeaf { get; set; }
         #endregion computed
 
-        public virtual ICollection<Mapblock> Mapblocks { get; set; }
+        // public virtual ICollection<Mapblock> Mapblocks { get; set; }
+        public virtual ICollection<Region> Regions { get; set; }
 
 
         public static short GetNewId()
@@ -88,10 +96,16 @@ namespace MapDicer
                 {
                     if (!context.Database.Exists())
                     {
+                        /*
                         string msg = String.Format("The database is missing {0}", context.Database.Log);
+                        if (!errors.Contains(msg))
+                        {
+                            errors.Enqueue(msg);
+                        }
+                        */
                         return null;
                     }
-                    ///MessageBox.Show(String.Format("context: {0}", context.Database.Exists()));
+                    // MessageBox.Show(String.Format("context: {0}", context.Database.Exists()));
                     var query = from entry in context.Lods
                                     // where entry.Id < 25
                                 orderby entry.LodId ascending // the Last method depends on ascending.
@@ -114,6 +128,17 @@ namespace MapDicer
         {
             using (var context = new MapDicerContext())
             {
+                if (!context.Database.Exists())
+                {
+                    /*
+                    string msg = String.Format("The database is missing {0}", context.Database.Log);
+                    if (!errors.Contains(msg))
+                    {
+                        errors.Enqueue(msg);
+                    }
+                    */
+                    return null;
+                }
                 var existing = (from entry in context.Lods
                                 // where entry.Id < 25
                             orderby entry.LodId ascending // the Last method depends on ascending.
@@ -141,17 +166,23 @@ namespace MapDicer
                 return existing;
             }
         }
-        public static bool Insert(Lod entry, bool generateId)
+        public static bool Insert(Lod newEntry, bool generateId)
         {
             bool ok = false;
-            if (generateId)
-            {
-                entry.LodId = GetNewId();
-            }
             using (var context = new MapDicerContext())
             {
-                
-                context.Lods.Add(entry);
+                if (generateId)
+                {
+                    var existing = (from entry in context.Lods
+                                        // where entry.Id < 25
+                                    orderby entry.LodId ascending // the Last method depends on ascending.
+                                    select entry).LastOrDefault();
+                    newEntry.LodId = 0;
+                    if (existing != null)
+                        newEntry.LodId = (short)(existing.LodId + 1);
+                }
+
+                context.Lods.Add(newEntry);
                 ok = context.SaveChanges() > 0;
             }
             return ok;

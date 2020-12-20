@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 
-namespace MapDicer
+namespace MapDicer.models
 {
     class SettingModel
     {

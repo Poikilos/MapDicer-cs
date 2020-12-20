@@ -5,11 +5,14 @@ using System.Text;
 
 namespace MapDicer.models
 {
-    public class Mapblock
+    public class Region
     {
-        public int MapblockId { get; set; }
+        public int RegionId { get; set; }
+        /// <summary>
+        /// The region name, such as the name of the contenent if Lod's name is continent.
+        /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// This is the parent.
         /// </summary>

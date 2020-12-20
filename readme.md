@@ -37,10 +37,22 @@ With MapDicer, cartographers will be able to add a level of detail
 
 ## Saving
 The save file format is SQLite. The connection string sets this, such
-as `Data Source=Default.db;Cache=Shared` (See
+as `Data Source=Default.sqlite;Cache=Shared;Database="MapDicer"` (See
 <https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings>).
 The setting is stored in `Properties\Settings.settings` (Available via
 Gear button, Editor Settings).
+- keyword not supported: "cache"
+- "Does not specify an initial catalog or AttachDBFileName"
+  (Issue #3)
+
+So (add more from
+`https://stackoverflow.com/questions/15726265/c-sharp-sqlite-connection-string-format`
+as well as fix issues above):
+`Data Source=Default.sqlite;Database="MapDicer";`
+
+Other bad options:
+- keyword not supported: 'version' for `Version=3;`
+- keyword not supported: 'new' for `New=True;`
 
 
 ## Compiling
