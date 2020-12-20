@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MapDicer.Models;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +31,9 @@ namespace MapDicer
         public static double prefillTerrainRed = 128;
         public static double prefillTerrainGreen = 128;
         public static double prefillTerrainBlue = 128;
+        public static int prefillSourceId = 1;
+        public static int prefillPPS = 1;
+        public static BitmapImage Image = null;
         private static TextBox[] colorTBs = null;
         private static Slider[] colorSliders = null;
         public int Red
@@ -64,6 +69,7 @@ namespace MapDicer
                 this.blueSlider.Value = (double)value;
             }
         }
+        public Terrain Terrain { get; private set; }
         public string TerrainName { get; private set; }
         private bool suppressToText = false; // suppress transfer of slider to text while doing the opposite
         private bool suppressToSlider = false; // suppress transfer of text to slider while doing the opposite
@@ -79,6 +85,7 @@ namespace MapDicer
             colorSliders[0] = this.redSlider;
             colorSliders[1] = this.greenSlider;
             colorSliders[2] = this.blueSlider;
+            this.Terrain = null;
         }
 
         private void addBtn_Click(object sender, RoutedEventArgs e)
@@ -86,7 +93,43 @@ namespace MapDicer
             Red = (int)Math.Round(this.redSlider.Value);
             Green = (int)Math.Round(this.greenSlider.Value);
             Blue = (int)Math.Round(this.blueSlider.Value);
-            TerrainName = this.nameTB.Text;
+            TerrainName = this.nameTB.Text.Trim();
+            if (TerrainName.Length < 1)
+            {
+                MessageBox.Show("You must enter a name.");
+                return;
+            }
+            int pps;
+            bool ok = int.TryParse(this.ppsTB.Text.Trim(), out pps);
+            if (!ok)
+            {
+                MessageBox.Show("PPS must be a whole number.");
+                return;
+            }
+            int? sourceId = null;
+            if (this.sourceTB.Text.Trim().Length > 0)
+            {
+                int tmpId;
+                ok = int.TryParse(this.sourceTB.Text.Trim(), out tmpId);
+                if (!ok)
+                {
+                    MessageBox.Show("The SourceId must be a whole number.");
+                    return;
+                }
+                else
+                {
+                    sourceId = tmpId;
+                }
+            }
+            NewTerrainWindow.Image = new BitmapImage(new System.Uri(this.pathTB.Text));
+            this.Terrain = new Terrain
+            {
+                TerrainId = Terrain.IdFromHexColorRgb(this.hexTB.Text),
+                Name = this.nameTB.Text,
+                Path = this.pathTB.Text,
+                SourceId = sourceId,
+                PixPerSample = pps,
+            };
             this.DialogResult = true;
         }
 
@@ -104,14 +147,27 @@ namespace MapDicer
             this.redSlider.Value = prefillTerrainRed;
             this.greenSlider.Value = prefillTerrainGreen;
             this.blueSlider.Value = prefillTerrainBlue;
+            this.ppsTB.Text = prefillPPS.ToString();
+            this.sourceTB.Text = prefillSourceId.ToString();
         }
 
-        public void prefill(double r, double g, double b)
+        /// <summary>
+        /// Set prefill values before showing the form.
+        /// </summary>
+        /// <param name="r">Red (0-255)</param>
+        /// <param name="g">Green (0-255)</param>
+        /// <param name="b">Blue (0-255)</param>
+        /// <param name="pps">Pixels Per Sample (32 means a 42x42 image will be larger than one
+        /// tile)</param>
+        /// <param name="sourceId">This index represents a source for credit (citation) purposes.</param>
+        public void prefill(double r, double g, double b, int pps, int sourceId)
         {
             // The sliders are null before Opened, apparently, so set properties instead:
             prefillTerrainRed = r;
             prefillTerrainGreen = g;
             prefillTerrainBlue = b;
+            prefillPPS = pps;
+            prefillSourceId = sourceId;
         }
 
         private void afterSliderChanged(int index)
@@ -199,6 +255,37 @@ namespace MapDicer
             if (this.terrainColorEllipse == null) return;
             // ^ null before initialized
             this.terrainColorEllipse.Fill = new SolidColorBrush(Color.FromArgb(255, (byte)Red, (byte)Green, (byte)Blue));
+            this.hexTB.Text = Terrain.HexRgbFromColor((byte)Red, (byte)Green, (byte)Blue);
         }
+
+        private void browseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                this.pathTB.Text = dlg.FileName;
+            }
+        }
+
+        private void nameTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int prevCaretIndex = this.nameTB.CaretIndex;
+            this.nameTB.Text = this.nameTB.Text.ToLower();
+            this.nameTB.CaretIndex = prevCaretIndex;
+        }
+
+        /*
+         * doesn't work (neither does terrainColorGrid_SizeChanged or anything: See Window SizeToContent
+         * in XAML)
+        private void mainSP_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double calcW = mainSP.ActualWidth;
+            double calcH = mainSP.ActualHeight;
+            if (this.Width < calcW) this.Width = calcW;
+            if (this.Height < calcH) this.Height = calcH;
+        }
+        */
+
     }
 }

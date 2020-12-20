@@ -14,6 +14,7 @@ namespace MapDicer.Models
     [Table("Terrain")]
     public class Terrain
     {
+        public const int SourceWorldmapOverworldTileset = 1;
         /// <summary>
         /// The color on the map image denotes the terrain. Alpha is unused, so only 24 bits of this
         /// int will ever be used.
@@ -46,14 +47,14 @@ namespace MapDicer.Models
         /// (Reserved for future use) The source of the image.
         /// </summary>
         [Column("SourceId")]
-        public int SourceId { get; set; }
+        public int? SourceId { get; set; }
 
         /// <summary>
         /// (Reserved for future use) If this was/is cropped from a tileset (denoted by SourceId in future
         /// versions), this is the ID.
         /// </summary>
         [Column("TileIndex")]
-        public int TileIndex { get; set; }
+        public int? TileIndex { get; set; }
 
         /// <summary>
         /// (Reserved for future use) JSON metadata (NodeDef, one per many instances).
@@ -68,9 +69,9 @@ namespace MapDicer.Models
         [Column("PixPerSample")]
         public int PixPerSample { get; set; }
 
-        public static byte IntFromHexPair(string hexPairStr)
+        public static int IntFromHexPair(string hexPairStr)
         {
-            return (byte)Convert.ToInt32(hexPairStr, 16);
+            return Convert.ToInt32(hexPairStr, 16);
         }
         public static byte ByteFromHexPair(string hexPairStr)
         {
@@ -80,27 +81,67 @@ namespace MapDicer.Models
         {
             return Convert.ToString(v, 16);
         }
-        public static int IdFromHexColor(string hexColor)
+        /// <summary>
+        /// Convert the string such that blue FIRST (in BBRRGG) is the MOST significant byte.
+        /// Get the color as a Terrain primary key integer. The order is BGR so blue is most significant
+        /// to immitate life (blue is a higher intensity by frequency).
+        /// The ID only reaches the value of a 24-bit number.
+        /// </summary>
+        /// <param name="hexColor"></param>
+        /// <returns></returns>
+        public static int IdFromHexColorBgr(string hexColor)
         {
             if (hexColor.Length != 6)
             {
                 throw new ApplicationException("The hex color must be 6 characters.");
             }
-            // The ID only reaches the value of a 24-bit number.
-            // Blue is most significant byte (to immitate life--blue is more intense).
             return (IntFromHexPair(hexColor.Substring(0, 2)) * 65536
-                    + ByteFromHexPair(hexColor.Substring(2, 2)) * 256
+                    + IntFromHexPair(hexColor.Substring(2, 2)) * 256
                     + ByteFromHexPair(hexColor.Substring(4, 2)));
         }
-        public static Color ColorFromHexColor(string hexColor)
+        /// <summary>
+        /// Convert the string such that red FIRST (in RRGGBB) is the LEAST significant byte.
+        /// </summary>
+        /// <param name="hexColor"></param>
+        /// <returns></returns>
+        public static int IdFromHexColorRgb(string hexColor)
         {
             if (hexColor.Length != 6)
             {
                 throw new ApplicationException("The hex color must be 6 characters.");
             }
-            byte r = ByteFromHexPair(hexColor.Substring(4, 2));
+            return (IntFromHexPair(hexColor.Substring(4, 2)) * 65536
+                    + IntFromHexPair(hexColor.Substring(2, 2)) * 256
+                    + ByteFromHexPair(hexColor.Substring(0, 2)));
+        }
+        public static string HexBgrFromColor(byte r, byte g, byte b)
+        {
+            return HexPair(b) + HexPair(g) + HexPair(r);
+        }
+        public static string HexRgbFromColor(byte r, byte g, byte b)
+        {
+            return HexPair(r) + HexPair(g) + HexPair(b);
+        }
+        public static Color ColorFromHexColorRgb(string hexColor)
+        {
+            if (hexColor.Length != 6)
+            {
+                throw new ApplicationException("The hex color must be 6 characters.");
+            }
+            byte r = ByteFromHexPair(hexColor.Substring(0, 2));
             byte g = ByteFromHexPair(hexColor.Substring(2, 2));
+            byte b = ByteFromHexPair(hexColor.Substring(4, 2));
+            return Color.FromArgb(255, r, g, b);
+        }
+        public static Color ColorFromHexColorBgr(string hexColor)
+        {
+            if (hexColor.Length != 6)
+            {
+                throw new ApplicationException("The hex color must be 6 characters.");
+            }
             byte b = ByteFromHexPair(hexColor.Substring(0, 2));
+            byte g = ByteFromHexPair(hexColor.Substring(2, 2));
+            byte r = ByteFromHexPair(hexColor.Substring(4, 2));
             return Color.FromArgb(255, r, g, b);
         }
         public static Color ColorFromId(int id)

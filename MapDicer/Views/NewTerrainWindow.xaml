@@ -5,16 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapDicer"
         mc:Ignorable="d"
-        Title="New Terrain" Height="238.668" Width="214.134"
+        Title="Terrain"
+        Width="325.134"
+        Height="368.668"
+        SizeToContent="Height"
         Loaded="Window_Loaded"
         >
-    <StackPanel x:Name="terrainsAddButtonMainSP" Orientation="Vertical">
+    <StackPanel x:Name="mainSP" Orientation="Vertical">
         <!--
 
         -->
         <Grid x:Name="terrainColorGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".1*"/>
+                <ColumnDefinition Width=".2*"/>
                 <ColumnDefinition Width=".7*"/>
                 <ColumnDefinition Width=".2*"/>
             </Grid.ColumnDefinitions>
@@ -23,8 +26,17 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Slider x:Name="redSlider" Grid.Row="0" Grid.Column="1" Margin="16" Value="100" Maximum="255" ValueChanged="redSlider_ValueChanged">
+            <TextBlock x:Name="idTBk" Grid.Row="0" Grid.Column="0" Text="Id"/>
+            <Ellipse x:Name="terrainColorEllipse" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Height="{Binding ElementName=idTBk, Path=ActualHeight}" Width="{Binding ElementName=terrainColorEllipse, Path=ActualHeight}" Fill="Black"/>
+            <TextBox IsReadOnly="True" x:Name="hexTB" Text="" Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
+            <Slider x:Name="redSlider" Grid.Row="1" Grid.Column="1" Margin="16" Value="100" Maximum="255" ValueChanged="redSlider_ValueChanged">
                 <Slider.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="Black" Offset="0.0" />
@@ -32,8 +44,8 @@
                     </LinearGradientBrush>
                 </Slider.Background>
             </Slider>
-            <TextBox x:Name="redTB" Grid.Row="0" Grid.Column="2" TextChanged="redTB_TextChanged" Text="100"/>
-            <Slider x:Name="greenSlider" Grid.Row="1" Grid.Column="1" Margin="16" Value="100" Maximum="255" ValueChanged="greenSlider_ValueChanged">
+            <TextBox x:Name="redTB" Grid.Row="1" Grid.Column="2" TextChanged="redTB_TextChanged" VerticalAlignment="Center" Text="100"/>
+            <Slider x:Name="greenSlider" Grid.Row="2" Grid.Column="1" Margin="16" Value="100" Maximum="255" ValueChanged="greenSlider_ValueChanged">
                 <Slider.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="Black" Offset="0.0" />
@@ -41,9 +53,9 @@
                     </LinearGradientBrush>
                 </Slider.Background>
             </Slider>
-            <TextBox x:Name="greenTB" Grid.Row="1" Grid.Column="2" Text="100" TextChanged="greenTB_TextChanged"/>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="R" VerticalAlignment="Center"/>
-            <Slider x:Name="blueSlider" Grid.Row="2" Grid.Column="1" Margin="16" Value="100" Maximum="255" ValueChanged="blueSlider_ValueChanged">
+            <TextBox x:Name="greenTB" Grid.Row="2" Grid.Column="2" Text="100" VerticalAlignment="Center" TextChanged="greenTB_TextChanged"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="R" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Slider x:Name="blueSlider" Grid.Row="3" Grid.Column="1" Margin="16" Value="100" Maximum="255" ValueChanged="blueSlider_ValueChanged">
                 <Slider.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="Black" Offset="0.0" />
@@ -51,11 +63,20 @@
                     </LinearGradientBrush>
                 </Slider.Background>
             </Slider>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="G" VerticalAlignment="Center"/>
-            <TextBox x:Name="blueTB" Grid.Row="2" Grid.Column="2" TextChanged="blueTB_TextChanged" Text="100"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="B" VerticalAlignment="Center"/>
-            <Ellipse x:Name="terrainColorEllipse" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="{Binding ElementName=terrainColorEllipse, Path=ActualWidth}" Fill="Black"/>
-            <TextBox x:Name="nameTB" Text="" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="G" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox x:Name="blueTB" Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" TextChanged="blueTB_TextChanged" Text="100"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="B" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Name" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox x:Name="nameTB" Text="" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Stretch" TextChanged="nameTB_TextChanged"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Image"/>
+            <TextBox x:Name="pathTB" Text="" Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Stretch"/>
+            <Button x:Name="browseBtn" Grid.Row="5" Grid.Column="2" Content="Browse..." Click="browseBtn_Click"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="SourceId"/>
+            <TextBox x:Name="sourceTB" Text="" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="PPS"/>
+            <TextBox x:Name="ppsTB" Text="" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
+            <TextBlock Grid.Row="8" Grid.Column="1" Text="(Pixels Per Sample: If less than image"/>
+            <TextBlock Grid.Row="9" Grid.Column="1" Text="size, tile takes up more than one square)"/>
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="addBtn" Content="Add" Click="addBtn_Click" IsDefault="True"/>

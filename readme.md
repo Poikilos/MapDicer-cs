@@ -12,6 +12,13 @@ With MapDicer, cartographers will be able to add a level of detail
 - gear-simple.svg is Public Domain by Openclipart via
   <https://publicdomainvectors.org/en/free-clipart/Simple-gear/62928.html>
 
+### Numbered sources
+(these numbers correspond to the SourceId in the terrain)
+1. Worldmap/Overworld Tileset
+   - Attribution: Art by MrBeast. Commissioned by OpenGameArt.org
+     (http://opengameart.org). Edited (seamless & standalone; photomanip
+     trees) by Poikilos
+
 ### Differences in Mtcompat vs Minetest
 - MapNode is a class, not a struct, and is a subclass of Mapblock.
 - There is a LiquidMapNode subclass of MapNode to try to increase speed

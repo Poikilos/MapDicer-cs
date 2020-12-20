@@ -48,6 +48,12 @@ namespace MapDicer
             }
             return null;
         }
+        public static int IntParseOrDefault(string text, int defaultValue)
+        {
+            int result;
+            bool ok = int.TryParse(text, out result);
+            return ok ? result : defaultValue;
+        }
         public static void EnsureTables()
         {
             // SettingModel.SqlConnectionString = Properties.Settings.Default.DbConnectionString;
@@ -90,7 +96,7 @@ namespace MapDicer
                        + ", SourceId INT"
                        + ", TileIndex INT"
                        + ", JSON TEXT"
-                       + ", PixPerSample INT"
+                       + ", PixPerSample INT NOT NULL"
                        + ");");
                 TrySql(sql, sc);
                 sql = ("create table Mapblock ("

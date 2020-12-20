@@ -82,7 +82,10 @@ namespace MapDicer
         }
         private void terrainBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!suppressNewWindow)
+            {
+                goToAddTerrain();
+            }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -113,18 +116,20 @@ namespace MapDicer
 
         private void brushTerrainCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((this.terrainCBx.SelectedItem != null) && (((TerrainButton)this.terrainCBx.SelectedItem).Content.Equals(SettingModel.NewIdStr)))
+            if ((this.terrainCBx.SelectedItem != null))
             {
-                try
-                {
-                    if (!suppressNewWindow)
+                if (((TerrainButton)this.terrainCBx.SelectedItem).Content.Equals(SettingModel.NewIdStr)) {
+                    try
                     {
-                        goToAddTerrain();
+                        if (!suppressNewWindow)
+                        {
+                            goToAddTerrain();
+                        }
                     }
-                }
-                catch (System.ArgumentException ex)
-                {
-                    // The system gave us the page, not the add terrain page.
+                    catch (System.ArgumentException ex)
+                    {
+                        // The system gave us the page, not the add terrain page.
+                    }
                 }
             }
         }
@@ -134,7 +139,7 @@ namespace MapDicer
             // this.Frame.Navigate(typeof(NewTerrainPage), null);
             // ^ Don't do that, it generates a new page.
             NewTerrainWindow contentDialog = new NewTerrainWindow();
-            contentDialog.prefill(prefillTerrainRed, prefillTerrainGreen, prefillTerrainBlue);
+            contentDialog.prefill(prefillTerrainRed, prefillTerrainGreen, prefillTerrainBlue, 32, 1);
             // ^ widgets are null at this point apparently
             var result = contentDialog.ShowDialog();
             prefillTerrainRed = contentDialog.Red;
