@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MapDicer.MtCompat.src
+namespace MapDicer.MtCompat
 {
     public enum ContentParamType
     {

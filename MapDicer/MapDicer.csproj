@@ -113,10 +113,10 @@
     <Compile Include="Models\Mapblock.cs" />
     <Compile Include="Models\MapDicerContext.cs" />
     <Compile Include="MapDicerTypes.cs" />
-    <Compile Include="MtCompat\src\ContentFeatures.cs" />
-    <Compile Include="MtCompat\src\Database.cs" />
-    <Compile Include="MtCompat\src\NodeDef.cs" />
-    <Compile Include="MtCompat\src\MapNode.cs" />
+    <Compile Include="MtCompat\ContentFeatures.cs" />
+    <Compile Include="MtCompat\Database.cs" />
+    <Compile Include="MtCompat\NodeDef.cs" />
+    <Compile Include="MtCompat\MapNode.cs" />
     <Compile Include="Views\EditorSettingsWindow.xaml.cs">
       <DependentUpon>EditorSettingsWindow.xaml</DependentUpon>
     </Compile>

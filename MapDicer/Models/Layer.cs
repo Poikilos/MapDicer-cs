@@ -1,4 +1,4 @@
-﻿using MapDicer.MtCompat.src;
+﻿using MapDicer.MtCompat;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
