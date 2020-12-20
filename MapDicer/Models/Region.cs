@@ -21,7 +21,7 @@ namespace MapDicer.Models
         /// <summary>
         /// The region name, such as the name of the contenent if Lod's name is continent.
         /// </summary>
-        [Required, Column("Name", TypeName = "TEXT")]
+        [Required, Column("Name")]
         public string Name { get; set; }
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace MapDicer.Models
         /// <summary>
         /// The name of this level of detail, such as World or Continent
         /// </summary>
-        [Column("Name", TypeName = "TEXT"), Required]
+        [Column("Name"), Required]
         public string Name { get; set; }
         /// <summary>
         /// The unique parent LOD in the LOD chain

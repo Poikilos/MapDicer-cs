@@ -21,25 +21,25 @@ namespace MapDicer.Models
         [Key, Column("TerrainId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int TerrainId { get; set; }
 
-        [Required, Column("Name", TypeName = "TEXT")]
+        [Required, Column("Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Ground, water, mountains, trees, etc
         /// </summary>
-        [Column("Classification", TypeName = "TEXT")]
+        [Column("Classification")]
         public string Classification { get; set; }
 
         /// <summary>
         /// Variant such as oak, pine, etc
         /// </summary>
-        [Column("Variant", TypeName = "TEXT")]
+        [Column("Variant")]
         public string Variant { get; set; }
 
         /// <summary>
         /// The path of the single tile.
         /// </summary>
-        [Column("Path", TypeName = "TEXT")]
+        [Column("Path")]
         public string Path { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace MapDicer.Models
         /// <summary>
         /// (Reserved for future use) JSON metadata (NodeDef, one per many instances).
         /// </summary>
-        [Column("JSON", TypeName = "TEXT")]
+        [Column("JSON")]
         public string JSON { get; set; }
 
         /// <summary>

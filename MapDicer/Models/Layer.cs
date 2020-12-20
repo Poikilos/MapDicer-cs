@@ -20,7 +20,7 @@ namespace MapDicer.Models
         [Required, Column("Order", TypeName = "INT"), Index(IsUnique = true)]
         public short Order { get; set; }
 
-        [Required, Column("Name", TypeName = "TEXT")]
+        [Required, Column("Name")]
         public string Name { get; set; }
     }
 }

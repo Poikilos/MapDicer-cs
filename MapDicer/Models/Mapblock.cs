@@ -78,7 +78,7 @@ namespace MapDicer.Models
         /// This is the map data for this section of the map (this map block). Each color in the image
         /// represents a terrain type.
         /// </summary>
-        [Column("Path", TypeName = "TEXT")]
+        [Column("Path")]
         public string Path { get; set; }
 
         // TODO: (future) -- this code is not validated
