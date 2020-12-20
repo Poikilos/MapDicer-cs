@@ -29,6 +29,7 @@ namespace MapDicer.Models
         /// </summary>
         [Required, Column("LodId")]
         public short LodId { get; set; }
+        [Association("region_lodid_fk", "LodId", "Lod.LodId", IsForeignKey = true)]
         public virtual Lod Lod { get; set; }
     }
 }

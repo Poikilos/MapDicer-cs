@@ -177,7 +177,7 @@ namespace MapDicer
             }
         }
 
-        private void settingsSourcesMI_Click(object sender, RoutedEventArgs e)
+        private void settingsLayersMI_Click(object sender, RoutedEventArgs e)
         {
 
         }

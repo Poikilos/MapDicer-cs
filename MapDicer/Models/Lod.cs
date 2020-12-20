@@ -18,11 +18,11 @@ namespace MapDicer.Models
     [Table("Lod")]
     public class Lod
     {
-        // public virtual ICollection<Mapblock> Mapblocks { get; set; }
+        public virtual ICollection<Mapblock> Mapblocks { get; set; }
         public virtual ICollection<Region> Regions { get; set; }
         public Lod()
         {
-            // Mapblocks = new List<Mapblock>();
+            Mapblocks = new List<Mapblock>();
             Regions = new List<Region>();
         }
         /*
@@ -49,8 +49,10 @@ namespace MapDicer.Models
         /// <summary>
         /// The unique parent LOD in the LOD chain
         /// </summary>
-        [Column("Parent"), Required, Index(IsUnique = true)]
-        public short Parent { get; set; }
+        [Column("ParentLodId"), Index(IsUnique = true)]
+        public short? ParentLodId { get; set; }
+        [Association("lod_parentlodid_fk", "ParentLodId", "Lod.LodId", IsForeignKey = true)]
+        public Lod Parent { get; set; }
         /// <summary>
         /// This is how many pixels are in the square image. The region may contain more than
         /// one Mapblock.
@@ -265,7 +267,7 @@ namespace MapDicer.Models
                      where v.LodId == entry.LodId
                      select v).First();
                 existing.Name = entry.Name;
-                existing.Parent = entry.Parent;
+                existing.ParentLodId = entry.ParentLodId;
                 existing.SamplesPerMapblock = entry.SamplesPerMapblock;
                 existing.UnitsPerSample = entry.UnitsPerSample;
                 existing.IsLeaf = entry.IsLeaf;

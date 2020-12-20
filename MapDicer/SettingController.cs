@@ -65,7 +65,7 @@ namespace MapDicer
                 sql = ("create table Lod ("
                        + "LodId INT NOT NULL PRIMARY KEY"
                        + ", Name TEXT NOT NULL UNIQUE"
-                       + ", Parent INT NOT NULL UNIQUE" // top should be -1
+                       + ", ParentLodId INT UNIQUE" // top should be null
                        + ", SamplesPerMapblock INT NOT NULL"
                        + ");");
                 TrySql(sql, sc);

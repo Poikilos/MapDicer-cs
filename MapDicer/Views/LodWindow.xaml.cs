@@ -82,7 +82,7 @@ namespace MapDicer
             }
             suppressLoad = false;
             this.NameTB.Text = entity.Name;
-            this.ParentTB.Text = entity.Parent.ToString();
+            this.ParentTB.Text = entity.ParentLodId.ToString();
             this.SamplesPerMapblockTB.Text = entity.SamplesPerMapblock.ToString();
             this.UnitsPerSample.Text = entity.UnitsPerSample.ToString();
             this.IsLeafCB.IsChecked = Lod.GetIsLeaf(entity);
@@ -136,7 +136,7 @@ namespace MapDicer
             }
             tb1 = this.ParentTB;
             if (short.TryParse(tb1.Text, out short1))
-                entity.Parent = short1;
+                entity.ParentLodId = short1;
             else
             {
                 err += String.Format(" The {0} is not a valid short.", tb1.Name);
@@ -170,7 +170,7 @@ namespace MapDicer
         {
             // LodId // short
             // Name // string
-            // Parent // short
+            // ParentLodId // short
             // UnitsPerSample // long; calculated
             // SamplesPerMapblock // long
             // IsLeaf // bool; calculated&saved

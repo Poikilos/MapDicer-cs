@@ -49,8 +49,8 @@
                             Click="settingsEditorSettingsMI_Click"
                         >
                         </MenuItem>
-                        <MenuItem x:Name="settingsSourcesMI" Header="Sources" 
-                            Click="settingsSourcesMI_Click"
+                        <MenuItem x:Name="settingsLayersMI" Header="Layers" 
+                            Click="settingsLayersMI_Click"
                         >
                         </MenuItem>
                     </ContextMenu>
