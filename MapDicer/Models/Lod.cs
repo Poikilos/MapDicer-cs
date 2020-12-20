@@ -5,7 +5,7 @@ using System.Data.SQLite;
 using System.Data.SQLite.Linq;
 using System.Text;
 
-namespace MapDicer.models
+namespace MapDicer.Models
 {
     public class Lod
     {

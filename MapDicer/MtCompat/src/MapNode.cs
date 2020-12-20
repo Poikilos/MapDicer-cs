@@ -17,12 +17,13 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+using MapDicer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MapDicer.mtcompat.src
+namespace MapDicer.MtCompat.src
 {
     using content_t = System.UInt16;
 

@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MapDicer.mtcompat.src
+namespace MapDicer.MtCompat.src
 {
     abstract class Database
     {

@@ -8,7 +8,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 // See https://damienbod.com/2013/11/14/using-sqlite-with-net/
 
-namespace MapDicer.models
+namespace MapDicer.Models
 {
     class MapDicerContext : DbContext
     {
