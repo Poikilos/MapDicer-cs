@@ -170,26 +170,16 @@ namespace MapDicer
             return null;
         }
 
-        public void Disable()
+        public void Enable(bool enable)
         {
             //Here update your label, button or any string related object.
             
             //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));    
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
-                NameTB.IsEnabled = false;
-                IdCbx.IsEnabled = false;
-                ParentTB.IsEnabled = false;
-            }));
-        }
-        public void Enable()
-        {
-            //Here update your label, button or any string related object.
-            
-            //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));    
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
-                NameTB.IsEnabled = true;
-                IdCbx.IsEnabled = true;
-                ParentTB.IsEnabled = true;
+                skeletonImage.Visibility = enable ? Visibility.Hidden : Visibility.Visible;
+                NameTB.IsEnabled = enable;
+                IdCbx.IsEnabled = enable;
+                ParentTB.IsEnabled = enable;
             }));
         }
 
@@ -203,11 +193,12 @@ namespace MapDicer
                     SetFrom(lod); // does set SelectedIndex
                 }
             }));
+            // rhatwar007 https://stackoverflow.com/a/24624095/4541104
         }
 
         private void ReadPrefilledEntry(bool reloadIds)
         {
-            Disable();
+            Enable(false);
 
             //Enable(false);
             // LodId // short
@@ -218,7 +209,7 @@ namespace MapDicer
             // IsLeaf // bool; calculated&saved
             LoadFieldsSafe(reloadIds, PrefillId <= -1);
             
-            Enable();
+            Enable(true);
         }
 
         private void IdCbx_SelectionChanged(object sender, RoutedEventArgs e)

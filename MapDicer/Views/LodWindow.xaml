@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapDicer"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         Title="Level of Detail (LOD)" Height="228.373" Width="454.057"
         Loaded="Window_Loaded"
@@ -50,5 +51,6 @@
         <Button x:Name="newBtn" Content="Save as New" Grid.Row="7" Grid.Column="1" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
         -->
         <Button x:Name="cancelBtn" Content="Cancel" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Height="Auto" VerticalAlignment="Bottom" Click="cancelBtn_Click"/>
+        <Image x:Name="skeletonImage" Source="{svgc:SvgImage Assets/lod_window_skeleton.svg}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
