@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+// using System.Windows.Threading;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace MapDicer
 {
@@ -26,6 +29,7 @@ namespace MapDicer
         public static short PrefillId = -1;
         public static short prefillParent;
         private bool suppressLoad = false;
+        // private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
 
         private void ClearFields(bool reloadIds, bool setSelectedIndexToNew)
         {
@@ -166,20 +170,55 @@ namespace MapDicer
             return null;
         }
 
+        public void Disable()
+        {
+            //Here update your label, button or any string related object.
+            
+            //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));    
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
+                NameTB.IsEnabled = false;
+                IdCbx.IsEnabled = false;
+                ParentTB.IsEnabled = false;
+            }));
+        }
+        public void Enable()
+        {
+            //Here update your label, button or any string related object.
+            
+            //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));    
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
+                NameTB.IsEnabled = true;
+                IdCbx.IsEnabled = true;
+                ParentTB.IsEnabled = true;
+            }));
+        }
+
+        private void LoadFieldsSafe(bool reloadIds, bool setSelectedIndexToNew)
+        {
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
+                ClearFields(reloadIds, setSelectedIndexToNew);
+                if (PrefillId > -1)
+                {
+                    Lod lod = Lod.GetById(PrefillId);
+                    SetFrom(lod); // does set SelectedIndex
+                }
+            }));
+        }
+
         private void ReadPrefilledEntry(bool reloadIds)
         {
+            Disable();
+
+            //Enable(false);
             // LodId // short
             // Name // string
             // ParentLodId // short
             // UnitsPerSample // long; calculated
             // SamplesPerMapblock // long
             // IsLeaf // bool; calculated&saved
-            ClearFields(reloadIds, PrefillId <= -1);
-            if (PrefillId > -1)
-            {
-                Lod lod = Lod.GetById(PrefillId);
-                SetFrom(lod); // does set SelectedIndex
-            }
+            LoadFieldsSafe(reloadIds, PrefillId <= -1);
+            
+            Enable();
         }
 
         private void IdCbx_SelectionChanged(object sender, RoutedEventArgs e)
@@ -203,8 +242,27 @@ namespace MapDicer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ReadPrefilledEntry(true);
+            /*
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += dispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+            */
+            Thread th = new Thread(LoadForm);
+            th.Start(true);
+            // Thread t = new System.Threading.Thread()
         }
+        private void LoadForm(object o)
+        {
+            ReadPrefilledEntry((bool)o);
+        }
+
+        /*
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+        }
+        */
+
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
