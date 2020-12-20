@@ -1,4 +1,5 @@
 ﻿using MapDicer.Models;
+using MapDicer.MtCompat.src;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,16 @@ namespace MapDicer
     /// This is a unique spatial position where y is an abstract computation from the Lod and
     /// layer.
     /// </summary>
-    struct MapDicerPos
+    public struct MapDicerPos
     {
+        public MapDicerPos(long mapBlockId)
+        {
+            v3s16 pos = MapDatabase.getIntegerAsBlock(mapBlockId);
+            X = pos.X;
+            Z = pos.Z;
+            LodId = (short)(pos.Y / SettingModel.MaxLayerCount);
+            Layer = (short)(pos.Y % SettingModel.MaxLayerCount);
+        }
         public short LodId;
         public short Layer;
         public short X;
@@ -41,7 +50,7 @@ namespace MapDicer
         /// <param name="layer">A key for a layer entity such as that of "terrain" or
         /// "elevation"</param>
         /// <returns>a primary key for the Mapblock at the given location</returns>
-        public long getBlockLayerAsInteger()
+        public long getSliceAsInteger()
         {
             if (Layer >= SettingModel.MaxLayerCount)
             {

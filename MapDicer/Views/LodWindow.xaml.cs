@@ -77,7 +77,7 @@ namespace MapDicer
             this.ParentTB.Text = entity.Parent.ToString();
             this.SamplesPerMapblockTB.Text = entity.SamplesPerMapblock.ToString();
             this.UnitsPerSample.Text = entity.UnitsPerSample.ToString();
-            this.IsLeafCB.IsChecked = entity.GetIsLeaf();
+            this.IsLeafCB.IsChecked = Lod.GetIsLeaf(entity);
         }
 
         /// <summary>

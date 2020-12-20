@@ -46,7 +46,7 @@ namespace MapDicer.MtCompat.src
     }
 
 
-    class MapNode : Mapblock
+    public class MapNode
     {
 
         /*
@@ -114,7 +114,7 @@ namespace MapDicer.MtCompat.src
         }
     }
 
-    class LiquidMapNode : MapNode
+    public class LiquidMapNode : MapNode
     {
         byte param2;
         byte getParam2()

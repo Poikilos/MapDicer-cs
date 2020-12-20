@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MapDicer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -111,7 +112,7 @@ namespace MapDicer
 
         private void brushTerrainCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((this.terrainCBx.SelectedItem != null) && (((TerrainButton)this.terrainCBx.SelectedItem).Content.Equals(TerrainButton.newItemContent)))
+            if ((this.terrainCBx.SelectedItem != null) && (((TerrainButton)this.terrainCBx.SelectedItem).Content.Equals(SettingModel.NewIdStr)))
             {
                 try
                 {

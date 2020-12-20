@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MapDicer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace MapDicer
     /// </summary>
     class TerrainButton : System.Windows.Controls.Button
     {
-        public const string newItemContent = "(Add New)";
+        // public const string newItemContent = "(Add New)";
 
         public byte R;
         public byte G;
@@ -27,7 +28,7 @@ namespace MapDicer
 
         private void Terrain_Loaded(object sender, EventArgs e)
         {
-            if ((string)Content != newItemContent)
+            if ((string)Content != SettingModel.NewIdStr)
             {
                 // this.BorderBrush.Opacity = 0;
                 // this.Background.Opacity = 0;

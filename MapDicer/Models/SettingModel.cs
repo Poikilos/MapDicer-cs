@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 // using System.Linq;
 using System.Text;
-using System.Windows.Media;
 using System.Data.SQLite;
 
 namespace MapDicer.Models
@@ -23,8 +22,8 @@ namespace MapDicer.Models
                     // conString.ToFullPath = true; // not available
                     // conString.FullUri = (new System.Uri(fullPath)).AbsoluteUri;
                     // conString.Version = 3;
-                    // conString.ForeignKeys = true; // not available
-                    // conString.Flags |= SQLiteConnectionFlags.HidePassword; // Flags not available
+                    conString.ForeignKeys = true; // not available
+                    conString.Flags |= SQLiteConnectionFlags.HidePassword; // Flags not available
                     // conString.Flags |= SQLiteConnectionFlags.LogAll;
                     // conString.Flags |= SQLiteConnectionFlags.UseConnectionPool;
                     // conString.Flags |= SQLiteConnectionFlags.UseConnectionTypes;
@@ -71,45 +70,5 @@ namespace MapDicer.Models
             MessageBox.Show(sender.GetType().Name);
         }
         */
-        public static byte IntFromHexPair(string hexPairStr)
-        {
-            return (byte)Convert.ToInt32(hexPairStr, 16);
-        }
-        public static byte ByteFromHexPair(string hexPairStr)
-        {
-            return (byte)IntFromHexPair(hexPairStr);
-        }
-        public static string HexPair(byte v)
-        {
-            return Convert.ToString(v, 16);
-        }
-        public static Color ColorFromHexColor(string hexColor)
-        {
-            if (hexColor.Length != 6)
-            {
-                throw new ApplicationException("The hex color must be 6 characters.");
-            }
-            byte r = ByteFromHexPair(hexColor.Substring(4, 2));
-            byte g = ByteFromHexPair(hexColor.Substring(2, 2));
-            byte b = ByteFromHexPair(hexColor.Substring(0, 2));
-            return Color.FromArgb(255, r, g, b);
-        }
-        public static int IdFromHexColor(string hexColor)
-        {
-            if (hexColor.Length != 6)
-            {
-                throw new ApplicationException("The hex color must be 6 characters.");
-            }
-            // The ID only reaches the value of a 24-bit number.
-            // Blue is most significant byte (to immitate life--blue is more intense).
-            return (IntFromHexPair(hexColor.Substring(0, 2)) * 65536
-                    + ByteFromHexPair(hexColor.Substring(2, 2)) * 256
-                    + ByteFromHexPair(hexColor.Substring(4, 2)));
-        }
-        public static Color ColorFromId(int id)
-        {
-            // A byte overflow will occur on blue if the id is out of range.
-            return Color.FromArgb(255, (byte)(id & 0xFF), (byte)((id >> 8) & 0xFF), (byte)(id >> 16));
-        }
     }
 }

@@ -24,7 +24,7 @@ using System.Text;
 
 namespace MapDicer.MtCompat.src
 {
-    struct ContentFeatures
+    public struct ContentFeatures
     {
         public LiquidType liquid_type;
         public ContentParamType param_type;

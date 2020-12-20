@@ -24,12 +24,12 @@ using System.Text;
 
 namespace MapDicer.MtCompat.src
 {
-    enum ContentParamType
+    public enum ContentParamType
     {
         None,
         Light,
     };
-    enum ContentParamType2
+    public enum ContentParamType2
     {
         None,
         // Need 8-bit param2
@@ -55,7 +55,7 @@ namespace MapDicer.MtCompat.src
         // Glasslike framed drawtype internal liquid level, param2 values 0 to 63
         GlasslikeLiquidLevel,
     }
-    enum LiquidType
+    public enum LiquidType
     {
         None,
         Flowing,
@@ -65,7 +65,7 @@ namespace MapDicer.MtCompat.src
     {
         // TODO: Implement this if importing Nodes from Minetest Lua mods.
     }
-    interface INodeDefManager
+    public interface INodeDefManager
     {
         ContentFeatures Get(MapNode node);
         // TODO: C# 8.0 or greater allows an interface to have a default implementation.

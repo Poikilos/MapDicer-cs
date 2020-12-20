@@ -101,8 +101,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IrrCompat\IrrcompatTypes.cs" />
+    <Compile Include="Models\Layer.cs" />
     <Compile Include="Models\Lod.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\SQLiteConfiguration.cs" />
+    <Compile Include="Models\Terrain.cs" />
     <Compile Include="Views\LodWindow.xaml.cs">
       <DependentUpon>LodWindow.xaml</DependentUpon>
     </Compile>

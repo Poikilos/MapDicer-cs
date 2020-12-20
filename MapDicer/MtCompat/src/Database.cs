@@ -74,7 +74,7 @@ namespace MapDicer.MtCompat.src
         /// <param name="p">A block offset in [x, z] format where y is zenith and 1 is the
         /// size of a Mapblock in this Lod</param>
         /// <returns>a primary key for the Mapblock at the given location</returns>
-        public long getBlockAsInteger(v3s16 pos)
+        public static long getBlockAsInteger(v3s16 pos)
         {
             return (long)((ulong)pos.Z * 0x1000000 +
                 (ulong)pos.Y * 0x1000 +
@@ -88,7 +88,7 @@ namespace MapDicer.MtCompat.src
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public v3s16 getIntegerAsBlock(long i)
+        public static v3s16 getIntegerAsBlock(long i)
         {
             v3s16 pos;
             // barring the "new" operator, fields must be assigned manually before use in C# structs.

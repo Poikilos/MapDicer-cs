@@ -14,9 +14,11 @@ namespace MapDicer.Models
     class MapDicerContext : DbContext
     {
         // can't derive from sealed class System.Data.SQLite.SQLiteContext
+        public DbSet<Layer> Layer { get; set; }
         public DbSet<Lod> Lods { get; set; }
         public DbSet<Mapblock> Mapblocks { get; set; }
         public DbSet<Region> Regions { get; set; }
+        public DbSet<Terrain> Terrains { get; set; }
 
         public MapDicerContext()
             : base(new SQLiteConnection() {

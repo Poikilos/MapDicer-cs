@@ -4,11 +4,22 @@ using System.Linq;
 using System.Data.SQLite;
 using System.Data.SQLite.Linq;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
+// using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+// using System.Data.Linq.Mapping;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MapDicer.Models
 {
+    [Table("Lod")]
     public class Lod
     {
+        // public virtual ICollection<Mapblock> Mapblocks { get; set; }
+        public virtual ICollection<Region> Regions { get; set; }
         public Lod()
         {
             // Mapblocks = new List<Mapblock>();
@@ -21,6 +32,7 @@ namespace MapDicer.Models
         }
         */
 
+        [Key, Column("LodId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LodId { get; set; }
         public short Id
         {
@@ -32,15 +44,18 @@ namespace MapDicer.Models
         /// <summary>
         /// The name of this level of detail, such as World or Continent
         /// </summary>
+        [Column("Name", TypeName = "TEXT"), Required]
         public string Name { get; set; }
         /// <summary>
         /// The unique parent LOD in the LOD chain
         /// </summary>
+        [Column("Parent", TypeName = "INT"), Required]
         public short Parent { get; set; }
         /// <summary>
         /// This is how many pixels are in the square image. The region may contain more than
         /// one Mapblock.
         /// </summary>
+        [Column("SamplesPerMapblock", TypeName = "INT"), Required]
         public long SamplesPerMapblock { get; set; }
 
         #region computed
@@ -48,24 +63,22 @@ namespace MapDicer.Models
         /// The statistic is only for display purposes.
         /// This stored for caching purposes (to prevent having to traverse to the leaf).
         /// </summary>
-        public long UnitsPerSample { get; set; }
+        public long UnitsPerSample;
         /// <summary>
         /// Whether this is the leaf. You cannot enter a leaf. A leaf is a Node.
         /// </summary>
-        private bool IsLeaf { get; set; }
+        public bool IsLeaf;
         #endregion computed
 
-        // public virtual ICollection<Mapblock> Mapblocks { get; set; }
-        public virtual ICollection<Region> Regions { get; set; }
 
 
         public static short GetNewId()
         {
             return (short)(Lod.LastId() + 1);
         }
-        public bool GetIsLeaf()
+        public static bool GetIsLeaf(Lod entry)
         {
-            return (GetChild(this.LodId) == null);
+            return (GetChild(entry.LodId) == null);
         }
 
         public static Lod GetChild(short parent)
