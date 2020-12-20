@@ -14,13 +14,13 @@ namespace MapDicer.Models
     [Table("Layer")]
     public class Layer : MapNode
     {
-        [Key, Column("LayerId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, Column("LayerId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LayerId { get; set; }
 
-        [Required, Column("Order", TypeName = "INT"), Index(IsUnique = true)]
+        [Required, Column("Order"), Index(IsUnique = true)]
         public short Order { get; set; }
 
-        [Required, Column("Name")]
+        [Required, Column("Name"), Index(IsUnique = true)]
         public string Name { get; set; }
     }
 }

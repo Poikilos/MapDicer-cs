@@ -18,10 +18,10 @@ namespace MapDicer.Models
         /// The color on the map image denotes the terrain. Alpha is unused, so only 24 bits of this
         /// int will ever be used.
         /// </summary>
-        [Key, Column("TerrainId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, Column("TerrainId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int TerrainId { get; set; }
 
-        [Required, Column("Name")]
+        [Required, Column("Name"), Index(IsUnique = true)]
         public string Name { get; set; }
 
         /// <summary>
@@ -45,14 +45,14 @@ namespace MapDicer.Models
         /// <summary>
         /// (Reserved for future use) The source of the image.
         /// </summary>
-        [Column("SourceId", TypeName = "INT")]
-        public long SourceId { get; set; }
+        [Column("SourceId")]
+        public int SourceId { get; set; }
 
         /// <summary>
         /// (Reserved for future use) If this was/is cropped from a tileset (denoted by SourceId in future
         /// versions), this is the ID.
         /// </summary>
-        [Column("TileIndex", TypeName = "INT")]
+        [Column("TileIndex")]
         public int TileIndex { get; set; }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace MapDicer.Models
         /// Scale the graphic so this many pixels fits into the sample (this is for representing a terrain
         /// graphically rather than by plain color).
         /// </summary>
-        [Column("PixPerSample", TypeName = "INT")]
+        [Column("PixPerSample")]
         public int PixPerSample { get; set; }
 
         public static byte IntFromHexPair(string hexPairStr)

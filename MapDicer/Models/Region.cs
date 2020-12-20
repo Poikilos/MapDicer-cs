@@ -16,7 +16,7 @@ namespace MapDicer.Models
         }
         public virtual ICollection<Mapblock> Mapblocks { get; set; }
 
-        [Key, Column("RegionId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, Column("RegionId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long RegionId { get; set; }
         /// <summary>
         /// The region name, such as the name of the contenent if Lod's name is continent.
@@ -27,7 +27,7 @@ namespace MapDicer.Models
         /// <summary>
         /// This is the parent.
         /// </summary>
-        [Required, Column("LodId", TypeName ="INT")]
+        [Required, Column("LodId")]
         public short LodId { get; set; }
         public virtual Lod Lod { get; set; }
     }

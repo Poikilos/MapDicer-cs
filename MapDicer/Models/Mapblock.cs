@@ -19,9 +19,10 @@ namespace MapDicer.Models
         /// of the coordinates as the primary key. It is the key because the hash denotes a unique
         /// combination of location, Layer, and Lod (See MtCompat.MapDatabase.getBlockAsInteger).
         /// </summary>
-        [Key, Column("MapblockId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, Column("MapblockId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long MapblockId { get; set; }
         // public string Name { get; set; }
+
         public Mapblock()
         {
 
@@ -47,7 +48,7 @@ namespace MapDicer.Models
         /// <summary>
         /// This is for getting infomation on how to place it, not for structure per se.
         /// </summary>
-        [Required, Column("LodId", TypeName = "INT"), ForeignKey("Lod")]
+        [Required, Column("LodId"), ForeignKey("Lod")]
         public short LodId { get; set; }
         public virtual Lod Lod { get; set; }
 
@@ -55,7 +56,7 @@ namespace MapDicer.Models
         /// <summary>
         /// This is for organizing by stat, not for structure per se.
         /// </summary>
-        [Required, Column("LayerId", TypeName = "INT"), ForeignKey("Layer")]
+        [Required, Column("LayerId"), ForeignKey("Layer")]
         public short LayerId { get; set; }
         public virtual Layer Layer { get; set; }
 
@@ -63,7 +64,7 @@ namespace MapDicer.Models
         /// <summary>
         /// This is the structural (real) parent.
         /// </summary>
-        [Required, Column("RegionId", TypeName = "INT"), ForeignKey("Region")]
+        [Required, Column("RegionId"), ForeignKey("Region")]
         public long RegionId { get; set; }
         public virtual Region Region { get; set; }
 
@@ -71,7 +72,7 @@ namespace MapDicer.Models
         /// This is the default terrain for non-generated parts. It is visible through the transparent
         /// parts of the map data, so only 24-bits of it is used.
         /// </summary>
-        [Column("TerrainId", TypeName = "INT")]
+        [Column("TerrainId")]
         public int TerrainId { get; set; }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace MapDicer.Models
         }
         */
 
-        [Key, Column("LodId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, Column("LodId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LodId { get; set; }
         public short Id
         {
@@ -44,18 +44,18 @@ namespace MapDicer.Models
         /// <summary>
         /// The name of this level of detail, such as World or Continent
         /// </summary>
-        [Column("Name"), Required]
+        [Column("Name"), Required, Index(IsUnique = true)]
         public string Name { get; set; }
         /// <summary>
         /// The unique parent LOD in the LOD chain
         /// </summary>
-        [Column("Parent", TypeName = "INT"), Required]
+        [Column("Parent"), Required, Index(IsUnique = true)]
         public short Parent { get; set; }
         /// <summary>
         /// This is how many pixels are in the square image. The region may contain more than
         /// one Mapblock.
         /// </summary>
-        [Column("SamplesPerMapblock", TypeName = "INT"), Required]
+        [Column("SamplesPerMapblock"), Required]
         public long SamplesPerMapblock { get; set; }
 
         #region computed
