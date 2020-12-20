@@ -17,8 +17,8 @@ namespace MapDicer.Models
         [Key, Column("LayerId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LayerId { get; set; }
 
-        [Required, Column("Order"), Index(IsUnique = true)]
-        public short Order { get; set; }
+        [Required, Column("Num"), Index(IsUnique = true)]
+        public short Num { get; set; }
 
         [Required, Column("Name"), Index(IsUnique = true)]
         public string Name { get; set; }

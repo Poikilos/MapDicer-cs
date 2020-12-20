@@ -9,6 +9,13 @@ namespace MapDicer.Models
     class SettingModel
     {
         public const string NewIdStr = "(New)";
+        public static string DbFullPath
+        {
+            get
+            {
+                return System.IO.Path.GetFullPath(Properties.Settings.Default.DbFile);
+            }
+        }
         public static string SqlConnectionString
         {
             get
@@ -17,7 +24,7 @@ namespace MapDicer.Models
                 if (oldConnectionString.Trim().Length == 0)
                 {
                     SQLiteConnectionStringBuilder conString = new SQLiteConnectionStringBuilder();
-                    string fullPath = System.IO.Path.GetFullPath(Properties.Settings.Default.DbFile);
+                    string fullPath = DbFullPath;
                     conString.DataSource = fullPath;
                     // conString.ToFullPath = true; // not available
                     // conString.FullUri = (new System.Uri(fullPath)).AbsoluteUri;
@@ -55,14 +62,7 @@ namespace MapDicer.Models
                 return maxLayerCount;
             }
         }
-        public static void LoadSettings()
-        {
-            // SettingModel.SqlConnectionString = Properties.Settings.Default.DbConnectionString;
-        }
         static SettingModel() {
-            LoadSettings();
-            // Properties.Settings.Default.PropertyChanged += SettingModel.PropertyChangedCallback_Event;
-            // ^ never happens
         }
         /*
         private static void PropertyChangedCallback_Event(object sender, PropertyChangedEventArgs e)

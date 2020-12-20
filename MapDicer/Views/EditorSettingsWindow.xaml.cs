@@ -49,6 +49,7 @@ namespace MapDicer
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
             this.writeSettings();
+            SettingController.EnsureTables(); // Use the new connection string.
             this.DialogResult = true;
             this.Close();
         }

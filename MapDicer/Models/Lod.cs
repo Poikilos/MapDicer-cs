@@ -136,6 +136,31 @@ namespace MapDicer.Models
                 }
                 return null;
             }
+            /*
+            catch (System.Data.SQLite.SQLiteException ex)
+            {
+                
+                // SQLiteException: SQL logic error
+                // no such table: Lod
+                // ^ but that's just the inner exception. See below.
+                
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            catch (System.Data.Entity.Core.EntityCommandExecutionException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            */
             return null;
         } // (*Linq to db*, 2020)
         public static Lod Last()
@@ -156,8 +181,8 @@ namespace MapDicer.Models
                 }
                 var existing = (from entry in context.Lods
                                 // where entry.Id < 25
-                            orderby entry.LodId ascending // the Last method depends on ascending.
-                            select entry).Last();
+                            orderby entry.LodId descending // the Last method depends on ascending.
+                            select entry).First();
                 return existing;
             }
         }
@@ -185,18 +210,36 @@ namespace MapDicer.Models
         public static bool Insert(Lod newEntry, bool generateId)
         {
             bool ok = false;
+            Lod last = null;
+            short newId = 0;
+            if (generateId)
+            {
+                using (var context = new MapDicerContext())
+                {
+                    context.Database.CreateIfNotExists();
+                    var existing = (from entry in context.Lods
+                                        // where entry.Id < 25
+                                    orderby entry.LodId descending // the Last method depends on ascending.
+                                    select entry).FirstOrDefault();
+                    if (existing != null)
+                        newId = existing.LodId; // last = existing;
+                    // else assume no entries (leave new entry at 0 if generateId)
+                }
+            }
+
             using (var context = new MapDicerContext())
             {
                 context.Database.CreateIfNotExists();
                 if (generateId)
                 {
-                    var existing = (from entry in context.Lods
-                                        // where entry.Id < 25
-                                    orderby entry.LodId ascending // the Last method depends on ascending.
-                                    select entry).LastOrDefault();
+                    newEntry.LodId = newId;
+                    /*
                     newEntry.LodId = 0;
-                    if (existing != null)
-                        newEntry.LodId = (short)(existing.LodId + 1);
+                    if (last != null)
+                        newEntry.LodId = (short)(last.LodId + 1);
+                    else
+                        newEntry.LodId = 0; // Assumes the table is empty or not present.
+                    */
                 }
 
                 context.Lods.Add(newEntry);

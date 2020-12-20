@@ -35,7 +35,15 @@ namespace MapDicer
                 Lod.errors.Clear();
                 this.IdCbx.Items.Clear();
                 this.IdCbx.Items.Add(SettingModel.NewIdStr);
-                List<Lod> items = Lod.All();
+                List<Lod> items = null;
+                try
+                {
+                    items = Lod.All();
+                }
+                catch (System.Data.Entity.Core.EntityCommandExecutionException ex)
+                {
+                    // doesn't matter, table must be empty (or not present yet)
+                }
                 if (Lod.errors.Count > 0)
                 {
                     string msg = Lod.errors.Dequeue();

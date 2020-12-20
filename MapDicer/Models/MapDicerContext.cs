@@ -13,8 +13,11 @@ namespace MapDicer.Models
 {
     class MapDicerContext : DbContext
     {
+        static MapDicerContext() {
+            SettingController.Start();
+        }
         // can't derive from sealed class System.Data.SQLite.SQLiteContext
-        public DbSet<Layer> Layer { get; set; }
+        public DbSet<Layer> Layers { get; set; }
         public DbSet<Lod> Lods { get; set; }
         public DbSet<Mapblock> Mapblocks { get; set; }
         public DbSet<Region> Regions { get; set; }
@@ -23,6 +26,7 @@ namespace MapDicer.Models
         public MapDicerContext()
             : base(new SQLiteConnection() {
                 ConnectionString  = SettingModel.SqlConnectionString
+                
             }, true)
         {
             // MessageBox.Show(String.Format("Connection string: {0}", SettingModel.SqlConnectionString));
@@ -33,6 +37,7 @@ namespace MapDicer.Models
             // Do not pluralize table names.
             modelBuilder.Conventions
                 .Remove<PluralizingTableNameConvention>();
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="MapDicer" Height="450" Width="800"
         SizeChanged="Window_SizeChanged"
+        Loaded="Window_Loaded"
         >
     <StackPanel x:Name="mainSP" Orientation="Vertical">
         <Grid x:Name="menuGrid" Width="Auto" Height="Auto" Background="LightSlateGray">

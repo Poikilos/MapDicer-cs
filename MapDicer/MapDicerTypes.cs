@@ -16,10 +16,10 @@ namespace MapDicer
         public MapDicerPos(long mapBlockId)
         {
             v3s16 pos = MapDatabase.getIntegerAsBlock(mapBlockId);
-            X = pos.X;
-            Z = pos.Z;
-            LodId = (short)(pos.Y / SettingModel.MaxLayerCount);
-            Layer = (short)(pos.Y % SettingModel.MaxLayerCount);
+            this.X = pos.X;
+            this.Z = pos.Z;
+            this.LodId = (short)(pos.Y / SettingModel.MaxLayerCount);
+            this.Layer = (short)(pos.Y % SettingModel.MaxLayerCount);
         }
         public short LodId;
         public short Layer;
@@ -33,8 +33,8 @@ namespace MapDicer
             }
             set
             {
-                LodId = (short)(value / SettingModel.MaxLayerCount);
-                Layer = (short)(value % SettingModel.MaxLayerCount);
+                this.LodId = (short)(value / SettingModel.MaxLayerCount);
+                this.Layer = (short)(value % SettingModel.MaxLayerCount);
             }
         }
         /// <summary>
@@ -52,7 +52,7 @@ namespace MapDicer
         /// <returns>a primary key for the Mapblock at the given location</returns>
         public long getSliceAsInteger()
         {
-            if (Layer >= SettingModel.MaxLayerCount)
+            if (this.Layer >= SettingModel.MaxLayerCount)
             {
                 throw new ApplicationException("The layer number cannot be >= MaxLayerCount");
             }

@@ -72,7 +72,7 @@ namespace MapDicer.Models
         /// This is the default terrain for non-generated parts. It is visible through the transparent
         /// parts of the map data, so only 24-bits of it is used.
         /// </summary>
-        [Column("TerrainId")]
+        [Required, Column("TerrainId"), ForeignKey("Terrain")]
         public int TerrainId { get; set; }
 
         /// <summary>

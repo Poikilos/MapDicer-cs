@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -188,12 +189,19 @@ namespace MapDicer
 
         private void detailBtn_Click(object sender, RoutedEventArgs e)
         {
+            SettingController.Start();
             LodWindow dlg = new LodWindow();
             var result = dlg.ShowDialog();
             if (result == true)
             {
                 // Do nothing, it saves on its own.
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // TimerCallback tc = new TimerCallback()
+            // Timer t = new Timer();
         }
     }
 }
