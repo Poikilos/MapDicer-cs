@@ -9,6 +9,9 @@ using System.Data.SQLite.EF6;
 using System.Linq;
 using System.Text;
 
+// See https://www.codeproject.com/Articles/1158937/SQLite-with-Csharp-Net-and-Entity-Framework?msg=5772111#xx5772111xx
+// - This file must be in the same namespace as the DbContext and Models.
+
 namespace MapDicer.Models
 {
     class SQLiteConfiguration : DbConfiguration
@@ -17,7 +20,9 @@ namespace MapDicer.Models
         {
             SetProviderFactory("System.Data.SQLite", SQLiteFactory.Instance);
             SetProviderFactory("System.Data.SQLite.EF6", SQLiteProviderFactory.Instance);
+            // SetProviderFactory("System.Data.SQLite.Linq", SQLiteProviderFactory.Instance);
             SetProviderServices("System.Data.SQLite", (DbProviderServices)SQLiteProviderFactory.Instance.GetService(typeof(DbProviderServices)));
+            // ^ See https://www.codeproject.com/Articles/1158937/SQLite-with-Csharp-Net-and-Entity-Framework?msg=5772111#xx5772111xx
         }
     }
 }

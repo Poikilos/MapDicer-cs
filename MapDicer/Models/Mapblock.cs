@@ -7,12 +7,18 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Mapping;
 using System.Data.SQLite;
 using System.Data.SQLite.EF6;
+// using System.Data.SQLite.Linq;
 
 namespace MapDicer.Models
 {
     [Table("Mapblock")]
     public class Mapblock : MapNode
     {
+        /// <summary>
+        /// The primary key must be long (INT in SQLite is same as long) because it contains the hash
+        /// of the coordinates as the primary key. It is the key because the hash denotes a unique
+        /// combination of location, Layer, and Lod (See MtCompat.MapDatabase.getBlockAsInteger).
+        /// </summary>
         [Key, Column("MapblockId", TypeName = "INT"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long MapblockId { get; set; }
         // public string Name { get; set; }
@@ -58,22 +64,22 @@ namespace MapDicer.Models
         /// This is the structural (real) parent.
         /// </summary>
         [Required, Column("RegionId", TypeName = "INT"), ForeignKey("Region")]
-        public short RegionId { get; set; }
+        public long RegionId { get; set; }
         public virtual Region Region { get; set; }
 
         /// <summary>
         /// This is the default terrain for non-generated parts. It is visible through the transparent
-        /// parts of the map data.
+        /// parts of the map data, so only 24-bits of it is used.
         /// </summary>
         [Column("TerrainId", TypeName = "INT")]
-        public short TerrainId { get; set; }
+        public int TerrainId { get; set; }
 
         /// <summary>
         /// This is the map data for this section of the map (this map block). Each color in the image
         /// represents a terrain type.
         /// </summary>
         [Column("Path", TypeName = "TEXT")]
-        public short Path { get; set; }
+        public string Path { get; set; }
 
         // TODO: (future) -- this code is not validated
         /*

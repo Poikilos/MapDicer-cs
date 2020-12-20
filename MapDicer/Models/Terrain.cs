@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Mapping;
 using System.Data.SQLite;
 using System.Data.SQLite.EF6;
+// using System.Data.SQLite.Linq;
 using System.Windows.Media;
 
 namespace MapDicer.Models

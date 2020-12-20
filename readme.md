@@ -56,6 +56,10 @@ Other bad options:
 - keyword not supported: 'tofullpath'
 - keyword not supported: 'foreign keys'
 
+### SQLite Types
+#### Entity Framework 6 (EF6)
+Column TypeName:
+- "TEXT" doesn't work
 
 ## Compiling
 
