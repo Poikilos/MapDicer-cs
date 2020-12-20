@@ -25,13 +25,25 @@ namespace MapDicer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Default.db;Cache=Shared")]
-        public string LastConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DbConnectionString {
             get {
-                return ((string)(this["LastConnectionString"]));
+                return ((string)(this["DbConnectionString"]));
             }
             set {
-                this["LastConnectionString"] = value;
+                this["DbConnectionString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Default.sqlite")]
+        public string DbFile {
+            get {
+                return ((string)(this["DbFile"]));
+            }
+            set {
+                this["DbFile"] = value;
             }
         }
     }

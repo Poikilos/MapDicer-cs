@@ -53,6 +53,8 @@ as well as fix issues above):
 Other bad options:
 - keyword not supported: 'version' for `Version=3;`
 - keyword not supported: 'new' for `New=True;`
+- keyword not supported: 'tofullpath'
+- keyword not supported: 'foreign keys'
 
 
 ## Compiling
@@ -125,6 +127,13 @@ Windows Registry Editor Version 5.00
   package instead). See <https://github.com/ElinamLLC/SharpVectors>.
 - System.Data.SQLite.Linq
   - Microsoft.EntityFrameworkCore
+- System.Data.SQLite
+  - Stub.System.Data.SQLite.Core.NetFramework.1.0.113.3
+  - System.Data.SQLite.Core.1.0.113.6
+  - System.Data.SQLite.EF6.1.0.113
+  - System.Data.SQLite.1.0.113.6
+
+
 
 ### UWP branch (deprecated) Dependencies (NuGet)
 - Uno.SQLitePCLRaw.wasm for cross-platform SQLite support.

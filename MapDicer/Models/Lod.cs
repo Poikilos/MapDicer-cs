@@ -94,6 +94,7 @@ namespace MapDicer.Models
             {
                 using (var context = new MapDicerContext())
                 {
+                    context.Database.CreateIfNotExists();
                     if (!context.Database.Exists())
                     {
                         /*
@@ -128,6 +129,7 @@ namespace MapDicer.Models
         {
             using (var context = new MapDicerContext())
             {
+                context.Database.CreateIfNotExists();
                 if (!context.Database.Exists())
                 {
                     /*
@@ -159,6 +161,7 @@ namespace MapDicer.Models
         {
             using (var context = new MapDicerContext())
             {
+                context.Database.CreateIfNotExists();
                 var existing = (from entry in context.Lods
                                     // where entry.Id < 25
                                 orderby entry.LodId ascending
@@ -171,6 +174,7 @@ namespace MapDicer.Models
             bool ok = false;
             using (var context = new MapDicerContext())
             {
+                context.Database.CreateIfNotExists();
                 if (generateId)
                 {
                     var existing = (from entry in context.Lods
@@ -198,6 +202,7 @@ namespace MapDicer.Models
             bool ok = false;
             using (var context = new MapDicerContext())
             {
+                context.Database.CreateIfNotExists();
                 // see https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/linq/insert-update-and-delete-operations
                 var existing =
                     (from v in context.Lods
@@ -219,6 +224,7 @@ namespace MapDicer.Models
             bool ok = false;
             using (var context = new MapDicerContext())
             {
+                context.Database.CreateIfNotExists();
                 var existing =
                     (from v in context.Lods
                      where v.LodId == entry.LodId

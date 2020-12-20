@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MapDicer"
         mc:Ignorable="d"
-        Title="Level of Detail (LOD)" Height="243.348" Width="564.5"
+        Title="Level of Detail (LOD)" Height="228.373" Width="454.057"
         Loaded="Window_Loaded"
         >
     <Grid
@@ -35,13 +35,17 @@
         <TextBox x:Name="NameTB" Grid.Row="2" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
         <TextBlock Text="Parent" Grid.Row="3" Grid.Column="0" Width="Auto"/>
         <TextBox x:Name="ParentTB" Grid.Row="3" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
-        <TextBlock Text="UnitsPerSample" Grid.Row="4" Grid.Column="0" Width="Auto"/>
-        <TextBox x:Name="UnitsPerSample" IsEnabled="False" Grid.Row="4" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
-        <TextBlock Text="SamplesPerMapblock" Grid.Row="5" Grid.Column="0" Width="Auto"/>
-        <TextBox x:Name="SamplesPerMapblockTB" Grid.Row="5" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
-        <TextBlock Text="IsLeaf" Grid.Row="6" Grid.Column="0" Width="Auto"/>
-        <CheckBox x:Name="IsLeafCB" Grid.Row="6" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3" IsEnabled="False"/>
-        <Button x:Name="saveBtn"  Content="Save" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Height="Auto" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
+
+        <TextBlock Text="SamplesPerMapblock" Grid.Row="4" Grid.Column="0" Width="Auto"/>
+        <TextBox x:Name="SamplesPerMapblockTB" Grid.Row="4" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
+
+        <!-- generated fields: -->
+        <TextBlock IsEnabled="False" Text="UnitsPerSample" Grid.Row="5" Grid.Column="0" Width="Auto"/>
+        <TextBox IsEnabled="False" x:Name="UnitsPerSample" Grid.Row="5" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
+        <TextBlock IsEnabled="False" Text="IsLeaf" Grid.Row="6" Grid.Column="0" Width="Auto"/>
+        <CheckBox IsEnabled="False" x:Name="IsLeafCB" Grid.Row="6" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
+
+        <Button x:Name="saveBtn"  IsDefault="True" Content="Save" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Height="Auto" VerticalAlignment="Bottom" Click="saveBtn_Click"/>
         <!--
         <Button x:Name="newBtn" Content="Save as New" Grid.Row="7" Grid.Column="1" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
         -->

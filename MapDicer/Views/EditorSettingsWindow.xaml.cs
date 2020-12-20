@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MapDicer.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,7 +23,6 @@ namespace MapDicer
         public EditorSettingsWindow()
         {
             InitializeComponent();
-            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -32,12 +32,15 @@ namespace MapDicer
 
         private void readSettings()
         {
-            this.LastConnectionStringTB.Text = Properties.Settings.Default.LastConnectionString;
+            this.DbConnectionStringTB.Text = Properties.Settings.Default.DbConnectionString;
+            this.DbGeneratedTB.Text = SettingModel.SqlConnectionString;
+            this.DbFileTB.Text = Properties.Settings.Default.DbFile;
         }
 
         private void writeSettings()
         {
-            Properties.Settings.Default.LastConnectionString = this.LastConnectionStringTB.Text.Trim();
+            Properties.Settings.Default.DbConnectionString = this.DbConnectionStringTB.Text.Trim();
+            Properties.Settings.Default.DbFile = this.DbFileTB.Text.Trim();
             Properties.Settings.Default.Save();
             // MessageBox.Show(String.Format("Saved {0}", Properties.Settings.Default.LastConnectionString));
             // Properties.Settings.Default.Reload();
@@ -55,6 +58,14 @@ namespace MapDicer
             this.readSettings();
             this.DialogResult = false;
             this.Close();
+        }
+
+        private void DbGenerateCSBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.DbConnectionStringTB.Text = "";
+            this.writeSettings();
+            this.readSettings();
+            this.readSettings();
         }
     }
 }

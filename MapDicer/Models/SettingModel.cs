@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+// using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using System.Data.SQLite;
 
 namespace MapDicer.Models
 {
@@ -13,7 +14,34 @@ namespace MapDicer.Models
         {
             get
             {
-                return Properties.Settings.Default.LastConnectionString;
+                string oldConnectionString = Properties.Settings.Default.DbConnectionString;
+                if (oldConnectionString.Trim().Length == 0)
+                {
+                    SQLiteConnectionStringBuilder conString = new SQLiteConnectionStringBuilder();
+                    string fullPath = System.IO.Path.GetFullPath(Properties.Settings.Default.DbFile);
+                    conString.DataSource = fullPath;
+                    // conString.ToFullPath = true; // not available
+                    // conString.FullUri = (new System.Uri(fullPath)).AbsoluteUri;
+                    // conString.Version = 3;
+                    // conString.ForeignKeys = true; // not available
+                    // conString.Flags |= SQLiteConnectionFlags.HidePassword; // Flags not available
+                    // conString.Flags |= SQLiteConnectionFlags.LogAll;
+                    // conString.Flags |= SQLiteConnectionFlags.UseConnectionPool;
+                    // conString.Flags |= SQLiteConnectionFlags.UseConnectionTypes;
+                    // conString.Pooling = true;
+                    // conString.Source = ":memory:";
+                    // conString.MaxPageCount = ;
+                    // maxI = conString.ProgressOps;
+                    // conString.PageSize = ;
+                    // conString.Password = ;
+                    // conString.VfsName = ;
+                    conString.Add("ProviderName", "SQLite"); // not supported by EntityFrameworkCore
+                    // ^ linq2db.SQLite (<https://github.com/linq2db/examples/blob/master/SQLite/GetStarted/LinqToDB.Templates/CopyMe.SQLite.tt.txt>)
+                    conString.Add("Database", "MapDicer");
+                    Properties.Settings.Default.DbConnectionString = conString.ConnectionString;
+                    Properties.Settings.Default.Save();
+                }
+                return Properties.Settings.Default.DbConnectionString;
             }
         }
         private static short maxLayerCount = 128;
@@ -30,7 +58,7 @@ namespace MapDicer.Models
         }
         public static void LoadSettings()
         {
-            // SettingModel.SqlConnectionString = Properties.Settings.Default.LastConnectionString;
+            // SettingModel.SqlConnectionString = Properties.Settings.Default.DbConnectionString;
         }
         static SettingModel() {
             LoadSettings();
