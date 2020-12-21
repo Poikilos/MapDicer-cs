@@ -38,11 +38,11 @@
         <TextBlock IsEnabled="False" Text="Generated DBCS" Grid.Row="2" Grid.Column="0" Width="Auto"/>
         <TextBox IsReadOnly="True" x:Name="DbGeneratedTB" Grid.Row="2" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
         
-        <TextBlock Text="DB File" Grid.Row="3" Grid.Column="0" Width="Auto"/>
+        <TextBlock Text="DB Filename" Grid.Row="3" Grid.Column="0" Width="Auto"/>
         <TextBox x:Name="DbFileTB" Grid.Row="3" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
 
 
-        <TextBlock Text="Press Generate after changing the file if you're not sure." Grid.Row="4" Grid.Column="1" Width="Auto" Grid.ColumnSpan="2"/>
+        <TextBlock Text="Press Generate after changing the filename if you're not sure." Grid.Row="4" Grid.Column="1" Width="Auto" Grid.ColumnSpan="2"/>
         <TextBlock Visibility="Hidden" Text="Settings File" Grid.Row="5" Grid.Column="0" Width="Auto"/>
         <TextBox Visibility="Hidden" x:Name="settingsFileTB" Grid.Row="5" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3" IsEnabled="False"/>
         <Button x:Name="saveBtn" Content="Save" Grid.Row="7" Grid.Column="1" Click="saveBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
