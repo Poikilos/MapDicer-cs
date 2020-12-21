@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MapDicer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,7 +65,7 @@ namespace MapDicer
             base.AddLogicalChild(visual);
         }
 
-        public void DeleteVisual(Visual visual)
+        public void RemoveVisual(Visual visual)
         {
             visuals.Remove(visual);
 
@@ -95,6 +96,23 @@ namespace MapDicer
             return GetMapDicerPos(GetWorldPos(relativeMVPoint), lodId, layerId);
         }
 
+        /// <summary>
+        /// Get the pixel point of the top left corner of the tile relative to the MapViewer.
+        /// </summary>
+        /// <param name="worldPoint">A point containing the X and Z (as Y) from a MapDicerPos</param>
+        /// <returns></returns>
+        internal Point GetPxPos(Point worldPoint)
+        {
+            return new Point
+            {
+                X = worldPoint.X * zoomPPS + pan.X,
+                Y = worldPoint.Y * zoomPPS + pan.Y,
+            };
+        }
+        internal Point GetPxPos(MapDicerPos microPos)
+        {
+            return GetPxPos(new Point(microPos.X, microPos.Z));
+        }
 
         private void DrawSquare(DrawingVisual visual, Point relativeMVPoint, bool currentlySelected)
         {
@@ -109,46 +127,46 @@ namespace MapDicer
             }
         }
 
-        private bool IsNewWrite(MapDicerPos mpos, bool markAsWritten)
+        private bool IsNewWrite(MapDicerPos microPos, bool markAsWritten)
         {
             bool changed = false;
-            if (mpos.X != lastDrawnPos.X)
+            if (microPos.X != lastDrawnPos.X)
                 changed = true;
-            else if (mpos.Z != lastDrawnPos.Z)
+            else if (microPos.Z != lastDrawnPos.Z)
                 changed = true;
-            else if (mpos.LodId != lastDrawnPos.LodId)
+            else if (microPos.LodId != lastDrawnPos.LodId)
                 changed = true;
-            else if (mpos.LayerId != lastDrawnPos.LayerId)
+            else if (microPos.LayerId != lastDrawnPos.LayerId)
                 changed = true;
             if (changed && markAsWritten)
             {
-                MarkAsWritten(mpos);
+                MarkAsWritten(microPos);
             }
             return changed;
         }
 
-        public bool IsNewWrite(MapDicerPos mpos)
+        public bool IsNewWrite(MapDicerPos microPos)
         {
             if (isNewDatabase)
                 return true;
             bool changed = false;
-            if (mpos.X != lastDrawnPos.X)
+            if (microPos.X != lastDrawnPos.X)
                 changed = true;
-            else if (mpos.Z != lastDrawnPos.Z)
+            else if (microPos.Z != lastDrawnPos.Z)
                 changed = true;
-            else if (mpos.LodId != lastDrawnPos.LodId)
+            else if (microPos.LodId != lastDrawnPos.LodId)
                 changed = true;
-            else if (mpos.LayerId != lastDrawnPos.LayerId)
+            else if (microPos.LayerId != lastDrawnPos.LayerId)
                 changed = true;
             return changed;
         }
-        public void MarkAsWritten(MapDicerPos mpos)
+        public void MarkAsWritten(MapDicerPos microPos)
         {
             isNewDatabase = false;
-            lastDrawnPos.LodId = mpos.LodId;
-            lastDrawnPos.LayerId = mpos.LayerId;
-            lastDrawnPos.X = mpos.X;
-            lastDrawnPos.Z = mpos.Z;
+            lastDrawnPos.LodId = microPos.LodId;
+            lastDrawnPos.LayerId = microPos.LayerId;
+            lastDrawnPos.X = microPos.X;
+            lastDrawnPos.Z = microPos.Z;
         }
 
         private void DrawImage(DrawingVisual visual, ImageSource imageSource, Point relativeMVPoint, bool currentlySelected)
@@ -165,15 +183,6 @@ namespace MapDicer
             }
         }
 
-        internal Point GetPxPos(Point worldPoint)
-        {
-            return new Point
-            {
-                X = worldPoint.X * zoomPPS + pan.X,
-                Y = worldPoint.Y * zoomPPS + pan.Y,
-            };
-        }
-
         internal void Add(Point relativeMVPoint)
         {
             Point worldPoint = GetWorldPos(relativeMVPoint);
@@ -183,13 +192,33 @@ namespace MapDicer
             AddVisual(visual);
         }
 
-        internal void Add(Point relativeMVPoint, ImageSource imageSource)
+        internal Visual Add(Point relativeMVPoint, ImageSource imageSource)
         {
             Point worldPoint = GetWorldPos(relativeMVPoint);
             Point pointSampleTopLeft = GetPxPos(worldPoint);
             DrawingVisual visual = new DrawingVisual();
             DrawImage(visual, imageSource, pointSampleTopLeft, false);
             AddVisual(visual);
+            return visual;
         }
+
+        internal static WriteableBitmap NewWriteableBitmap(Lod lod)
+        {
+            double dpi = SettingController.DpiForNonViewableData;
+            int width = lod.SamplesPerMapblock;
+            int height = lod.SamplesPerMapblock;
+            WriteableBitmap wb = new WriteableBitmap(width, height, dpi, dpi, PixelFormats.Bgra32, null);
+            if ((wb.PixelWidth != width) || (wb.PixelHeight != height))
+                throw new ApplicationException(String.Format("Tried to get {0}x{1} image and got {2}x{3}", width, height, wb.PixelWidth, wb.PixelHeight));
+            return wb;
+        }
+        /*
+        internal static ByteMap GetByteMap(Lod lod, Color color, bool fill)
+        {
+            int width = lod.SamplesPerMapblock;
+            int height = lod.SamplesPerMapblock;
+            return new ByteMap(width, height, 4, fill, color);
+        }
+        */
     }
 }

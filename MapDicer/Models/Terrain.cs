@@ -26,6 +26,13 @@ namespace MapDicer.Models
         /// </summary>
         [Key, Column("TerrainId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int TerrainId { get; set; }
+        public int Primary
+        {
+            get
+            {
+                return TerrainId;
+            }
+        }
 
         [Required, Column("Name"), Index(IsUnique = true)]
         public string Name { get; set; }
@@ -184,6 +191,19 @@ namespace MapDicer.Models
             return ok;
         }
 
+        internal static Terrain GetById(int id)
+        {
+            using (var context = new MapDicerContext())
+            {
+                context.Database.CreateIfNotExists();
+                var existing = (from entry in context.Terrains
+                                where entry.Primary == id
+                                orderby entry.Primary ascending
+                                select entry).FirstOrDefault();
+                return existing;
+            }
+        }
+
         /// <summary>
         /// Convert the string such that blue FIRST (in BBRRGG) is the MOST significant byte.
         /// Get the color as a Terrain primary key integer. The order is BGR so blue is most significant
@@ -201,6 +221,10 @@ namespace MapDicer.Models
             return (IntFromHexPair(hexColor.Substring(0, 2)) * 65536
                     + IntFromHexPair(hexColor.Substring(2, 2)) * 256
                     + ByteFromHexPair(hexColor.Substring(4, 2)));
+        }
+        internal static int IdFromColorRgb(byte r, byte g, byte b)
+        {
+            return b * 65536 + g * 256 + r;
         }
         /// <summary>
         /// Convert the string such that red FIRST (in RRGGBB) is the LEAST significant byte.
@@ -253,5 +277,6 @@ namespace MapDicer.Models
             return Color.FromArgb(255, (byte)(id & 0xFF), (byte)((id >> 8) & 0xFF), (byte)(id >> 16));
         }
 
+        
     }
 }

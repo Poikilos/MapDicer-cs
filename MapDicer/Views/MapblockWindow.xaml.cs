@@ -51,23 +51,25 @@ namespace MapDicer.Views
                 MessageBox.Show("You must enter a path.");
                 return;
             }
-            Mapblock mapblock = new Mapblock();
-            mapblock.LodId = this.lodId;
-            mapblock.LayerId = this.layerId;
-            mapblock.RegionId = this.regionId;
-            mapblock.TerrainId = this.terrainId;
             short x = short.Parse(this.longitudeTB.Text);
             short z = short.Parse(this.latitudeTB.Text);
-            MapDicerPos mpos = new MapDicerPos
+            MapDicerPos macroPos = new MapDicerPos
             {
                 LayerId = layerId,
                 LodId = lodId,
                 X = x,
                 Z = z,
             };
-            mapblock.MapblockId = mpos.getSliceAsInteger();
-            mapblock.Path = SettingController.Import(string1, "mapblocks", mapblock.MapblockId.ToString(), false);
-            string error = Mapblock.Insert(mapblock, x, z, false);
+            Mapblock mapblock; // = new Mapblock();
+            // mapblock.LodId = this.lodId;
+            // mapblock.LayerId = this.layerId;
+            // mapblock.RegionId = this.regionId;
+            // mapblock.TerrainId = this.terrainId;
+            mapblock = SettingController.GenerateBlock(macroPos, this.regionId, this.terrainId);
+            // mapblock.MapblockId = macroPos.getSliceAsInteger();
+            // mapblock.Path = 
+            throw new NotImplementedException(String.Format("Creating the image {0} is not implemented here.", mapblock.GetImagePath(false)));
+            string error = Mapblock.Insert(mapblock);
             if ((error != null) && (error.Length > 0))
             {
                 MessageBox.Show(String.Format("The database does not accept the entry.\n {0}", error));

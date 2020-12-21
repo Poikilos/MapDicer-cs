@@ -101,6 +101,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ByteMap.cs" />
     <Compile Include="IrrCompat\IrrcompatTypes.cs" />
     <Compile Include="MapViewer.cs" />
     <Compile Include="Models\Layer.cs" />

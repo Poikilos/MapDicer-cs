@@ -33,7 +33,7 @@ namespace MapDicer.Models
 
         [Key, Column("LodId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LodId { get; set; }
-        public short Id
+        public short Primary
         {
             get
             {
@@ -57,7 +57,7 @@ namespace MapDicer.Models
         /// one Mapblock.
         /// </summary>
         [Column("SamplesPerMapblock"), Required]
-        public long SamplesPerMapblock { get; set; }
+        public int SamplesPerMapblock { get; set; }
 
         #region computed
         /// <summary>
@@ -197,14 +197,14 @@ namespace MapDicer.Models
             return result;
         }
 
-        public static Lod GetById(short lodId)
+        public static Lod GetById(short id)
         {
             using (var context = new MapDicerContext())
             {
                 context.Database.CreateIfNotExists();
                 var existing = (from entry in context.Lods
-                                where entry.LodId == lodId
-                                orderby entry.LodId ascending
+                                where entry.Primary == id
+                                orderby entry.Primary ascending
                                 select entry).FirstOrDefault();
                 return existing;
             }

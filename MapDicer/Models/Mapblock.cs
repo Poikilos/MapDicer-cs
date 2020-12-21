@@ -95,6 +95,13 @@ namespace MapDicer.Models
         /// </summary>
         [Column("Path")]
         public string Path { get; set; }
+        public Lod Child
+        {
+            get
+            {
+                return Lod.GetChild(this.LodId);
+            }
+        }
 
         // TODO: (future) -- this code is not validated
         /*
@@ -113,11 +120,14 @@ namespace MapDicer.Models
         /// <param name="generateId">generate the id; If false, ignore x and z (they are baked
         /// into the MapblockId)</param>
         /// <returns></returns>
-        public static string Insert(Mapblock newEntry, short x, short z, bool generateId)
+        public static string Insert(Mapblock newEntry) // , short x, short z, bool generateId)
         {
+            bool generateId = false;
             string error = "";
+            long newId = newEntry.MapblockId;
             // Mapblock last = null;
-            MapDicerPos mpos = new MapDicerPos
+            /*
+            MapDicerPos macroPos = new MapDicerPos
             {
                 LodId = newEntry.LodId,
                 LayerId = newEntry.LayerId,
@@ -126,11 +136,11 @@ namespace MapDicer.Models
             };
 
 
-            long newId = newEntry.MapblockId;
             if (generateId)
             {
-                newId = mpos.getSliceAsInteger();
+                newId = macroPos.getSliceAsInteger();
             }
+            */
             /*
             if (generateId)
             {
@@ -197,20 +207,20 @@ namespace MapDicer.Models
         {
             return Convert.ToString(v, 16).PadLeft(4, '0');
         }
-        public static string GetImagePath(long mapblockId, bool makeDirs)
+        public static string GetImagePath(long macroMapblockId, bool makeDirs)
         {
-            MapDicerPos mpos = new MapDicerPos(mapblockId);
-            return GetImagePath(mpos, makeDirs);
+            MapDicerPos macroPos = new MapDicerPos(macroMapblockId);
+            return GetImagePath(macroPos, makeDirs);
         }
-        public static string GetImagePath(MapDicerPos mpos, bool makeDirs)
+        public static string GetImagePath(MapDicerPos macroPos, bool makeDirs)
         {
             string sectorsPath = System.IO.Path.Combine(SettingController.DataPath, "mapblocks");
-            string yPath = System.IO.Path.Combine(sectorsPath, HexQuad(mpos.Y));
+            string yPath = System.IO.Path.Combine(sectorsPath, HexQuad(macroPos.Y));
             // Go into y first unlike sectors2 (since there are few layers), and with Quads for all 4 values.
             // (See
             // <https://git.minetest.org/minetest/minetest/src/branch/master/doc/world_format.txt#L221>).
-            string xPath = System.IO.Path.Combine(yPath, HexQuad(mpos.X));
-            string zPath = System.IO.Path.Combine(xPath, HexQuad(mpos.Z)) + SettingController.MapblockImageDotExt;
+            string xPath = System.IO.Path.Combine(yPath, HexQuad(macroPos.X));
+            string zPath = System.IO.Path.Combine(xPath, HexQuad(macroPos.Z)) + SettingController.MapblockImageDotExt;
             // return SettingController.ImportPath(null, "mapblocks", mapblockId.ToString(), makeDirs);
             if (makeDirs)
             {
@@ -314,20 +324,24 @@ namespace MapDicer.Models
             */
             return null;
         }
-        public static Mapblock WhereAt(long mapblockId)
+        public static Mapblock GetById(long matchId)
         {
             try
             {
                 using (var context = new MapDicerContext())
                 {
+                    // Don't use properties, only Db fields (fails regardless of name):
+                    // System.NotSupportedException: 'The specified type member 'Id' is not supported in LINQ to Entities. Only initializers, entity members, and entity navigation properties are supported.'
+
                     // See
                     // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/linq/insert-update-and-delete-operations
                     var existing =
                         (from v in context.Mapblocks
-                         where v.MapblockId == mapblockId
+                         where v.MapblockId == matchId
                          select v).FirstOrDefault();
                     // FirstOrDefault can handle null without throwing an exception.
                     // Only use it when you do not need a record.
+                    return existing;
                 }
             }
             catch (System.ArgumentException ex)

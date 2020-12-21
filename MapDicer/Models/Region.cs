@@ -25,6 +25,13 @@ namespace MapDicer.Models
 
         [Key, Column("RegionId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long RegionId { get; set; }
+        public long Primary
+        {
+            get
+            {
+                return RegionId;
+            }
+        }
         /// <summary>
         /// The region name, such as the name of the contenent if Lod's name is continent.
         /// </summary>

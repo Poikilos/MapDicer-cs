@@ -51,6 +51,13 @@ namespace MapDicer
                 return ".png";
             }
         }
+        public static double DpiForNonViewableData
+        {
+            get
+            {
+                return 4.0;
+            }
+        }
 
 
         /// <summary>
@@ -222,10 +229,10 @@ namespace MapDicer
                 TrySql(sql, sc);
                 sql = ("create table Mapblock ("
                        + "MapblockId INT NOT NULL PRIMARY KEY"
-                       + ", LodId INT NOT NULL UNIQUE"
-                       + ", LayerId INT NOT NULL UNIQUE"
-                       + ", RegionId INT NOT NULL UNIQUE"
-                       + ", TerrainId INT NOT NULL UNIQUE"
+                       + ", LodId INT NOT NULL"
+                       + ", LayerId INT NOT NULL"
+                       + ", RegionId INT NOT NULL"
+                       + ", TerrainId INT NOT NULL"
                        + ", Path TEXT"
                        // + ", Data BLOB" // TODO: (future) Data
                        + ", FOREIGN KEY (LodId)"
@@ -254,6 +261,7 @@ namespace MapDicer
             string path = null;
             Mapblock mapblock = new Mapblock
             {
+                MapblockId = pos.getSliceAsInteger(),
                 LodId = pos.LodId,
                 LayerId = pos.LayerId,
                 RegionId = regionId,

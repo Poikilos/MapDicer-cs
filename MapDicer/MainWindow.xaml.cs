@@ -3,6 +3,7 @@ using MapDicer.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -61,6 +62,15 @@ namespace MapDicer
                 UpdateMapViewerSize();
         }
         private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
+        /// <summary>
+        /// Indexed by the micro-position
+        /// </summary>
+        private Dictionary<long, Visual> mbVisuals = new Dictionary<long, Visual>();
+        // private Dictionary<long, ImageSource> mbSources = new Dictionary<long, ImageSource>();
+        /// <summary>
+        /// Indexed by the macro position
+        /// </summary>
+        private Dictionary<long, WriteableBitmap> mbWBs = new Dictionary<long, WriteableBitmap>();
 
         public void UpdateMapViewerSize()
         {
@@ -165,11 +175,17 @@ namespace MapDicer
             }
         }
         */
+        public ImageSource GetTerrainImageSource(int terrainId)
+        {
+            Terrain terrain = Terrain.GetById(terrainId);
+            return new BitmapImage(
+                new Uri(System.IO.Path.Combine(SettingController.DataPath, terrain.Path))
+            );
+        }
         public void ShowTerrain(Terrain terrain)
         {
             if ((terrain != null))
             {
-
                 MainWindow.brushColorShape.Fill = new SolidColorBrush(terrain.GetColor());
                 this.terrainColorEllipse.Fill = MainWindow.brushColorShape.Fill;
                 try
@@ -318,7 +334,7 @@ namespace MapDicer
                     // foreach (Lod lod in this.viewModel.Lods)
                     for (int i = 0; i < this.viewModel.Lods.Count; i++)
                     {
-                        if (this.viewModel.Lods[i].Id == dlg.ChangedEntry.Id)
+                        if (this.viewModel.Lods[i].Primary == dlg.ChangedEntry.Primary)
                         {
                             // this.viewModel.Lods.Add(dlg.ChangedEntry);
                             // lod.Name = dlg.ChangedEntry.Name;
@@ -418,7 +434,7 @@ namespace MapDicer
             // Name // string
             // ParentLodId // short
             // UnitsPerSample // long; calculated
-            // SamplesPerMapblock // long
+            // SamplesPerMapblock // int
             // IsLeaf // bool; calculated&saved
             LoadLodsSafe(reloadIds);
 
@@ -592,7 +608,7 @@ namespace MapDicer
 
             if (this.viewModel.SelectedLod != null)
             {
-                foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.Id))
+                foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.Primary))
                 {
                     this.viewModel.Regions.Add(entry);
                 }
@@ -600,12 +616,95 @@ namespace MapDicer
                 {
                     this.regionCBx.SelectedIndex = this.viewModel.Regions.Count - 1;
                 }
-
-                foreach (Mapblock entry in Mapblock.WhereLodIdEquals(this.viewModel.SelectedLod.Id))
+                List<Mapblock> badMBs = new List<Mapblock>();
+                string msg;
+                Lod lod = this.viewModel.SelectedLod;
+                foreach (Mapblock entry in Mapblock.WhereLodIdEquals(this.viewModel.SelectedLod.Primary))
                 {
+                    MapDicerPos macroPos = new MapDicerPos(entry.MapblockId);
+                    msg = String.Format("~ Trying +mapblock:{0},{1}",
+                                        macroPos.X, macroPos.Y);
+                    Console.Error.WriteLine(msg);
+                    string path = entry.GetImagePath(true);
+                    WriteableBitmap wb = null;
+                    if (!File.Exists(path))
+                    {
+                        badMBs.Add(entry);
+                        Console.Error.WriteLine("  FAILED (missing image)");
+                        wb = MapViewer.NewWriteableBitmap(lod);
+                    }
+                    else
+                    {
+                        BitmapImage bitmap = new BitmapImage(new Uri(path));
+                        wb = new WriteableBitmap(bitmap);
+                    }
+                    mbWBs[entry.MapblockId] = wb;
+                    Int32Rect srcRect = new Int32Rect();
+                    srcRect.Width = 1;
+                    srcRect.Height = 1;
+                    Lod childLod = entry.Child;
+                    int childSamplesPerMapblock = 1;
+                    if (childLod != null)
+                    {
+                        childSamplesPerMapblock = childLod.SamplesPerMapblock;
+                    }
+                    MapDicerPos microPos = new MapDicerPos
+                    {
+                        LodId = (short)(macroPos.LodId - 1), // TODO: Improve this--this is usually correct though.
+                        LayerId = macroPos.LayerId,
+                        X = (short)(macroPos.X * childSamplesPerMapblock),
+                        Z = (short)(macroPos.Z * childSamplesPerMapblock),
+                    };
+                    int offsetX = macroPos.X * childSamplesPerMapblock;
+                    int offsetY = macroPos.Z * childSamplesPerMapblock;
+                    int imageX = microPos.X - offsetX;
+                    int imageY = microPos.Z - offsetY;
+
+                    msg = String.Format("  + mapblock:{0},{1} global:{2},{3} offset:{4},{5} relative:{6},{7}",
+                                        macroPos.X, macroPos.Y, microPos.X, microPos.Y, offsetX, offsetY, imageX, imageY);
+                    Console.Error.WriteLine(msg);
+                    byte[] pixel = new byte[4];
+                    int width = (int)wb.Width;
+                    int height = (int)wb.Height;
+                    for (int y = 0; y < width; y++)
+                    {
+                        srcRect.X = 0;
+                        for (int x = 0; x < height; x++)
+                        {
+
+                            try
+                            {
+                                wb.CopyPixels(srcRect, pixel, 4, 0);
+                                if (pixel[3] > 0)
+                                {
+                                    int tid = Terrain.IdFromColorRgb(pixel[2], pixel[1], pixel[0]);
+                                    Visual visual;
+                                    if (mbVisuals.TryGetValue(microPos.getSliceAsInteger(), out visual))
+                                    {
+                                        mapViewer.RemoveVisual(visual);
+                                    }
+
+                                    Point relativeMVPoint = mapViewer.GetPxPos(microPos);
+                                    visual = mapViewer.Add(relativeMVPoint, GetTerrainImageSource(tid));
+                                    mbVisuals.Add(microPos.getSliceAsInteger(), visual);
+                                }
+                            }
+                            catch (System.ArgumentException ex)
+                            {
+                                MessageBox.Show(String.Format("srcRect {0} was out of range in {1}x{2}.",
+                                                              srcRect, width, height));
+                                y = height;
+                                break;
+                            }
+                            srcRect.X++;
+                        }
+                        srcRect.Y++;
+                    }
                     this.viewModel.Mapblocks.Add(entry);
                     LoadMapBlock(entry);
+                   
                 }
+                // TODO: remove each mapblock in badMBs
                 if (this.viewModel.Mapblocks.Count > 0)
                 {
                     this.regionCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
@@ -659,6 +758,7 @@ namespace MapDicer
         /// <param name="point">The point must be relative to mapViewer.</param>
         private void mapViewer_Interaction(Point relativeMVPoint)
         {
+            string msg = "";
             if (this.viewModel.SelectedLod == null)
             {
                 MessageBox.Show("You must select a level of detail to expand a region through drawing.");
@@ -678,34 +778,72 @@ namespace MapDicer
             Lod lod = this.viewModel.SelectedLod;
             Terrain terrain = this.viewModel.SelectedTerrain;
             short layerId = this.viewModel.SelectedLayerId;
-
-            MapDicerPos mpos = mapViewer.GetWorldMapDicerPos(relativeMVPoint, lod.LodId, this.viewModel.SelectedLayerId);
-            if (!mapViewer.IsNewWrite(mpos))
+            short subLodId = (short)(lod.LodId + 1); // TODO improve this. This is usually correct though.
+            MapDicerPos microPos = mapViewer.GetWorldMapDicerPos(relativeMVPoint, subLodId, this.viewModel.SelectedLayerId);
+            if (!mapViewer.IsNewWrite(microPos))
             {
                 return;
             }
-            mapViewer.MarkAsWritten(mpos);
+            mapViewer.MarkAsWritten(microPos);
             // ^ Mark as written before written to avoid retrying on the same drag.
             // If we are in a region such as a province,
             // we draw province pixels (each pixel is displayed as a map tile).
             // If the current lod doesn't have an image here, create one.
-            // Currently, mpos is the child location (image pixel coordinates for saving).
+            // Currently, microPos is the child location (image pixel coordinates for saving).
             // We need the number of the mapblock within the lod.
-            MapDicerPos pos = new MapDicerPos
+            MapDicerPos macroPos = new MapDicerPos
             {
                 LodId = lod.LodId,
                 LayerId = layerId,
-                X = (short)(mpos.X / lod.SamplesPerMapblock),
-                Z = (short)(mpos.Z / lod.SamplesPerMapblock),
+                X = (short)(microPos.X / lod.SamplesPerMapblock),
+                Z = (short)(microPos.Z / lod.SamplesPerMapblock),
             };
-            Mapblock existing = Mapblock.WhereAt(pos.getSliceAsInteger());
+            Mapblock existing = Mapblock.GetById(macroPos.getSliceAsInteger());
             Mapblock mapblock = existing;
             if (existing == null)
             {
-                mapblock = SettingController.GenerateBlock(pos, region.RegionId, terrain.TerrainId);
-
+                mapblock = SettingController.GenerateBlock(macroPos, region.RegionId, terrain.TerrainId);
+                
+                WriteableBitmap newWB = MapViewer.NewWriteableBitmap(lod);
+                mbWBs.Add(mapblock.MapblockId, newWB);
+                // ^ If didn't load at startup and wasn't deleted, may already exist here from a previous
+                // stroke: "System.ArgumentException: 'An item with the same key has already been added.'"
+                string error = Mapblock.Insert(mapblock);
+                if (error.Length > 0)
+                {
+                    msg = String.Format("The mapblock didn't load at startup, probably due to"
+                                        + "missing \"{0}\". MapblockId:{1} GetSliceAsInteger:{2} error: {3}",
+                                        mapblock.GetImagePath(true), mapblock.MapblockId, macroPos.getSliceAsInteger(), error);
+                    MessageBox.Show(msg);
+                }
             }
-            mapViewer.Add(relativeMVPoint, this.terrainImage.Source);
+            int offsetX = macroPos.X * lod.SamplesPerMapblock;
+            int offsetY = macroPos.Z * lod.SamplesPerMapblock;
+            int imageX = microPos.X - offsetX;
+            int imageY = microPos.Z - offsetY;
+            msg = String.Format("SetPixel on mapblock:{0},{1} global:{2},{3} offset:{4},{5} relative:{6},{7}",
+                                macroPos.X, macroPos.Y, microPos.X, microPos.Y, offsetX, offsetY, imageX, imageY);
+            this.statusTB.Text = msg;
+            Console.Error.WriteLine(msg);
+            if (!mbWBs.ContainsKey(macroPos.getSliceAsInteger()))
+            {
+                msg = String.Format("Error: Generated {0} but tried to use {1}", mapblock.MapblockId,
+                                    macroPos.getSliceAsInteger());
+                MessageBox.Show(msg);
+                return;
+            }
+            WriteableBitmap wb = mbWBs[macroPos.getSliceAsInteger()];
+            ByteMap.WritePixelTo(wb, imageX, imageY, terrain.GetColor());
+            string path = Mapblock.GetImagePath(macroPos.getSliceAsInteger(), true);
+            Console.Error.Write(String.Format("^ saving image {0}", path));
+            ByteMap.SaveWriteableBitmap(path, wb);
+            Visual visual;
+            if (mbVisuals.TryGetValue(microPos.getSliceAsInteger(), out visual))
+            {
+                mapViewer.RemoveVisual(visual);
+            }
+            visual = mapViewer.Add(relativeMVPoint, this.terrainImage.Source);
+            mbVisuals.Add(microPos.getSliceAsInteger(), visual);
         }
 
         private void mapViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
