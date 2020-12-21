@@ -120,7 +120,7 @@ namespace MapDicer.Models
             MapDicerPos mpos = new MapDicerPos
             {
                 LodId = newEntry.LodId,
-                Layer = newEntry.LayerId,
+                LayerId = newEntry.LayerId,
                 X = x,
                 Z = z,
             };
@@ -192,7 +192,65 @@ namespace MapDicer.Models
                 }
             }
             return error;
-        }// (*Linq to db*, 2020)
+        }
+        public static string HexQuad(short v)
+        {
+            return Convert.ToString(v, 16).PadLeft(4, '0');
+        }
+        public static string GetImagePath(long mapblockId, bool makeDirs)
+        {
+            MapDicerPos mpos = new MapDicerPos(mapblockId);
+            return GetImagePath(mpos, makeDirs);
+        }
+        public static string GetImagePath(MapDicerPos mpos, bool makeDirs)
+        {
+            string sectorsPath = System.IO.Path.Combine(SettingController.DataPath, "mapblocks");
+            string yPath = System.IO.Path.Combine(sectorsPath, HexQuad(mpos.Y));
+            // Go into y first unlike sectors2 (since there are few layers), and with Quads for all 4 values.
+            // (See
+            // <https://git.minetest.org/minetest/minetest/src/branch/master/doc/world_format.txt#L221>).
+            string xPath = System.IO.Path.Combine(yPath, HexQuad(mpos.X));
+            string zPath = System.IO.Path.Combine(xPath, HexQuad(mpos.Z)) + SettingController.MapblockImageDotExt;
+            // return SettingController.ImportPath(null, "mapblocks", mapblockId.ToString(), makeDirs);
+            if (makeDirs)
+            {
+                if (!System.IO.Directory.Exists(yPath))
+                    System.IO.Directory.CreateDirectory(yPath);
+                if (!System.IO.Directory.Exists(xPath))
+                    System.IO.Directory.CreateDirectory(yPath);
+            }
+            return zPath;
+        }
+        public string GetImagePath(bool makeDirs) {
+            return Mapblock.GetImagePath(this.MapblockId, makeDirs);
+        }
+        /*
+        /// <summary>
+        /// Update any fields that differ.
+        /// </summary>
+        /// <param name="entry">The new version of the entry with the matching Id</param>
+        /// <returns>True if ok</returns>
+        public static bool Update(Mapblock entry)
+        {
+            bool ok = false;
+            using (var context = new MapDicerContext())
+            {
+                context.Database.CreateIfNotExists();
+                // see https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/linq/insert-update-and-delete-operations
+                var existing =
+                    (from v in context.Mapblocks
+                     where v.MapblockId == entry.MapblockId
+                     select v).First();
+                existing.LayerId = entry.LayerId;
+                existing.LodId = entry.LodId;
+                existing.Path = entry.Path;
+                existing.RegionId = entry.RegionId;
+                existing.TerrainId = entry.TerrainId;
+                ok = context.SaveChanges() > 0;
+            }
+            return ok;
+        }
+        */
 
         public static List<Mapblock> WhereLodIdEquals(short matchLodId)
         {
@@ -255,6 +313,33 @@ namespace MapDicer.Models
             }
             */
             return null;
-        } // (*Linq to db*, 2020)
+        }
+        public static Mapblock WhereAt(long mapblockId)
+        {
+            try
+            {
+                using (var context = new MapDicerContext())
+                {
+                    // See
+                    // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/linq/insert-update-and-delete-operations
+                    var existing =
+                        (from v in context.Mapblocks
+                         where v.MapblockId == mapblockId
+                         select v).FirstOrDefault();
+                    // FirstOrDefault can handle null without throwing an exception.
+                    // Only use it when you do not need a record.
+                }
+            }
+            catch (System.ArgumentException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            return null;
+        }
     }
 }

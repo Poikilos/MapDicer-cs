@@ -60,7 +60,7 @@ namespace MapDicer.Views
             short z = short.Parse(this.latitudeTB.Text);
             MapDicerPos mpos = new MapDicerPos
             {
-                Layer = layerId,
+                LayerId = layerId,
                 LodId = lodId,
                 X = x,
                 Z = z,

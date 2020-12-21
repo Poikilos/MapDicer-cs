@@ -44,39 +44,91 @@ namespace MapDicer
                 return Path.Combine(DbDirPath, DataDirName);
             }
         }
+        public static string MapblockImageDotExt
+        {
+            get
+            {
+                return ".png";
+            }
+        }
 
 
         /// <summary>
         /// Import the file to DataPath in the given category as a subfolder.
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="category"></param>
+        /// <param name="path">The original file to move</param>
+        /// <param name="category">Use this subdirectory under DataPath.</param>
         /// <param name="id">The new filename, or null to retain filename (extension from path is
         /// <param name="overwrite">Overwrite any existing file (at return path--see returns).</param>
         /// <returns>The new path relative to DataPath, without a leading slash.</returns>
         public static string Import(string path, string category, string id, bool overwrite)
         {
+            return Import(path, category, id, overwrite, false, true);
+        }
+        private static string Import(string path, string category, string id, bool overwrite, bool dryRun, bool makeDirs)
+        {
             category = category.Replace('\\', '/');
-            string fileName = Path.GetFileName(path);
+            string fileName = null;
             if (id != null)
             {
                 string dotExt = Path.GetExtension(path);
                 fileName = id + dotExt;
             }
-            if (!Directory.Exists(DataPath))
+            else
             {
-                Directory.CreateDirectory(DataPath);
+                if (path != null)
+                {
+                    fileName = Path.GetFileName(path);
+                }
+                else if (!dryRun)
+                {
+                    throw new ApplicationException("You cannot use a null path unless there is an id.");
+                }
             }
             string catPath = Path.Combine(DataPath, category);
-            if (!Directory.Exists(catPath))
+            if (makeDirs)
             {
-                Directory.CreateDirectory(catPath);
+                if (!Directory.Exists(DataPath))
+                {
+                    Directory.CreateDirectory(DataPath);
+                }
+                if (!Directory.Exists(catPath))
+                {
+                    Directory.CreateDirectory(catPath);
+                }
             }
             // TODO: allow category to contain a slash
             string relPath = Path.Combine(category, fileName);
             string newPath = Path.Combine(DataPath, relPath);
-            File.Copy(path, newPath, overwrite);
+            if (!dryRun) 
+                File.Copy(path, newPath, overwrite);
             return relPath;
+        }
+        /// <summary>
+        /// Get the path to which the file would be imported including the filename. See
+        /// public static Import for documentation.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="category"></param>
+        /// <param name="id"></param>
+        /// <param name="makeDirs"></param>
+        /// <returns></returns>
+        public static string GetImportRelPath(string path, string category, string id, bool makeDirs)
+        {
+            return Import(path, category, id, false, true, makeDirs);
+        }
+        /// <summary>
+        /// Get the path to which the file would be imported including the filename. See
+        /// public static Import for documentation.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="category"></param>
+        /// <param name="id"></param>
+        /// <param name="makeDirs"></param>
+        /// <returns></returns>
+        public static string GetImportFullPath(string path, string category, string id, bool makeDirs)
+        {
+            return Path.Combine(DataPath, Import(path, category, id, false, true, makeDirs));
         }
         static SettingController() {
             Start();
@@ -190,5 +242,25 @@ namespace MapDicer
             }
         }
 
+        /// <summary>
+        /// Generate the block, but do not save an image nor write the entry to the database.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="regionId"></param>
+        /// <param name="terrainId"></param>
+        /// <returns></returns>
+        internal static Mapblock GenerateBlock(MapDicerPos pos, long regionId, int terrainId)
+        {
+            string path = null;
+            Mapblock mapblock = new Mapblock
+            {
+                LodId = pos.LodId,
+                LayerId = pos.LayerId,
+                RegionId = regionId,
+                TerrainId = terrainId,
+                Path = Mapblock.GetImagePath(pos, true),
+            };
+            return mapblock;
+        }
     }
 }

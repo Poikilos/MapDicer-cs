@@ -157,12 +157,7 @@ namespace MapDicer.Models
         }
         public static string HexPair(byte v)
         {
-            string hStr = Convert.ToString(v, 16);
-            if (hStr.Length < 2)
-            {
-                hStr = "0" + hStr;
-            }
-            return hStr;
+            return Convert.ToString(v, 16).PadLeft(2, '0');
         }
 
         public static bool Test()

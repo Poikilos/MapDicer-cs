@@ -85,7 +85,7 @@ namespace MapDicer
             return new MapDicerPos
             {
                 LodId = lodId,
-                Layer = layerId,
+                LayerId = layerId,
                 X = (short)worldPoint.X,
                 Z = (short)worldPoint.Y, // ground plane is X-Z as per OpenGL
             };
@@ -118,7 +118,7 @@ namespace MapDicer
                 changed = true;
             else if (mpos.LodId != lastDrawnPos.LodId)
                 changed = true;
-            else if (mpos.Layer != lastDrawnPos.Layer)
+            else if (mpos.LayerId != lastDrawnPos.LayerId)
                 changed = true;
             if (changed && markAsWritten)
             {
@@ -138,7 +138,7 @@ namespace MapDicer
                 changed = true;
             else if (mpos.LodId != lastDrawnPos.LodId)
                 changed = true;
-            else if (mpos.Layer != lastDrawnPos.Layer)
+            else if (mpos.LayerId != lastDrawnPos.LayerId)
                 changed = true;
             return changed;
         }
@@ -146,7 +146,7 @@ namespace MapDicer
         {
             isNewDatabase = false;
             lastDrawnPos.LodId = mpos.LodId;
-            lastDrawnPos.Layer = mpos.Layer;
+            lastDrawnPos.LayerId = mpos.LayerId;
             lastDrawnPos.X = mpos.X;
             lastDrawnPos.Z = mpos.Z;
         }

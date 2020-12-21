@@ -279,7 +279,7 @@ namespace MapDicer.Models
         /// Update any fields that differ.
         /// </summary>
         /// <param name="entry">The new version of the lod with the matching LodId</param>
-        /// <returns></returns>
+        /// <returns>True if ok</returns>
         public static bool Update(Lod entry)
         {
             bool ok = false;
@@ -299,7 +299,7 @@ namespace MapDicer.Models
                 ok = context.SaveChanges() > 0;
             }
             return ok;
-        }// (*Linq to db*, 2020)
+        }
 
         
         public static bool Delete(Lod entry)

@@ -666,7 +666,7 @@ namespace MapDicer
             }
             if (this.viewModel.SelectedRegion == null)
             {
-                MessageBox.Show("You must select a region to expand it through drawing.");
+                MessageBox.Show(String.Format("You must select a region (a {0}) to expand it through drawing.", this.viewModel.SelectedLod.Name));
                 return;
             }
             if (this.viewModel.SelectedTerrain == null)
@@ -674,15 +674,38 @@ namespace MapDicer
                 MessageBox.Show("You must select a terrain to draw.");
                 return;
             }
-            MapDicerPos mpos = mapViewer.GetWorldMapDicerPos(relativeMVPoint, this.viewModel.SelectedLod.LodId, this.viewModel.SelectedLayerId);
+            Region region = this.viewModel.SelectedRegion;
+            Lod lod = this.viewModel.SelectedLod;
+            Terrain terrain = this.viewModel.SelectedTerrain;
+            short layerId = this.viewModel.SelectedLayerId;
+
+            MapDicerPos mpos = mapViewer.GetWorldMapDicerPos(relativeMVPoint, lod.LodId, this.viewModel.SelectedLayerId);
             if (!mapViewer.IsNewWrite(mpos))
             {
                 return;
             }
             mapViewer.MarkAsWritten(mpos);
-            // Mark as written before written to avoid retrying on the same drag.
+            // ^ Mark as written before written to avoid retrying on the same drag.
+            // If we are in a region such as a province,
+            // we draw province pixels (each pixel is displayed as a map tile).
+            // If the current lod doesn't have an image here, create one.
+            // Currently, mpos is the child location (image pixel coordinates for saving).
+            // We need the number of the mapblock within the lod.
+            MapDicerPos pos = new MapDicerPos
+            {
+                LodId = lod.LodId,
+                LayerId = layerId,
+                X = (short)(mpos.X / lod.SamplesPerMapblock),
+                Z = (short)(mpos.Z / lod.SamplesPerMapblock),
+            };
+            Mapblock existing = Mapblock.WhereAt(pos.getSliceAsInteger());
+            Mapblock mapblock = existing;
+            if (existing == null)
+            {
+                mapblock = SettingController.GenerateBlock(pos, region.RegionId, terrain.TerrainId);
+
+            }
             mapViewer.Add(relativeMVPoint, this.terrainImage.Source);
-            // mapViewer.Add(relativeMVPoint);
         }
 
         private void mapViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
