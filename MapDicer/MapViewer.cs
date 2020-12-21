@@ -49,12 +49,10 @@ namespace MapDicer
                 return zoomPPS;
             }
         }
-        private List<Visual> visuals = new List<Visual>();//collection of the visual objects
+        private List<Visual> visuals = new List<Visual>();
 
-        //From Panel Get visual object by index
         protected override Visual GetVisualChild(int index) { return visuals[index]; }
 
-        //From Panel The number of child
         protected override int VisualChildrenCount { get { return visuals.Count; } }
 
         public void AddVisual(Visual visual)
@@ -169,15 +167,28 @@ namespace MapDicer
             lastDrawnPos.Z = microPos.Z;
         }
 
-        private void DrawImage(DrawingVisual visual, ImageSource imageSource, Point relativeMVPoint, bool currentlySelected)
+        /// <summary>
+        /// Draw the image and modify the visual so it is ready to add to the canvas.
+        /// </summary>
+        /// <param name="visual">visual to modify using the parameters</param>
+        /// <param name="imageSource">image to display</param>
+        /// <param name="relativeMVPoint">a point relative to the MapView instance</param>
+        /// <param name="currentlySelected">whether highlighted (reserved for future use)</param>
+        /// <param name="pps">The Pixels Per Sample determines how much of the image fits within on square.</param>
+        private void DrawImage(DrawingVisual visual, ImageSource imageSource, Point relativeMVPoint, bool currentlySelected, int pps)
         {
             using (DrawingContext dc = visual.RenderOpen())
             {
+                double scale = zoomPPS / pps;
+                double newW = imageSource.Width * scale;
+                double newH = imageSource.Height * scale;
                 Rect rect = new Rect
                 {
-                    Location = relativeMVPoint,
-                    Width = zoomPPS,
-                    Height = zoomPPS,
+                    // Location = relativeMVPoint,
+                    X = relativeMVPoint.X - ((newW - imageSource.Width) / 2.0),
+                    Y = relativeMVPoint.Y - ((newH - imageSource.Height) / 2.0),
+                    Width = newW,
+                    Height = newH,
                 };
                 dc.DrawImage(imageSource, rect);
             }
@@ -192,12 +203,20 @@ namespace MapDicer
             AddVisual(visual);
         }
 
-        internal Visual Add(Point relativeMVPoint, ImageSource imageSource)
+        /// <summary>
+        /// Add the image at the given location, offset negatively if pps is less than image size.
+        /// </summary>
+        /// <param name="relativeMVPoint"></param>
+        /// <param name="imageSource"></param>
+        /// <param name="pps">PPS (Pixels Per Sample) is how many pixels fit within a square. If smaller
+        /// than the image, the image will go beyond the square.</param>
+        /// <returns></returns>
+        internal Visual Add(Point relativeMVPoint, ImageSource imageSource, int pps)
         {
             Point worldPoint = GetWorldPos(relativeMVPoint);
             Point pointSampleTopLeft = GetPxPos(worldPoint);
             DrawingVisual visual = new DrawingVisual();
-            DrawImage(visual, imageSource, pointSampleTopLeft, false);
+            DrawImage(visual, imageSource, pointSampleTopLeft, false, pps);
             AddVisual(visual);
             return visual;
         }

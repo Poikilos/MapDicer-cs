@@ -606,6 +606,13 @@ namespace MapDicer
 
             this.viewModel.SelectedRegion = null;
 
+            foreach (KeyValuePair<long, Visual> entry in mbVisuals)
+            {
+                mapViewer.RemoveVisual(entry.Value);
+            }
+            mbVisuals.Clear();
+            mbWBs.Clear();
+
             if (this.viewModel.SelectedLod != null)
             {
                 foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.LodId))
@@ -712,7 +719,7 @@ namespace MapDicer
                                 }
 
                                 Point relativeMVPoint = mapViewer.GetPxPos(microPos);
-                                visual = mapViewer.Add(relativeMVPoint, GetTerrainImageSource(tid));
+                                visual = mapViewer.Add(relativeMVPoint, GetTerrainImageSource(tid), Terrain.GetById(tid).PixPerSample);
                                 mbVisuals.Add(microPos.getSliceAsInteger(), visual);
                             }
                             srcRect.X++;
@@ -862,7 +869,7 @@ namespace MapDicer
                 mapViewer.RemoveVisual(visual);
                 mbVisuals.Remove(microPos.getSliceAsInteger());
             }
-            visual = mapViewer.Add(relativeMVPoint, this.terrainImage.Source);
+            visual = mapViewer.Add(relativeMVPoint, this.terrainImage.Source, terrain.PixPerSample);
             mbVisuals.Add(microPos.getSliceAsInteger(), visual);
         }
 
