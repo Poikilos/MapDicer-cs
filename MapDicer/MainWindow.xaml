@@ -113,10 +113,23 @@
 
 
         <Image x:Name="image" Source="Assets/splash.png"/>
-        <local:MapViewer
-              x:Name="MyCanvas"
-              Background="AntiqueWhite"
-             ClipToBounds="True">
+        <local:MapViewer 
+            x:Name="mapViewer"
+            Background="Black"
+            ClipToBounds="True"
+            Visibility="Hidden"
+            IsVisibleChanged="mapViewer_IsVisibleChanged"
+            MouseLeftButtonDown="mapViewer_MouseLeftButtonDown"
+            TouchDown="mapViewer_TouchDown"
+            LostTouchCapture="mapViewer_LostTouchCapture"
+            TouchLeave="mapViewer_TouchLeave"
+            TouchUp="mapViewer_TouchUp"
+            TouchMove="mapViewer_TouchMove"
+            DragOver="mapViewer_DragOver"
+            MouseUp="mapViewer_MouseUp"
+            MouseMove="mapViewer_MouseMove"
+            MouseLeave="mapViewer_MouseLeave"
+        >
         </local:MapViewer>
 
     </StackPanel>

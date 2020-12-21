@@ -27,11 +27,12 @@ namespace MapDicer
         private int touchSize = 16;
         public static MainWindow thisMP = null;
 
-        public static Ellipse brushColorShape = new Ellipse();
+        public static Ellipse brushColorShape = new Ellipse(); // TODO: draw more than one tile at once.
         public static double prefillTerrainRed = 128;
         public static double prefillTerrainGreen = 128;
         public static double prefillTerrainBlue = 128;
         private bool suppressNewWindow = false;
+        private bool touching = false;
         private const int InitStateNone = 0;
         private const int InitStateDb = 1;
         private const int InitStateFull = 2;
@@ -56,8 +57,15 @@ namespace MapDicer
                 this.terrainBrushSizeSlider.Value = MainWindow.brushColorShape.Width;
             }
             this.afterBrushSize();
+            if (mapViewer.Visibility == Visibility.Visible)
+                UpdateMapViewerSize();
         }
         private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
+
+        public void UpdateMapViewerSize()
+        {
+            mapViewer.Height = this.ActualHeight - this.menuGrid.ActualHeight;
+        }
 
         public MainWindow()
         {
@@ -97,6 +105,7 @@ namespace MapDicer
                 this.image.Source = new BitmapImage(
                     new Uri(System.IO.Path.Combine(System.Environment.CurrentDirectory, "Assets", "splash.png"))
                 );
+                this.image.Visibility = Visibility.Visible;
             }
             catch (System.IO.FileNotFoundException ex)
             {
@@ -106,6 +115,7 @@ namespace MapDicer
         private void ReloadDatabase()
         {
             this.initState = InitStateNone;
+            this.mapViewer.IsNewDatabase = true;
             ShowSplash();
             viewModel.Lods.Clear();
             viewModel.Regions.Clear();
@@ -348,6 +358,7 @@ namespace MapDicer
                 this.regionBtn.IsEnabled = enable;
                 this.mapblockBtn.IsEnabled = enable;
                 this.terrainBtn.IsEnabled = enable;
+                this.mapViewer.Visibility = enable ? Visibility.Visible : Visibility.Hidden;
             }));
         }
 
@@ -466,6 +477,7 @@ namespace MapDicer
             dispatcherTimer.Stop();
             dispatcherTimer = null;
             initState = InitStateFull;
+            this.image.Visibility = Visibility.Hidden;
             this.image.Source = null;
             Enable(true);
         }
@@ -524,13 +536,31 @@ namespace MapDicer
 
         // private Dictionary<long, BitmapImage> bitmapCache = new Dictionary<long, BitmapImage>();
 
-        private void ShowMapblock(Mapblock mapblock)
+        private void LoadMapBlock(Mapblock mapblock)
         {
             // TODO: finish this
+        }
+        
+        private void ReloadMapblocks()
+        {
+            /*
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                // Draw a triangle:
+                Pen drawingPen = new Pen(Brushes.Wheat, 2);
+                drawingContext.DrawLine(drawingPen, new Point(100, 50), new Point(150, 150));
+                drawingContext.DrawLine(drawingPen, new Point(150, 150), new Point(50, 150));
+                drawingContext.DrawLine(drawingPen, new Point(50, 150), new Point(100, 50));
+            }
+
+            mapViewer.AddVisual(drawingVisual);
+            */
         }
 
         private void ShowMapblock()
         {
+            // TODO: eliminate this
             /*
             if (viewModel.SelectedMapblock != null)
             {
@@ -574,13 +604,13 @@ namespace MapDicer
                 foreach (Mapblock entry in Mapblock.WhereLodIdEquals(this.viewModel.SelectedLod.Id))
                 {
                     this.viewModel.Mapblocks.Add(entry);
-                    ShowMapblock(entry);
+                    LoadMapBlock(entry);
                 }
                 if (this.viewModel.Mapblocks.Count > 0)
                 {
                     this.regionCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
                 }
-
+                ReloadMapblocks();
             }
 
         }
@@ -614,6 +644,100 @@ namespace MapDicer
             }
 
         }
+
+        private void mapViewer_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (mapViewer.Visibility == Visibility.Visible)
+            {
+                UpdateMapViewerSize();
+            }
+        }
+
+        /// <summary>
+        /// Handle touch or click on the mapViewer.
+        /// </summary>
+        /// <param name="point">The point must be relative to mapViewer.</param>
+        private void mapViewer_Interaction(Point relativeMVPoint)
+        {
+            if (this.viewModel.SelectedLod == null)
+            {
+                MessageBox.Show("You must select a level of detail to expand a region through drawing.");
+                return;
+            }
+            if (this.viewModel.SelectedRegion == null)
+            {
+                MessageBox.Show("You must select a region to expand it through drawing.");
+                return;
+            }
+            if (this.viewModel.SelectedTerrain == null)
+            {
+                MessageBox.Show("You must select a terrain to draw.");
+                return;
+            }
+            MapDicerPos mpos = mapViewer.GetWorldMapDicerPos(relativeMVPoint, this.viewModel.SelectedLod.LodId, this.viewModel.SelectedLayerId);
+            if (!mapViewer.IsNewWrite(mpos))
+            {
+                return;
+            }
+            mapViewer.MarkAsWritten(mpos);
+            // Mark as written before written to avoid retrying on the same drag.
+            mapViewer.Add(relativeMVPoint, this.terrainImage.Source);
+            // mapViewer.Add(relativeMVPoint);
+        }
+
+        private void mapViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            mapViewer_Interaction(e.GetPosition(mapViewer));
+            touching = true;
+        }
+
+        private void mapViewer_TouchDown(object sender, TouchEventArgs e)
+        {
+            mapViewer_Interaction(e.GetTouchPoint(mapViewer).Position);
+            touching = true;
+        }
+
+        private void mapViewer_TouchUp(object sender, TouchEventArgs e)
+        {
+            touching = false;
+        }
+
+        private void mapViewer_LostTouchCapture(object sender, TouchEventArgs e)
+        {
+            touching = false;
+        }
+
+        private void mapViewer_TouchLeave(object sender, TouchEventArgs e)
+        {
+            touching = false;
+        }
+
+        private void mapViewer_TouchMove(object sender, TouchEventArgs e)
+        {
+            if (touching)
+                mapViewer_Interaction(e.GetTouchPoint(mapViewer).Position);
+        }
+
+        private void mapViewer_DragOver(object sender, DragEventArgs e)
+        {
+            mapViewer_Interaction(e.GetPosition(mapViewer));
+        }
+
+        private void mapViewer_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            touching = false;
+        }
+
+        private void mapViewer_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (touching)
+                mapViewer_Interaction(e.GetPosition(mapViewer));
+        }
+
+        private void mapViewer_MouseLeave(object sender, MouseEventArgs e)
+        {
+            touching = false;
+        }
     }
     class ViewModel
     {
@@ -622,6 +746,12 @@ namespace MapDicer
         public ObservableCollection<Region> Regions { get; set; }
         public ObservableCollection<Mapblock> Mapblocks { get; set; }
         public ObservableCollection<Terrain> Terrains { get; set; }
+        public short SelectedLayerId {
+            get
+            {
+                return SettingController.LayerWhenOnly1;
+            }
+        }
         public ViewModel()
         {
             Lods = new ObservableCollection<Lod>();
