@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
 
-namespace MapDicer
+namespace MapDicer.Views
 {
     /// <summary>
     /// Interaction logic for LodWindow.xaml
@@ -227,7 +227,7 @@ namespace MapDicer
             
             //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));    
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
-                skeletonImage.Visibility = enable ? Visibility.Hidden : Visibility.Visible;
+                skeletonImage.Visibility = enable ? Visibility.Hidden : Visibility.Visible; // hide skeleton when enabled
                 NameTB.IsEnabled = enable;
                 if (this.IdCbx.Items.Count < 1)
                 {

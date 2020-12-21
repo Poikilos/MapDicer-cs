@@ -11,6 +11,7 @@ namespace MapDicer
     class SettingController
     {
         private static bool started = false;
+        public const short LayerWhenOnly1 = 0;
         public static void Start()
         {
             if (started)
@@ -19,6 +20,7 @@ namespace MapDicer
             // The static constructor runs when the first instance is created or the first static member
             // is accessed (even if this method is empty).
             EnsureTables();
+            EnsureSampleData();
         }
         public static string DataPath {
             get
@@ -94,6 +96,21 @@ namespace MapDicer
             int result;
             bool ok = int.TryParse(text, out result);
             return ok ? result : defaultValue;
+        }
+        public static void EnsureSampleData()
+        {
+            Layer layer = new Layer();
+            layer.LayerId = SettingController.LayerWhenOnly1;
+            layer.Name = "terrain";
+            layer.Num = 0;
+            try
+            {
+                Layer.Insert(layer);
+            }
+            catch
+            {
+                // TODO: this assumes it was already added and the problem was a primary key constraint violation
+            }
         }
         public static void EnsureTables()
         {

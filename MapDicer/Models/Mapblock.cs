@@ -101,5 +101,95 @@ namespace MapDicer.Models
         [Column("Data", TypeName = "BLOB")]
         public byte[] Data { get; set; }
         */
+
+        /// <summary>
+        /// Insert at the location where x-z is the ground plane as per OpenGL.
+        /// </summary>
+        /// <param name="newEntry"></param>
+        /// <param name="x"></param>
+        /// <param name="z"></param>
+        /// <param name="generateId">generate the id; If false, ignore x and z (they are baked
+        /// into the MapblockId)</param>
+        /// <returns></returns>
+        public static string Insert(Mapblock newEntry, short x, short z, bool generateId)
+        {
+            string error = "";
+            // Mapblock last = null;
+            MapDicerPos mpos = new MapDicerPos
+            {
+                LodId = newEntry.LodId,
+                Layer = newEntry.LayerId,
+                X = x,
+                Z = z,
+            };
+
+
+            long newId = newEntry.MapblockId;
+            if (generateId)
+            {
+                newId = mpos.getSliceAsInteger();
+            }
+            /*
+            if (generateId)
+            {
+                using (var context = new MapDicerContext())
+                {
+                    context.Database.CreateIfNotExists();
+                    var existing = (from entry in context.Mapblocks
+                                        // where entry.Id < 25
+                                    orderby entry.MapblockId descending // the Last method depends on ascending.
+                                    select entry).FirstOrDefault();
+                    if (existing != null)
+                    {
+                        newId = (short)(existing.MapblockId + 1); // last = existing;
+                    }
+                    // else assume no entries (leave new entry at 0 if generateId)
+                }
+            }
+            */
+
+            using (var context = new MapDicerContext())
+            {
+                context.Database.CreateIfNotExists();
+                if (generateId)
+                {
+                    newEntry.MapblockId = newId;
+                    /*
+                    newEntry.MapblockId = 0;
+                    if (last != null)
+                        newEntry.MapblockId = (short)(last.MapblockId + 1);
+                    else
+                        newEntry.MapblockId = 0; // Assumes the table is empty or not present.
+                    */
+                }
+
+                context.Mapblocks.Add(newEntry);
+                try
+                {
+                    int count = context.SaveChanges();
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException ex)
+                {
+                    // There may be two inner exceptions such as
+                    // 1:
+                    // UpdateException: An error occurred while updating the entries. See the inner exception for details.
+                    // 2:
+                    // SQLiteException: constraint failed
+                    // UNIQUE constraint failed: Mapblock.MapblockId
+                    error = ex.Message;
+                    Exception ex1 = ex.InnerException;
+                    if (ex1 != null)
+                    {
+                        error += "\n" + ex1.Message;
+                        Exception ex2 = ex1.InnerException;
+                        if (ex2 != null)
+                        {
+                            error += "\n" + ex2.Message;
+                        }
+                    }
+                }
+            }
+            return error;
+        }// (*Linq to db*, 2020)
     }
 }

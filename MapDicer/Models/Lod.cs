@@ -164,6 +164,7 @@ namespace MapDicer.Models
             */
             return null;
         } // (*Linq to db*, 2020)
+
         public static Lod Last()
         {
             using (var context = new MapDicerContext())

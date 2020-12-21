@@ -1,4 +1,5 @@
 ﻿using MapDicer.Models;
+using MapDicer.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -324,7 +325,8 @@ namespace MapDicer
 
             //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));    
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
-                // skeletonImage.Visibility = enable ? Visibility.Hidden : Visibility.Visible;
+                // skeletonImage.Visibility = enable ? Visibility.Hidden : Visibility.Visible; // hide skeleton when enabled
+                this.menuGrid.Visibility = enable ? Visibility.Visible : Visibility.Hidden;
                 this.detailCBx.IsEnabled = enable;
                 this.regionCBx.IsEnabled = enable;
                 this.blockCBx.IsEnabled = enable;
@@ -348,12 +350,16 @@ namespace MapDicer
                     {
                         this.viewModel.Lods.Add(entry);
                     }
+
                     this.viewModel.Terrains.Clear();
                     this.viewModel.SelectedTerrain = null;
                     foreach (Terrain entry in Terrain.All())
                     {
                         this.viewModel.Terrains.Add(entry);
                     }
+
+                    // The timer will fill in everything dependent upon selected Lod.
+
                     if (initState < InitStateDb)
                     {
                         initState = InitStateDb;
@@ -394,26 +400,32 @@ namespace MapDicer
         {
             string msg = "";
             if (this.viewModel.Terrains.Count > 0)
-            {
-                int lastId = this.viewModel.Terrains.Count - 1;
-                this.blockCBx.SelectedIndex = lastId;
-                // ^ does nothing unless IsSynchronizedWithCurrentItem="True"
-                // this.viewModel.SelectedTerrainId = lastId;
-                // ^ does nothing
-                // this.viewModel.SelectedTerrain = this.viewModel.Terrains[lastId];
-            }
+                this.terrainCBx.SelectedIndex = this.viewModel.Terrains.Count - 1;
             else
-            {
                 msg += "There are no terrains yet. ";
-            }
+
             if (this.viewModel.Lods.Count > 0)
+            {
                 this.detailCBx.SelectedIndex = this.viewModel.Lods.Count - 1;
+            }
             else
                 msg += "There are no Levels of Detail yet. ";
+            /*
+            if (this.viewModel.Regions.Count > 0)
+                this.regionCBx.SelectedIndex = this.viewModel.Regions.Count - 1;
+            else
+                msg += "There are no Regions in this level of detail yet. ";
+
+            if (this.viewModel.Mapblocks.Count > 0)
+                this.blockCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
+            else
+                msg += "There are no Mapblocks in this level of detail yet. "; // region doesn't matter
+            */
             if (msg.Length > 0)
             {
                 MessageBox.Show(msg + " Try adding some using the corresponding picture button by the empty selection box.");
             }
+
             dispatcherTimer.Stop();
             dispatcherTimer = null;
             initState = InitStateFull;
@@ -421,15 +433,114 @@ namespace MapDicer
             Enable(true);
         }
 
+        private void regionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SettingController.Start();
+            if (viewModel.SelectedLod == null)
+            {
+                MessageBox.Show("You must select a Level of Detail before adding or changing regions.");
+                return;
+            }
+            RegionWindow dlg = new RegionWindow(viewModel.SelectedLod.LodId);
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                // saved to database already in this case, so:
+                if (dlg.NewEntry != null)
+                {
+                    this.viewModel.Regions.Add(dlg.NewEntry);
+                    dlg.NewEntry = null;
+                }
+            }
+        }
+
+        private void mapblockBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SettingController.Start();
+            if (viewModel.SelectedLod == null)
+            {
+                MessageBox.Show("You must select a Level of Detail, Region and Terrain before adding or changing mapblocks.");
+                return;
+            }
+            if (viewModel.SelectedRegion == null)
+            {
+                MessageBox.Show("You must select a Region and Terrain before adding or changing mapblocks.");
+                return;
+            }
+            if (viewModel.SelectedTerrain == null)
+            {
+                MessageBox.Show("You must select a Terrain before adding or changing mapblocks.");
+                return;
+            }
+            MapblockWindow dlg = new MapblockWindow(viewModel.SelectedLod.LodId, viewModel.SelectedRegion.RegionId, viewModel.SelectedTerrain.TerrainId);
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                // saved to database already in this case, so:
+                if (dlg.NewEntry != null)
+                {
+                    this.viewModel.Mapblocks.Add(dlg.NewEntry);
+                    dlg.NewEntry = null;
+                }
+            }
+        }
+
+        private void ShowMapblock()
+        {
+            /*
+            if (viewModel.SelectedMapblock != null)
+            {
+                try
+                {
+                    this.image.Source = new BitmapImage(
+                        new Uri(System.IO.Path.Combine(SettingController.DataPath, viewModel.SelectedMapblock.Path))
+                    );
+                }
+                catch (System.IO.FileNotFoundException ex)
+                {
+                    Console.Error.WriteLine(ex.ToString());
+                }
+            }
+            */
+        }
+
+        private void blockCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ShowMapblock();
+        }
+
+        private void detailCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.viewModel.Regions.Clear();
+            this.viewModel.Mapblocks.Clear(); // regionCBx_SelectionChanged will add the mapblocks.
+
+            this.viewModel.SelectedRegion = null;
+
+            if (this.viewModel.SelectedLod != null)
+            {
+                // TODO: finish this
+                /*
+                foreach (Region entry in Region.WhereLodEquals(this.viewModel.SelectedLod.Id))
+                {
+                    this.viewModel.Terrains.Add(entry);
+                }
+                */
+            }
+
+        }
     }
     class ViewModel
     {
         public MainWindow Parent = null;
         public ObservableCollection<Lod> Lods { get; set; }
+        public ObservableCollection<Region> Regions { get; set; }
+        public ObservableCollection<Mapblock> Mapblocks { get; set; }
         public ObservableCollection<Terrain> Terrains { get; set; }
         public ViewModel()
         {
             Lods = new ObservableCollection<Lod>();
+            Regions = new ObservableCollection<Region>();
+            Mapblocks = new ObservableCollection<Mapblock>();
             Terrains = new ObservableCollection<Terrain>();
         }
 
@@ -449,6 +560,44 @@ namespace MapDicer
             set
             {
                 selectedLod = value;
+            }
+        }
+
+        private int selectedRegionId;
+        public int SelectedRegionId
+        {
+            get { return selectedRegionId; }
+            set
+            {
+                selectedRegionId = value;
+            }
+        }
+        private Region selectedRegion;
+        public Region SelectedRegion
+        {
+            get { return selectedRegion; }
+            set
+            {
+                selectedRegion = value;
+            }
+        }
+
+        private int selectedMapblockId;
+        public int SelectedMapblockId
+        {
+            get { return selectedMapblockId; }
+            set
+            {
+                selectedMapblockId = value;
+            }
+        }
+        private Mapblock selectedMapblock;
+        public Mapblock SelectedMapblock
+        {
+            get { return selectedMapblock; }
+            set
+            {
+                selectedMapblock = value;
             }
         }
 

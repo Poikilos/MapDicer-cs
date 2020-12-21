@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MapDicer
+namespace MapDicer.Views
 {
     /// <summary>
     /// Interaction logic for OptionsWindow.xaml

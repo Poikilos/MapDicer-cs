@@ -25,5 +25,17 @@ namespace MapDicer.Models
 
         [Required, Column("Name"), Index(IsUnique = true)]
         public string Name { get; set; }
+
+        public static bool Insert(Layer newEntry)
+        {
+            bool ok = false;
+            using (var context = new MapDicerContext())
+            {
+                context.Database.CreateIfNotExists();
+                context.Layers.Add(newEntry);
+                ok = context.SaveChanges() > 0;
+            }
+            return ok;
+        }// (*Linq to db*, 2020)
     }
 }
