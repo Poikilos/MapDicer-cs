@@ -12,6 +12,8 @@ namespace MapDicer
     {
         private static bool started = false;
         public const short LayerWhenOnly1 = 0;
+        public static bool NewDB = true;
+        private static string loadedCS = null;
         public static void Start()
         {
             if (started)
@@ -19,8 +21,17 @@ namespace MapDicer
             started = true;
             // The static constructor runs when the first instance is created or the first static member
             // is accessed (even if this method is empty).
-            EnsureTables();
-            EnsureSampleData();
+            InitializeDB();
+        }
+        public static void InitializeDB()
+        {
+            if (loadedCS != SettingModel.SqlConnectionString)
+            {
+                loadedCS = SettingModel.SqlConnectionString;
+                NewDB = true;
+                EnsureTables();
+                EnsureSampleData();
+            }
         }
         public static string DataPath {
             get
@@ -97,7 +108,7 @@ namespace MapDicer
             bool ok = int.TryParse(text, out result);
             return ok ? result : defaultValue;
         }
-        public static void EnsureSampleData()
+        private static void EnsureSampleData()
         {
             Layer layer = new Layer();
             layer.LayerId = SettingController.LayerWhenOnly1;
@@ -112,7 +123,7 @@ namespace MapDicer
                 // TODO: this assumes it was already added and the problem was a primary key constraint violation
             }
         }
-        public static void EnsureTables()
+        private static void EnsureTables()
         {
             // SettingModel.SqlConnectionString = Properties.Settings.Default.DbConnectionString;
             if (!File.Exists(SettingModel.DbFullPath))

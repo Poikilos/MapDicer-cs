@@ -26,6 +26,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height=".1*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -41,9 +42,10 @@
         <TextBox x:Name="DbFileTB" Grid.Row="3" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
 
 
-        <TextBlock Visibility="Hidden" Text="Settings File" Grid.Row="4" Grid.Column="0" Width="Auto"/>
-        <TextBox Visibility="Hidden" x:Name="settingsFileTB" Grid.Row="4" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3" IsEnabled="False"/>
-        <Button x:Name="saveBtn" Content="Save" Grid.Row="6" Grid.Column="1" Click="saveBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Grid.Row="6" Grid.Column="2" Click="cancelBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <TextBlock Text="Press Generate after changing the file if you're not sure." Grid.Row="4" Grid.Column="1" Width="Auto" Grid.ColumnSpan="2"/>
+        <TextBlock Visibility="Hidden" Text="Settings File" Grid.Row="5" Grid.Column="0" Width="Auto"/>
+        <TextBox Visibility="Hidden" x:Name="settingsFileTB" Grid.Row="5" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3" IsEnabled="False"/>
+        <Button x:Name="saveBtn" Content="Save" Grid.Row="7" Grid.Column="1" Click="saveBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Grid.Row="7" Grid.Column="2" Click="cancelBtn_Click" Height="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

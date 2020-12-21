@@ -49,16 +49,14 @@ namespace MapDicer.Views
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
             this.writeSettings();
-            SettingController.EnsureTables(); // Use the new connection string.
+            SettingController.InitializeDB(); // Reloads if connection string changed.
             this.DialogResult = true;
-            this.Close();
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
             this.readSettings();
             this.DialogResult = false;
-            this.Close();
         }
 
         private void DbGenerateCSBtn_Click(object sender, RoutedEventArgs e)

@@ -57,13 +57,11 @@ namespace MapDicer
             }
             this.afterBrushSize();
         }
-        private System.Windows.Threading.DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
 
         public MainWindow()
         {
             InitializeComponent();
-            dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
             this.viewModel = new ViewModel();
             this.viewModel.Parent = this;
             this.DataContext = this.viewModel;
@@ -80,6 +78,7 @@ namespace MapDicer
             // Button: MessageDialog dialog = new MessageDialog((this.brushTerrainCB.Items[0]).GetType().ToString());
             // var result = dialog.ShowAsync();
             // this.brushTerrainCB.Items.Add(typeof this.brushTerrainCB.Items[0]);
+            this.ShowSplash();
             try
             {
                 this.terrainImage.Source = new BitmapImage(
@@ -90,6 +89,9 @@ namespace MapDicer
             {
                 Console.Error.WriteLine(ex.ToString());
             }
+        }
+        private void ShowSplash()
+        {
             try
             {
                 this.image.Source = new BitmapImage(
@@ -100,6 +102,16 @@ namespace MapDicer
             {
                 Console.Error.WriteLine(ex.ToString());
             }
+        }
+        private void ReloadDatabase()
+        {
+            this.initState = InitStateNone;
+            ShowSplash();
+            viewModel.Lods.Clear();
+            viewModel.Regions.Clear();
+            viewModel.Mapblocks.Clear();
+            viewModel.Terrains.Clear();
+            StartLoadStateThread();
         }
         private void terrainColorBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -260,7 +272,10 @@ namespace MapDicer
             var result = dlg.ShowDialog();
             if (result == true)
             {
-                // Do nothing, it saves on its own.
+                if (SettingController.NewDB)
+                {
+                    ReloadDatabase();
+                }
             }
         }
 
@@ -339,6 +354,7 @@ namespace MapDicer
         private void LoadLodsSafe(bool reloadIds)
         {
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
+                SettingController.NewDB = false; // Make sure this doesn't run again.
                 if (reloadIds)
                 {
                     this.viewModel.Lods.Clear();
@@ -359,12 +375,22 @@ namespace MapDicer
 
                     if (initState < InitStateDb)
                     {
-                        initState = InitStateDb;
-                        dispatcherTimer.Start();
+                        if (dispatcherTimer != null)
+                        {
+                            MessageBox.Show("Error: The database load dispatcher is busy.");
+                        }
+                        else
+                        {
+                            dispatcherTimer = new DispatcherTimer();
+                            dispatcherTimer.Tick += dispatcherTimer_Tick;
+                            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+                            initState = InitStateDb;
+                            dispatcherTimer.Start();
+                        }
                     }
                 }
             }));
-            // rhatwar007 https://stackoverflow.com/a/24624095/4541104
+            
         }
 
         private void LoadState(object o)
@@ -373,6 +399,7 @@ namespace MapDicer
         }
         private void ReloadState(bool reloadIds)
         {
+
             Enable(false);
 
             //Enable(false);
@@ -398,10 +425,14 @@ namespace MapDicer
             {
                 System.Windows.Application.Current.Shutdown();
             }
-            Thread th = new Thread(LoadState);
-            th.Start(true);
+            StartLoadStateThread();
         }
 
+        private void StartLoadStateThread()
+        {
+            Thread th = new Thread(LoadState);
+            th.Start(true); // parameterized (true becomes the object param for LoadState)
+        }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             string msg = "";
