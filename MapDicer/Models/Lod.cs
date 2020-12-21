@@ -53,6 +53,14 @@ namespace MapDicer.Models
         [Column("SamplesPerMapblock"), Required]
         public int SamplesPerMapblock { get; set; }
 
+        public Lod Child
+        {
+            get
+            {
+                return Lod.GetChild(this.LodId);
+            }
+        }
+
         #region computed
         /// <summary>
         /// The statistic is only for display purposes.

@@ -642,21 +642,28 @@ namespace MapDicer
                     Int32Rect srcRect = new Int32Rect();
                     srcRect.Width = 1;
                     srcRect.Height = 1;
-                    Lod childLod = entry.Child;
+                    Lod childLod = entry.Lod.Child;
+                    Lod parentLod = entry.Lod.Parent;
                     int childSamplesPerMapblock = 1;
                     if (childLod != null)
                     {
                         childSamplesPerMapblock = childLod.SamplesPerMapblock;
                     }
+                    int parentSamplesPerMapblock = 1;
+                    if (parentLod != null)
+                    {
+                        parentSamplesPerMapblock = parentLod.SamplesPerMapblock;
+                    }
                     MapDicerPos microPos = new MapDicerPos
                     {
                         LodId = (short)(macroPos.LodId - 1), // TODO: Improve this--this is usually correct though.
                         LayerId = macroPos.LayerId,
-                        X = (short)(macroPos.X * childSamplesPerMapblock),
-                        Z = (short)(macroPos.Z * childSamplesPerMapblock),
+                        X = (short)(macroPos.X * lod.SamplesPerMapblock),
+                        Z = (short)(macroPos.Z * lod.SamplesPerMapblock),
                     };
-                    int offsetX = macroPos.X * childSamplesPerMapblock;
-                    int offsetY = macroPos.Z * childSamplesPerMapblock;
+                    // ^ The microPos must become a bigger number since it is in the on-screen tile size.
+                    int offsetX = macroPos.X * lod.SamplesPerMapblock;
+                    int offsetY = macroPos.Z * lod.SamplesPerMapblock;
                     int imageX = microPos.X - offsetX;
                     int imageY = microPos.Z - offsetY;
 
@@ -675,19 +682,6 @@ namespace MapDicer
                             try
                             {
                                 wb.CopyPixels(srcRect, pixel, 4, 0);
-                                if (pixel[3] > 0)
-                                {
-                                    int tid = Terrain.IdFromColorRgb(pixel[2], pixel[1], pixel[0]);
-                                    Visual visual;
-                                    if (mbVisuals.TryGetValue(microPos.getSliceAsInteger(), out visual))
-                                    {
-                                        mapViewer.RemoveVisual(visual);
-                                    }
-
-                                    Point relativeMVPoint = mapViewer.GetPxPos(microPos);
-                                    visual = mapViewer.Add(relativeMVPoint, GetTerrainImageSource(tid));
-                                    mbVisuals.Add(microPos.getSliceAsInteger(), visual);
-                                }
                             }
                             catch (System.ArgumentException ex)
                             {
@@ -695,6 +689,19 @@ namespace MapDicer
                                                               srcRect, width, height));
                                 y = height;
                                 break;
+                            }
+                            if (pixel[3] > 0)
+                            {
+                                int tid = Terrain.IdFromColorRgb(pixel[2], pixel[1], pixel[0]);
+                                Visual visual;
+                                if (mbVisuals.TryGetValue(microPos.getSliceAsInteger(), out visual))
+                                {
+                                    mapViewer.RemoveVisual(visual);
+                                }
+
+                                Point relativeMVPoint = mapViewer.GetPxPos(microPos);
+                                visual = mapViewer.Add(relativeMVPoint, GetTerrainImageSource(tid));
+                                mbVisuals.Add(microPos.getSliceAsInteger(), visual);
                             }
                             srcRect.X++;
                         }
@@ -835,12 +842,13 @@ namespace MapDicer
             WriteableBitmap wb = mbWBs[macroPos.getSliceAsInteger()];
             ByteMap.WritePixelTo(wb, imageX, imageY, terrain.GetColor());
             string path = Mapblock.GetImagePath(macroPos.getSliceAsInteger(), true);
-            Console.Error.Write(String.Format("^ saving image {0}", path));
+            Console.Error.WriteLine(String.Format("^ saving image {0}", path));
             ByteMap.SaveWriteableBitmap(path, wb);
             Visual visual;
             if (mbVisuals.TryGetValue(microPos.getSliceAsInteger(), out visual))
             {
                 mapViewer.RemoveVisual(visual);
+                mbVisuals.Remove(microPos.getSliceAsInteger());
             }
             visual = mapViewer.Add(relativeMVPoint, this.terrainImage.Source);
             mbVisuals.Add(microPos.getSliceAsInteger(), visual);

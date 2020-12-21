@@ -51,11 +51,15 @@ namespace MapDicer
                 return ".png";
             }
         }
+        /// <summary>
+        /// This must be 96 for WPF or WPF will scale the WriteableBitmap (See
+        /// <https://www.hanselman.com/blog/be-aware-of-dpi-with-image-pngs-in-wpf-images-scale-weird-or-are-blurry>)
+        /// </summary>
         public static double DpiForNonViewableData
         {
             get
             {
-                return 4.0;
+                return 96;
             }
         }
 

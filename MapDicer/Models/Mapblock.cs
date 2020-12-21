@@ -95,13 +95,6 @@ namespace MapDicer.Models
         /// </summary>
         [Column("Path")]
         public string Path { get; set; }
-        public Lod Child
-        {
-            get
-            {
-                return Lod.GetChild(this.LodId);
-            }
-        }
 
         // TODO: (future) -- this code is not validated
         /*
@@ -227,7 +220,7 @@ namespace MapDicer.Models
                 if (!System.IO.Directory.Exists(yPath))
                     System.IO.Directory.CreateDirectory(yPath);
                 if (!System.IO.Directory.Exists(xPath))
-                    System.IO.Directory.CreateDirectory(yPath);
+                    System.IO.Directory.CreateDirectory(xPath);
             }
             return zPath;
         }
