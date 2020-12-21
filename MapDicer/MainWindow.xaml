@@ -107,7 +107,7 @@
                 SelectionChanged="terrainCBx_SelectionChanged"
                 />
 
-            <Button x:Name="terrainColorBtn" Grid.Column="6" Grid.Row="0" Margin="0" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
+            <Button x:Name="terrainColorBtn" IsEnabled="False" Grid.Column="6" Grid.Row="0" Margin="0" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
                 <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainColorBtn}" Height="{Binding Path=ActualHeight, ElementName=terrainColorBtn}"/>
             </Button>
             <TextBlock x:Name="statusTB" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5"/>

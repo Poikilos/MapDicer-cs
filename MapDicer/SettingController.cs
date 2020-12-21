@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MapDicer
 {
@@ -83,6 +84,12 @@ namespace MapDicer
             if (id != null)
             {
                 string dotExt = Path.GetExtension(path);
+                // Remove invalid file name characters:
+                string regex = String.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars())));
+                Regex removeInvalidChars = new Regex(regex, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+                id = removeInvalidChars.Replace(id, "_");
+                // ^ See Jan's answer on
+                // <https://stackoverflow.com/questions/146134/how-to-remove-illegal-characters-from-path-and-filenames>
                 fileName = id + dotExt;
             }
             else

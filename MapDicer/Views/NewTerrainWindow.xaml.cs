@@ -148,8 +148,8 @@ namespace MapDicer.Views
             this.NewEntry = new Terrain
             {
                 TerrainId = Terrain.IdFromHexColorRgb(this.hexTB.Text),
-                Name = this.nameTB.Text,
-                Path = SettingController.Import(this.pathTB.Text, "terrain", null, true),
+                Name = this.nameTB.Text.Trim(),
+                Path = SettingController.Import(this.pathTB.Text, "terrain", this.nameTB.Text.Trim(), true),
                 SourceId = sourceId,
                 PixPerSample = pps,
             };
