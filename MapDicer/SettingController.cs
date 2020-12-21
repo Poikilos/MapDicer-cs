@@ -15,24 +15,65 @@ namespace MapDicer
         {
             if (started)
                 return;
+            started = true;
             // The static constructor runs when the first instance is created or the first static member
             // is accessed (even if this method is empty).
-            LoadSettings();
             EnsureTables();
+        }
+        public static string DataPath {
+            get
+            {
+                string DbPath = SettingModel.DbFullPath;
+                FileInfo fi = new FileInfo(DbPath);
+                string DbNoExt = Path.GetFileNameWithoutExtension(DbPath);
+                string DbDirPath = fi.Directory.FullName;
+                string DataDirName = DbNoExt + "_files";
+                return Path.Combine(DbDirPath, DataDirName);
+            }
+        }
+
+
+        /// <summary>
+        /// Import the file to DataPath in the given category as a subfolder.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="category"></param>
+        /// <param name="id">The new filename, or null to retain filename (extension from path is
+        /// <param name="overwrite">Overwrite any existing file (at return path--see returns).</param>
+        /// <returns>The new path relative to DataPath, without a leading slash.</returns>
+        public static string Import(string path, string category, string id, bool overwrite)
+        {
+            category = category.Replace('\\', '/');
+            string fileName = Path.GetFileName(path);
+            if (id != null)
+            {
+                string dotExt = Path.GetExtension(path);
+                fileName = id + dotExt;
+            }
+            if (!Directory.Exists(DataPath))
+            {
+                Directory.CreateDirectory(DataPath);
+            }
+            string catPath = Path.Combine(DataPath, category);
+            if (!Directory.Exists(catPath))
+            {
+                Directory.CreateDirectory(catPath);
+            }
+            // TODO: allow category to contain a slash
+            string relPath = Path.Combine(category, fileName);
+            string newPath = Path.Combine(DataPath, relPath);
+            File.Copy(path, newPath, overwrite);
+            return relPath;
         }
         static SettingController() {
             Start();
             // Properties.Settings.Default.PropertyChanged += SettingModel.PropertyChangedCallback_Event;
         }
-        public static void LoadSettings()
-        {
-
-        }
         /// <summary>
-        /// 
+        /// Try a sql command, otherwise return an exception.
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="sc"></param>
+        /// <param name="sql">SQLite-flavored SQL code</param>
+        /// <param name="sc">The SQLiteConnection</param>
         /// <returns>Exception or null</returns>
         private static Exception TrySql(string sql, SQLiteConnection sc)
         {
@@ -119,11 +160,6 @@ namespace MapDicer
                 TrySql(sql, sc);
                 sc.Close();
             }
-
-            using (MapDicerContext context = new MapDicerContext())
-            {
-            }
-            
         }
 
     }

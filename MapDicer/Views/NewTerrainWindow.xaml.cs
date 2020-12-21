@@ -28,14 +28,29 @@ namespace MapDicer
         }
         */
         // public Result DialogResult = Result.Primary;
-        public static double prefillTerrainRed = 128;
-        public static double prefillTerrainGreen = 128;
-        public static double prefillTerrainBlue = 128;
-        public static int prefillSourceId = 1;
-        public static int prefillPPS = 1;
-        public static BitmapImage Image = null;
+        private double prefillTerrainRed = 128;
+        private double prefillTerrainGreen = 128;
+        private double prefillTerrainBlue = 128;
+        private int prefillSourceId = 1;
+        private int prefillPPS = 1;
         private static TextBox[] colorTBs = null;
         private static Slider[] colorSliders = null;
+        private bool suppressToText = false; // suppress transfer of slider to text while doing the opposite
+        private bool suppressToSlider = false; // suppress transfer of text to slider while doing the opposite
+
+        public BitmapImage Image = null;
+        private Terrain terrain = null;
+        public Terrain Terrain
+        {
+            get
+            {
+                return terrain;
+            }
+            set
+            {
+                terrain = value;
+            }
+        }
         public int Red
         {
             get
@@ -69,10 +84,6 @@ namespace MapDicer
                 this.blueSlider.Value = (double)value;
             }
         }
-        public Terrain Terrain { get; private set; }
-        public string TerrainName { get; private set; }
-        private bool suppressToText = false; // suppress transfer of slider to text while doing the opposite
-        private bool suppressToSlider = false; // suppress transfer of text to slider while doing the opposite
 
         public NewTerrainWindow()
         {
@@ -93,8 +104,7 @@ namespace MapDicer
             Red = (int)Math.Round(this.redSlider.Value);
             Green = (int)Math.Round(this.greenSlider.Value);
             Blue = (int)Math.Round(this.blueSlider.Value);
-            TerrainName = this.nameTB.Text.Trim();
-            if (TerrainName.Length < 1)
+            if (this.nameTB.Text.Trim().Length < 1)
             {
                 MessageBox.Show("You must enter a name.");
                 return;
@@ -121,12 +131,25 @@ namespace MapDicer
                     sourceId = tmpId;
                 }
             }
-            NewTerrainWindow.Image = new BitmapImage(new System.Uri(this.pathTB.Text));
+            try
+            {
+                this.Image = new BitmapImage(new System.Uri(this.pathTB.Text));
+            }
+            catch (System.UriFormatException ex)
+            {
+                MessageBox.Show("The path is not valid.");
+                return;
+            }
+            catch (System.NotSupportedException ex)
+            {
+                MessageBox.Show("You must choose a supported image format such as jpg or png.");
+                return;
+            }
             this.Terrain = new Terrain
             {
                 TerrainId = Terrain.IdFromHexColorRgb(this.hexTB.Text),
                 Name = this.nameTB.Text,
-                Path = this.pathTB.Text,
+                Path = SettingController.Import(this.pathTB.Text, "terrain", null, true),
                 SourceId = sourceId,
                 PixPerSample = pps,
             };
@@ -138,7 +161,6 @@ namespace MapDicer
             Red = (int)Math.Round(this.redSlider.Value);
             Green = (int)Math.Round(this.greenSlider.Value);
             Blue = (int)Math.Round(this.blueSlider.Value);
-            TerrainName = this.nameTB.Text;
             this.DialogResult = false;
         }
 

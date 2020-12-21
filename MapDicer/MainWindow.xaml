@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MapDicer"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
-        Title="MapDicer" Height="450" Width="800"
+        Title="MapDicer" Height="569" Width="800"
         SizeChanged="Window_SizeChanged"
         Loaded="Window_Loaded"
         >
@@ -28,7 +28,13 @@
             <Button x:Name="detailBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="detailBtn_Click">
                 <Image Source="{svgc:SvgImage Assets/detail.svg}" Width="{Binding Path=ActualHeight, ElementName=detailBtn}" Height="{Binding Path=ActualHeight, ElementName=detailBtn}"/>
             </Button>
-            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <!--<ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>-->
+            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1"
+                ItemsSource="{Binding Lods}" DisplayMemberPath="Name"
+                SelectedValuePath="LodId" SelectedValue="{Binding SelectedLodId}"                 
+                SelectedItem="{Binding SelectedLod}"
+                IsSynchronizedWithCurrentItem="True"
+            />
             <Button x:Name="regionBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}">
                 <Image Source="{svgc:SvgImage Assets/region.svg}"  Width="{Binding Path=ActualHeight, ElementName=regionBtn}" Height="{Binding Path=ActualHeight, ElementName=regionBtn}"/>
             </Button>
@@ -69,14 +75,22 @@
                 <Image x:Name="terrainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </Button>
 
-            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" Height="16pt" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>
+            
+            <!--<ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5" Height="16pt" HorizontalAlignment="Stretch" SelectionChanged="brushTerrainCB_SelectionChanged"/>-->
+            <ComboBox x:Name="terrainCBx" Grid.Row="1" Grid.Column="5"
+                ItemsSource="{Binding Terrains}" DisplayMemberPath="Name"
+                SelectedValuePath="TerrainId" SelectedValue="{Binding SelectedTerrainId}"                 
+                SelectedItem="{Binding SelectedTerrain}"
+                IsSynchronizedWithCurrentItem="True"
+                />
+
             <Button x:Name="terrainColorBtn" Margin="0" Padding="0" BorderThickness="0" Background="Transparent" Grid.Column="6" Grid.Row="1"  HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
                 <Ellipse x:Name="terrainColorEllipse" Stroke="DarkSlateGray" Fill="Green" HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainColorBtn}" Height="{Binding Path=ActualHeight, ElementName=terrainColorBtn}"/>
             </Button>
         </Grid>
 
 
-        <Image x:Name="image" Width="256" Height="256"/>
+        <Image x:Name="image" Source="Assets/splash.png"/>
 
     </StackPanel>
 </Window>

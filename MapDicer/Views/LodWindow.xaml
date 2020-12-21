@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="Level of Detail (LOD)" Height="228.373" Width="454.057"
         Loaded="Window_Loaded"
+        SizeToContent="Height"
         >
     <Grid
         Width="Auto"
@@ -32,6 +33,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="LodId" Grid.Row="1" Grid.Column="0" Width="Auto"/>
         <ComboBox x:Name="IdCbx" Grid.Row="1" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="2" SelectionChanged="IdCbx_SelectionChanged"/>
+        <CheckBox x:Name="newCB" Grid.Row="1" Grid.Column="3" Content="New" Checked="newCB_Checked" Unchecked="newCB_Unchecked"/>
         <TextBlock Text="Name" Grid.Row="2" Grid.Column="0" Width="Auto"/>
         <TextBox x:Name="NameTB" Grid.Row="2" Grid.Column="1" Width="Auto" Height="Auto" Grid.ColumnSpan="3"/>
         <TextBlock Text="Parent" Grid.Row="3" Grid.Column="0" Width="Auto"/>

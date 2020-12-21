@@ -1,14 +1,18 @@
-﻿using MapDicer.MtCompat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Data.Entity.Core.Mapping;
-// using System.Data.Linq;
+// using System.Data.Entity.ModelConfiguration.Conventions;
+// using System.Data.Entity.Core.Mapping;
+// using System.Data.Linq.Mapping;
 using System.Data.SQLite;
-using System.Data.SQLite.EF6;
+// using System.Data.SQLite.EF6;
 // using System.Data.SQLite.Linq;
+// using System.Data.Linq;
+using System.Linq; // orderby etc
+
+using MapDicer.MtCompat;
 
 namespace MapDicer.Models
 {

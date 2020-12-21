@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Data.SQLite;
-using System.Data.SQLite.Linq;
-using System.Text;
 using System.ComponentModel.DataAnnotations;
-// using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
-// using System.Data.Linq.Mapping;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+// using System.Data.Entity.ModelConfiguration.Conventions;
+// using System.Data.Entity.Core.Mapping;
+// using System.Data.Linq.Mapping;
+using System.Data.SQLite;
+// using System.Data.SQLite.EF6;
+// using System.Data.SQLite.Linq;
+using System.Linq; // orderby etc
+
 
 namespace MapDicer.Models
 {
@@ -203,15 +202,15 @@ namespace MapDicer.Models
             {
                 context.Database.CreateIfNotExists();
                 var existing = (from entry in context.Lods
-                                    // where entry.Id < 25
+                                where entry.LodId == lodId
                                 orderby entry.LodId ascending
                                 select entry).FirstOrDefault();
                 return existing;
             }
         }
-        public static bool Insert(Lod newEntry, bool generateId)
+        public static string Insert(Lod newEntry, bool generateId)
         {
-            bool ok = false;
+            string error = "";
             Lod last = null;
             short newId = 0;
             if (generateId)
@@ -224,7 +223,9 @@ namespace MapDicer.Models
                                     orderby entry.LodId descending // the Last method depends on ascending.
                                     select entry).FirstOrDefault();
                     if (existing != null)
-                        newId = existing.LodId; // last = existing;
+                    {
+                        newId = (short)(existing.LodId + 1); // last = existing;
+                    }
                     // else assume no entries (leave new entry at 0 if generateId)
                 }
             }
@@ -245,9 +246,32 @@ namespace MapDicer.Models
                 }
 
                 context.Lods.Add(newEntry);
-                ok = context.SaveChanges() > 0;
+                try
+                {
+                    int count = context.SaveChanges();
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException ex)
+                {
+                    // There may be two inner exceptions such as
+                    // 1:
+                    // UpdateException: An error occurred while updating the entries. See the inner exception for details.
+                    // 2:
+                    // SQLiteException: constraint failed
+                    // UNIQUE constraint failed: Lod.LodId
+                    error = ex.Message;
+                    Exception ex1 = ex.InnerException;
+                    if (ex1 != null)
+                    {
+                        error += "\n" + ex1.Message;
+                        Exception ex2 = ex1.InnerException;
+                        if (ex2 != null)
+                        {
+                            error += "\n" + ex2.Message;
+                        }
+                    }
+                }
             }
-            return ok;
+            return error;
         }// (*Linq to db*, 2020)
 
         /// <summary>

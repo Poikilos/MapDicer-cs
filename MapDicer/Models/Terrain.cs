@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Data.Entity.Core.Mapping;
+// using System.Data.Entity.ModelConfiguration.Conventions;
+// using System.Data.Entity.Core.Mapping;
+// using System.Data.Linq.Mapping;
 using System.Data.SQLite;
-using System.Data.SQLite.EF6;
+// using System.Data.SQLite.EF6;
 // using System.Data.SQLite.Linq;
+// using System.Data.Linq;
+using System.Linq; // orderby etc
+
 using System.Windows.Media;
 
 namespace MapDicer.Models
@@ -68,6 +73,55 @@ namespace MapDicer.Models
         /// </summary>
         [Column("PixPerSample")]
         public int PixPerSample { get; set; }
+
+        public static Queue<string> errors = new Queue<string>();
+        public static List<Terrain> All()
+        {
+            try
+            {
+                using (var context = new MapDicerContext())
+                {
+                    context.Database.CreateIfNotExists();
+                    if (!context.Database.Exists())
+                    {
+                        return null;
+                    }
+                    var query = from entry in context.Terrains
+                                    // where entry.Id < 25
+                                orderby entry.TerrainId ascending
+                                select entry;
+                    return query.ToList();
+                }
+            }
+            catch (System.ArgumentException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            return null;
+        } // (*Linq to db*, 2020)
+
+        public static bool Insert(Terrain newEntry)
+        {
+            bool ok = false;
+            using (var context = new MapDicerContext())
+            {
+                context.Database.CreateIfNotExists();
+                context.Terrains.Add(newEntry);
+                ok = context.SaveChanges() > 0;
+            }
+            return ok;
+        }// (*Linq to db*, 2020)
+
+        public Color GetColor()
+        {
+            return Terrain.ColorFromId(TerrainId);
+        }
+
 
         public static int IntFromHexPair(string hexPairStr)
         {
@@ -149,5 +203,6 @@ namespace MapDicer.Models
             // A byte overflow will occur on blue if the id is out of range.
             return Color.FromArgb(255, (byte)(id & 0xFF), (byte)((id >> 8) & 0xFF), (byte)(id >> 16));
         }
+
     }
 }
