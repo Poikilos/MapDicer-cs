@@ -365,9 +365,9 @@ namespace MapDicer
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate {
                 // skeletonImage.Visibility = enable ? Visibility.Hidden : Visibility.Visible; // hide skeleton when enabled
                 this.menuGrid.Visibility = enable ? Visibility.Visible : Visibility.Hidden;
-                this.detailCBx.IsEnabled = enable;
+                this.lodCBx.IsEnabled = enable;
                 this.regionCBx.IsEnabled = enable;
-                this.blockCBx.IsEnabled = enable;
+                this.mapblockCBx.IsEnabled = enable;
                 this.terrainCBx.IsEnabled = enable;
 
                 this.detailBtn.IsEnabled = enable;
@@ -470,7 +470,7 @@ namespace MapDicer
 
             if (this.viewModel.Lods.Count > 0)
             {
-                this.detailCBx.SelectedIndex = this.viewModel.Lods.Count - 1;
+                this.lodCBx.SelectedIndex = this.viewModel.Lods.Count - 1;
             }
             else
                 msg += "There are no Levels of Detail yet. ";
@@ -481,7 +481,7 @@ namespace MapDicer
                 msg += "There are no Regions in this level of detail yet. ";
 
             if (this.viewModel.Mapblocks.Count > 0)
-                this.blockCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
+                this.mapblockCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
             else
                 msg += "There are no Mapblocks in this level of detail yet. "; // region doesn't matter
             */
@@ -556,53 +556,11 @@ namespace MapDicer
         {
             // TODO: finish this
         }
-        
-        private void ReloadMapblocks()
-        {
-            /*
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            {
-                // Draw a triangle:
-                Pen drawingPen = new Pen(Brushes.Wheat, 2);
-                drawingContext.DrawLine(drawingPen, new Point(100, 50), new Point(150, 150));
-                drawingContext.DrawLine(drawingPen, new Point(150, 150), new Point(50, 150));
-                drawingContext.DrawLine(drawingPen, new Point(50, 150), new Point(100, 50));
-            }
 
-            mapViewer.AddVisual(drawingVisual);
-            */
-        }
-
-        private void ShowMapblock()
-        {
-            // TODO: eliminate this
-            /*
-            if (viewModel.SelectedMapblock != null)
-            {
-                try
-                {
-                    this.image.Source = new BitmapImage(
-                        new Uri(System.IO.Path.Combine(SettingController.DataPath, viewModel.SelectedMapblock.Path))
-                    );
-                }
-                catch (System.IO.FileNotFoundException ex)
-                {
-                    Console.Error.WriteLine(ex.ToString());
-                }
-            }
-            */
-        }
-
-        private void blockCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ShowMapblock();
-        }
-
-        private void detailCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ClearLodDependents()
         {
             this.viewModel.Regions.Clear();
-            this.viewModel.Mapblocks.Clear(); 
+            this.viewModel.Mapblocks.Clear();
 
             this.viewModel.SelectedRegion = null;
 
@@ -612,7 +570,9 @@ namespace MapDicer
             }
             mbVisuals.Clear();
             mbWBs.Clear();
-
+        }
+        private void LoadLodDependents()
+        {
             if (this.viewModel.SelectedLod != null)
             {
                 foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.LodId))
@@ -650,7 +610,7 @@ namespace MapDicer
                     srcRect.Width = 1;
                     srcRect.Height = 1;
                     Lod childLod = Lod.GetChild(entry.LodId);
-                    Lod parentLod =  Lod.GetById(entry.LodId).Parent;
+                    Lod parentLod = Lod.GetById(entry.LodId).Parent;
                     int childSamplesPerMapblock = 1;
                     if (childLod != null)
                     {
@@ -728,16 +688,20 @@ namespace MapDicer
                     }
                     this.viewModel.Mapblocks.Add(entry);
                     LoadMapBlock(entry);
-                   
                 }
-                // TODO: remove each mapblock in badMBs
+                // TODO: remove each mapblock in badMBs (may not be necessary since image gets generated if missing)
                 if (this.viewModel.Mapblocks.Count > 0)
                 {
                     this.regionCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
                 }
-                ReloadMapblocks();
             }
+        }
 
+        private void lodCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            ClearLodDependents();
+            LoadLodDependents();
         }
 
         private void terrainCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -779,7 +743,8 @@ namespace MapDicer
         }
 
         /// <summary>
-        /// Handle touch or click on the mapViewer.
+        /// Handle touch or click on the mapViewer. Add new ids to the mapblock image. Create a new mapblock
+        /// if one doesn't exist at the clicked location.
         /// </summary>
         /// <param name="point">The point must be relative to mapViewer.</param>
         private void mapViewer_Interaction(Point relativeMVPoint)
@@ -792,7 +757,10 @@ namespace MapDicer
             }
             if (this.viewModel.SelectedRegion == null)
             {
-                MessageBox.Show(String.Format("You must select a region (a {0}) to expand it through drawing.", this.viewModel.SelectedLod.Name));
+                MessageBox.Show(String.Format(
+                    "You must select a region (a {0}) to expand it through drawing.",
+                    this.viewModel.SelectedLod.Name
+                ));
                 return;
             }
             if (this.viewModel.SelectedTerrain == null)
@@ -815,7 +783,7 @@ namespace MapDicer
             // If we are in a region such as a province,
             // we draw province pixels (each pixel is displayed as a map tile).
             // If the current lod doesn't have an image here, create one.
-            // Currently, microPos is the child location (image pixel coordinates for saving).
+            // At this point in the code, microPos is the child location (image pixel coordinates for saving).
             // We need the number of the mapblock within the lod.
             MapDicerPos macroPos = new MapDicerPos
             {

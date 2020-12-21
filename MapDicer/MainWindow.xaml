@@ -26,18 +26,18 @@
                 <ColumnDefinition Width=".04*"/>
                 <ColumnDefinition Width=".04*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="detailBtn" Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="detailBtn_Click">
+            <Button x:Name="detailBtn" Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"  Width="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Height="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Click="detailBtn_Click">
                 <Image Source="{svgc:SvgImage Assets/detail.svg}" Width="{Binding Path=ActualHeight, ElementName=detailBtn}" Height="{Binding Path=ActualHeight, ElementName=detailBtn}"/>
             </Button>
             <!--<ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>-->
-            <ComboBox x:Name="detailCBx" Grid.Row="0" Grid.Column="1"
+            <ComboBox x:Name="lodCBx" Grid.Row="0" Grid.Column="1"
                 ItemsSource="{Binding Lods}" DisplayMemberPath="Name"
                 SelectedValuePath="LodId" SelectedValue="{Binding SelectedLodId}"                 
                 SelectedItem="{Binding SelectedLod}"
                 IsSynchronizedWithCurrentItem="True"
-                SelectionChanged="detailCBx_SelectionChanged"
+                SelectionChanged="lodCBx_SelectionChanged"
             />
-            <Button x:Name="regionBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="regionBtn_Click">
+            <Button x:Name="regionBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"  Width="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Height="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Click="regionBtn_Click">
                 <Image Source="{svgc:SvgImage Assets/region.svg}"  Width="{Binding Path=ActualHeight, ElementName=regionBtn}" Height="{Binding Path=ActualHeight, ElementName=regionBtn}"/>
             </Button>
             <!--
@@ -50,21 +50,20 @@
                 IsSynchronizedWithCurrentItem="True"
             />
 
-            <Button x:Name="mapblockBtn" Grid.Row="1" Grid.Column="4" Visibility="Hidden" Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="mapblockBtn_Click">
+            <Button x:Name="mapblockBtn" Grid.Row="1" Grid.Column="4" Visibility="Hidden" Padding="0" BorderThickness="0" Margin="0" Background="Transparent" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Height="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Click="mapblockBtn_Click">
                 <Image Source="{svgc:SvgImage Assets/mapblock.svg}" Width="{Binding Path=ActualHeight, ElementName=mapblockBtn}" Height="{Binding Path=ActualHeight, ElementName=mapblockBtn}"/>
             </Button>
             <!--
-            <ComboBox x:Name="blockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
+            <ComboBox x:Name="mapblockCBx" Grid.Row="0" Grid.Column="5" HorizontalAlignment="Stretch"/>
             -->
-            <ComboBox x:Name="blockCBx" Grid.Row="1" Grid.Column="5"
+            <ComboBox x:Name="mapblockCBx" Grid.Row="1" Grid.Column="5"
                 ItemsSource="{Binding Mapblocks}" DisplayMemberPath="Path"
                 SelectedValuePath="MapblockId" SelectedValue="{Binding SelectedMapblockId}"                 
                 SelectedItem="{Binding SelectedMapblock}"
                 IsSynchronizedWithCurrentItem="True"
-                SelectionChanged="blockCBx_SelectionChanged"
                 Visibility="Hidden"
             />
-            <Button Background="Transparent" Margin="0" Padding="0" x:Name="settingsButton" Grid.Row="0" Grid.Column="7" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=blockCBx}" Height="{Binding Path=ActualHeight, ElementName=blockCBx}" Click="settingsButton_Click">
+            <Button Background="Transparent" Margin="0" Padding="0" x:Name="settingsButton" Grid.Row="0" Grid.Column="7" BorderThickness="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Height="{Binding Path=ActualHeight, ElementName=mapblockCBx}" Click="settingsButton_Click">
                 <Button.Template>
                     <ControlTemplate>
                         <Image x:Name="settingsImage" Source="{svgc:SvgImage Assets/gear-simple.svg}" Width="{Binding Path=ActualHeight, ElementName=settingsButton}" Height="{Binding Path=ActualHeight, ElementName=settingsButton}"/>
