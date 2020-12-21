@@ -11,7 +11,7 @@ using System.Data.SQLite;
 // using System.Data.SQLite.Linq;
 // using System.Data.Linq;
 using System.Linq; // orderby etc
-
+using System.Windows;
 using System.Windows.Media;
 
 namespace MapDicer.Models
@@ -88,7 +88,7 @@ namespace MapDicer.Models
                     }
                     var query = from entry in context.Terrains
                                     // where entry.Id < 25
-                                orderby entry.TerrainId ascending
+                                orderby entry.Name ascending
                                 select entry;
                     return query.ToList();
                 }
@@ -105,16 +105,39 @@ namespace MapDicer.Models
             return null;
         } // (*Linq to db*, 2020)
 
-        public static bool Insert(Terrain newEntry)
+        public static string Insert(Terrain newEntry)
         {
-            bool ok = false;
+            string error = "";
             using (var context = new MapDicerContext())
             {
                 context.Database.CreateIfNotExists();
                 context.Terrains.Add(newEntry);
-                ok = context.SaveChanges() > 0;
+                try
+                {
+                    int count = context.SaveChanges();
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException ex)
+                {
+                    // There may be two inner exceptions such as
+                    // 1:
+                    // UpdateException: An error occurred while updating the entries. See the inner exception for details.
+                    // 2:
+                    // SQLiteException: constraint failed
+                    // UNIQUE constraint failed: Mapblock.MapblockId
+                    error = ex.Message;
+                    Exception ex1 = ex.InnerException;
+                    if (ex1 != null)
+                    {
+                        error += "\n" + ex1.Message;
+                        Exception ex2 = ex1.InnerException;
+                        if (ex2 != null)
+                        {
+                            error += "\n" + ex2.Message;
+                        }
+                    }
+                }
             }
-            return ok;
+            return error;
         }// (*Linq to db*, 2020)
 
         public Color GetColor()
@@ -127,14 +150,45 @@ namespace MapDicer.Models
         {
             return Convert.ToInt32(hexPairStr, 16);
         }
+
         public static byte ByteFromHexPair(string hexPairStr)
         {
             return (byte)IntFromHexPair(hexPairStr);
         }
         public static string HexPair(byte v)
         {
-            return Convert.ToString(v, 16);
+            string hStr = Convert.ToString(v, 16);
+            if (hStr.Length < 2)
+            {
+                hStr = "0" + hStr;
+            }
+            return hStr;
         }
+
+        public static bool Test()
+        {
+            bool ok = true;
+            string hexPairStr = "10";
+
+            int value = IntFromHexPair(hexPairStr);
+            string testStr = HexPair((byte)value);
+            if (testStr != hexPairStr)
+            {
+                ok = false;
+                MessageBox.Show(String.Format("Error: {0} made {1} which is really {2}", hexPairStr, value, testStr));
+            }
+
+            byte v = 128;
+            string hStr = HexPair(v);
+            byte testByte = ByteFromHexPair(hStr);
+            if (testByte != v)
+            {
+                ok = false;
+                MessageBox.Show(String.Format("Error: {0} made {1} which is really {2}", v, hStr, testByte));
+            }
+            return ok;
+        }
+
         /// <summary>
         /// Convert the string such that blue FIRST (in BBRRGG) is the MOST significant byte.
         /// Get the color as a Terrain primary key integer. The order is BGR so blue is most significant

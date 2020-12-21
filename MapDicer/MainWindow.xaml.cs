@@ -123,17 +123,11 @@ namespace MapDicer
             MainWindow.brushColorShape.Width = this.terrainBrushSizeSlider.Value;
             this.afterSize(false);
         }
-
+        /*
         private void AddTerrain(Terrain terrain, double r, double g, double b)
         {
-            if (!Terrain.Insert(terrain))
-            {
-                MessageBox.Show("The database did not accept the data. Ensure that the color is not already used.");
-                return;
-            }
-            this.viewModel.Terrains.Add(terrain);
-            this.terrainCBx.SelectedIndex = this.viewModel.Terrains.Count - 1;
         }
+        */
         /*
         private void AddTerrain(string name, double r, double g, double b)
         {
@@ -231,10 +225,13 @@ namespace MapDicer
 
                 // string textTrim = contentDialog.Terrain.Name;
                 // if (textTrim.Length > 0)
-                if (dlg.Terrain != null)
+                if (dlg.NewEntry != null)
                 {
-                    AddTerrain(dlg.Terrain, dlg.Red, dlg.Green, dlg.Blue);
-                    dlg.Terrain = null;
+                    this.viewModel.Terrains.Add(dlg.NewEntry);
+                    this.terrainCBx.SelectedIndex = this.viewModel.Terrains.Count - 1;
+
+                    // AddTerrain(dlg.Terrain, dlg.Red, dlg.Green, dlg.Blue);
+                    dlg.NewEntry = null;
                 }
                 else
                 {
@@ -392,6 +389,15 @@ namespace MapDicer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            bool ok = true;
+            if (!Terrain.Test())
+            {
+                ok = false;
+            }
+            if (!ok)
+            {
+                System.Windows.Application.Current.Shutdown();
+            }
             Thread th = new Thread(LoadState);
             th.Start(true);
         }
@@ -485,6 +491,13 @@ namespace MapDicer
             }
         }
 
+        // private Dictionary<long, BitmapImage> bitmapCache = new Dictionary<long, BitmapImage>();
+
+        private void ShowMapblock(Mapblock mapblock)
+        {
+            // TODO: finish this
+        }
+
         private void ShowMapblock()
         {
             /*
@@ -512,18 +525,60 @@ namespace MapDicer
         private void detailCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.viewModel.Regions.Clear();
-            this.viewModel.Mapblocks.Clear(); // regionCBx_SelectionChanged will add the mapblocks.
+            this.viewModel.Mapblocks.Clear(); 
 
             this.viewModel.SelectedRegion = null;
 
             if (this.viewModel.SelectedLod != null)
             {
-                // TODO: finish this
-                /*
-                foreach (Region entry in Region.WhereLodEquals(this.viewModel.SelectedLod.Id))
+                foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.Id))
                 {
-                    this.viewModel.Terrains.Add(entry);
+                    this.viewModel.Regions.Add(entry);
                 }
+                if (this.viewModel.Regions.Count > 0)
+                {
+                    this.regionCBx.SelectedIndex = this.viewModel.Regions.Count - 1;
+                }
+
+                foreach (Mapblock entry in Mapblock.WhereLodIdEquals(this.viewModel.SelectedLod.Id))
+                {
+                    this.viewModel.Mapblocks.Add(entry);
+                    ShowMapblock(entry);
+                }
+                if (this.viewModel.Mapblocks.Count > 0)
+                {
+                    this.regionCBx.SelectedIndex = this.viewModel.Mapblocks.Count - 1;
+                }
+
+            }
+
+        }
+
+        private void terrainCBx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (viewModel.SelectedTerrain != null)
+            {
+                ShowTerrain(viewModel.SelectedTerrain);
+                Color color = Terrain.ColorFromId(viewModel.SelectedTerrain.TerrainId);
+                prefillTerrainRed = color.R;
+                prefillTerrainGreen = color.G;
+                prefillTerrainBlue = color.B;
+
+                // TODO: (optional) Change the prefill values for new colors to avoid primary key
+                // constraint violations in case the user doesn't change the color:
+                /*
+                if (prefillTerrainRed < 255)
+                    prefillTerrainRed += 1;
+                else
+                    prefillTerrainRed -= 1;
+                if (prefillTerrainGreen < 255)
+                    prefillTerrainGreen += 1;
+                else
+                    prefillTerrainGreen -= 1;
+                if (prefillTerrainBlue < 255)
+                    prefillTerrainBlue += 1;
+                else
+                    prefillTerrainBlue -= 1;
                 */
             }
 
@@ -617,7 +672,7 @@ namespace MapDicer
             set
             {
                 selectedTerrain = value;
-                Parent.ShowTerrain(selectedTerrain);
+                
             }
         }
     }

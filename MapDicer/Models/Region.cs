@@ -39,6 +39,8 @@ namespace MapDicer.Models
         [Association("region_lodid_fk", "LodId", "Lod.LodId", IsForeignKey = true)]
         public virtual Lod Lod { get; set; }
 
+        public static Queue<string> errors = new Queue<string>();
+
         public static string Insert(Region newEntry, bool generateId)
         {
             string error = "";
@@ -104,5 +106,69 @@ namespace MapDicer.Models
             }
             return error;
         }// (*Linq to db*, 2020)
+
+        public static List<Region> WhereLodIdEquals(short matchLodId)
+        {
+            try
+            {
+                using (var context = new MapDicerContext())
+                {
+                    context.Database.CreateIfNotExists();
+                    if (!context.Database.Exists())
+                    {
+                        /*
+                        string msg = String.Format("The database is missing {0}", context.Database.Log);
+                        if (!errors.Contains(msg))
+                        {
+                            errors.Enqueue(msg);
+                        }
+                        */
+                        return null;
+                    }
+                    // MessageBox.Show(String.Format("context: {0}", context.Database.Exists()));
+                    var query = from entry in context.Regions
+                                where entry.LodId == matchLodId
+                                orderby entry.LodId ascending // the Last method depends on ascending.
+                                select entry;
+                    return query.ToList();
+                }
+            }
+            catch (System.ArgumentException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            /*
+            catch (System.Data.SQLite.SQLiteException ex)
+            {
+                
+                // SQLiteException: SQL logic error
+                // no such table: Lod
+                // ^ but that's just the inner exception. See below.
+                
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            catch (System.Data.Entity.Core.EntityCommandExecutionException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            */
+            return null;
+        } // (*Linq to db*, 2020)
+
     }
 }

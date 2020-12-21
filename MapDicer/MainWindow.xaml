@@ -11,7 +11,7 @@
         Loaded="Window_Loaded"
         >
     <StackPanel x:Name="mainSP" Orientation="Vertical">
-        <Grid x:Name="menuGrid" Width="Auto" Height="Auto" Background="LightSlateGray">
+        <Grid x:Name="menuGrid" Visibility="Hidden" Width="Auto" Height="Auto" Background="LightSlateGray">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -84,14 +84,14 @@
                 </Button.ContextMenu>
             </Button>
             <!--<Image Source="{svgc:SvgImage Source=/Images/Save.svg, AppName=WpfTestSvgSample}" Height="24" Width="24"/> -->
-            <Button Background="Transparent" Padding="0" x:Name="terrainBrushSizeButton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" >
+            <Button Visibility="Hidden" Background="Transparent" Padding="0" x:Name="terrainBrushSizeButton" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" >
                 <Image x:Name="terrainBrushSizeImage" Source="{svgc:SvgImage Assets/size.svg}"  />
             </Button>
-            <Slider x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="terrainBrushSizeSlider_ValueChanged" />
-            <Button x:Name="elevationBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}">
+            <Slider Visibility="Hidden" x:Name="terrainBrushSizeSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" ValueChanged="terrainBrushSizeSlider_ValueChanged" />
+            <Button Visibility="Hidden" x:Name="elevationBtn"  Padding="0" BorderThickness="0" Margin="0" Background="Transparent" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}">
                 <Image x:Name="terrainParamImage" Source="{svgc:SvgImage Assets/elevation.svg}"  />
             </Button>
-            <Slider x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <Slider Visibility="Hidden" x:Name="terrainParamSlider" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch"/>
             <Button x:Name="terrainBtn"  Padding="0" BorderThickness="0" Margin="0" Grid.Row="1" Background="Transparent" Grid.Column="4" HorizontalAlignment="Right" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainBtn_Click">
                 <Image x:Name="terrainImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </Button>
@@ -103,6 +103,7 @@
                 SelectedValuePath="TerrainId" SelectedValue="{Binding SelectedTerrainId}"                 
                 SelectedItem="{Binding SelectedTerrain}"
                 IsSynchronizedWithCurrentItem="True"
+                SelectionChanged="terrainCBx_SelectionChanged"
                 />
 
             <Button x:Name="terrainColorBtn" Margin="0" Padding="0" BorderThickness="0" Background="Transparent" Grid.Column="6" Grid.Row="1"  HorizontalAlignment="Left" Width="{Binding Path=ActualHeight, ElementName=terrainCBx}" Height="{Binding Path=ActualHeight, ElementName=terrainCBx}" Click="terrainColorBtn_Click">
@@ -112,6 +113,11 @@
 
 
         <Image x:Name="image" Source="Assets/splash.png"/>
+        <local:MapViewer
+              x:Name="MyCanvas"
+              Background="AntiqueWhite"
+             ClipToBounds="True">
+        </local:MapViewer>
 
     </StackPanel>
 </Window>

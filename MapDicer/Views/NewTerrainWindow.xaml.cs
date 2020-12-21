@@ -39,16 +39,16 @@ namespace MapDicer.Views
         private bool suppressToSlider = false; // suppress transfer of text to slider while doing the opposite
 
         public BitmapImage Image = null;
-        private Terrain terrain = null;
-        public Terrain Terrain
+        private Terrain newEntry = null;
+        public Terrain NewEntry
         {
             get
             {
-                return terrain;
+                return newEntry;
             }
             set
             {
-                terrain = value;
+                newEntry = value;
             }
         }
         public int Red
@@ -96,7 +96,7 @@ namespace MapDicer.Views
             colorSliders[0] = this.redSlider;
             colorSliders[1] = this.greenSlider;
             colorSliders[2] = this.blueSlider;
-            this.Terrain = null;
+            this.NewEntry = null;
         }
 
         private void addBtn_Click(object sender, RoutedEventArgs e)
@@ -145,7 +145,7 @@ namespace MapDicer.Views
                 MessageBox.Show("You must choose a supported image format such as jpg or png.");
                 return;
             }
-            this.Terrain = new Terrain
+            this.NewEntry = new Terrain
             {
                 TerrainId = Terrain.IdFromHexColorRgb(this.hexTB.Text),
                 Name = this.nameTB.Text,
@@ -153,6 +153,13 @@ namespace MapDicer.Views
                 SourceId = sourceId,
                 PixPerSample = pps,
             };
+            string error = Terrain.Insert(this.newEntry);
+            if (error.Length > 0)
+            {
+                this.newEntry = null;
+                MessageBox.Show(String.Format("The name and color must be unique.\n ", error));
+                return;
+            }
             this.DialogResult = true;
         }
 

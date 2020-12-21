@@ -102,6 +102,8 @@ namespace MapDicer.Models
         public byte[] Data { get; set; }
         */
 
+        public static Queue<string> errors = new Queue<string>();
+
         /// <summary>
         /// Insert at the location where x-z is the ground plane as per OpenGL.
         /// </summary>
@@ -191,5 +193,68 @@ namespace MapDicer.Models
             }
             return error;
         }// (*Linq to db*, 2020)
+
+        public static List<Mapblock> WhereLodIdEquals(short matchLodId)
+        {
+            try
+            {
+                using (var context = new MapDicerContext())
+                {
+                    context.Database.CreateIfNotExists();
+                    if (!context.Database.Exists())
+                    {
+                        /*
+                        string msg = String.Format("The database is missing {0}", context.Database.Log);
+                        if (!errors.Contains(msg))
+                        {
+                            errors.Enqueue(msg);
+                        }
+                        */
+                        return null;
+                    }
+                    // MessageBox.Show(String.Format("context: {0}", context.Database.Exists()));
+                    var query = from entry in context.Mapblocks
+                                where entry.LodId == matchLodId
+                                orderby entry.LodId ascending // the Last method depends on ascending.
+                                select entry;
+                    return query.ToList();
+                }
+            }
+            catch (System.ArgumentException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            /*
+            catch (System.Data.SQLite.SQLiteException ex)
+            {
+                
+                // SQLiteException: SQL logic error
+                // no such table: Lod
+                // ^ but that's just the inner exception. See below.
+                
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            catch (System.Data.Entity.Core.EntityCommandExecutionException ex)
+            {
+                string msg = ex.Message;
+                if (!errors.Contains(msg))
+                {
+                    errors.Enqueue(msg);
+                }
+                return null;
+            }
+            */
+            return null;
+        } // (*Linq to db*, 2020)
     }
 }

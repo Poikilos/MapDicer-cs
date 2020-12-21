@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Terrain"
         Width="325.134"
-        Height="368.668"
+        Height="421.668"
         SizeToContent="Height"
         Loaded="Window_Loaded"
         >
