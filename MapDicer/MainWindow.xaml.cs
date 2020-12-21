@@ -334,7 +334,7 @@ namespace MapDicer
                     // foreach (Lod lod in this.viewModel.Lods)
                     for (int i = 0; i < this.viewModel.Lods.Count; i++)
                     {
-                        if (this.viewModel.Lods[i].Primary == dlg.ChangedEntry.Primary)
+                        if (this.viewModel.Lods[i].LodId == dlg.ChangedEntry.LodId)
                         {
                             // this.viewModel.Lods.Add(dlg.ChangedEntry);
                             // lod.Name = dlg.ChangedEntry.Name;
@@ -608,7 +608,7 @@ namespace MapDicer
 
             if (this.viewModel.SelectedLod != null)
             {
-                foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.Primary))
+                foreach (Region entry in Region.WhereLodIdEquals(this.viewModel.SelectedLod.LodId))
                 {
                     this.viewModel.Regions.Add(entry);
                 }
@@ -619,7 +619,7 @@ namespace MapDicer
                 List<Mapblock> badMBs = new List<Mapblock>();
                 string msg;
                 Lod lod = this.viewModel.SelectedLod;
-                foreach (Mapblock entry in Mapblock.WhereLodIdEquals(this.viewModel.SelectedLod.Primary))
+                foreach (Mapblock entry in Mapblock.WhereLodIdEquals(this.viewModel.SelectedLod.LodId))
                 {
                     MapDicerPos macroPos = new MapDicerPos(entry.MapblockId);
                     msg = String.Format("~ Trying +mapblock:{0},{1}",

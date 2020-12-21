@@ -62,7 +62,7 @@ namespace MapDicer.Views
                 if (items != null)
                 {
                     foreach (var item in items)
-                        this.IdCbx.Items.Add(item.Primary);
+                        this.IdCbx.Items.Add(item.LodId);
                     Enable(true); // enable drop-down if disabled by having 0
                 }
             }
@@ -334,12 +334,12 @@ namespace MapDicer.Views
                 if (isNew)
                 {
                     // ^ ok since LastId is -1 if there are none, so new one will be 0.
-                    short tmpId = entry.Primary;
+                    short tmpId = entry.LodId;
                     string error = Lod.Insert(entry, true);
                     // MessageBox.Show(String.Format("Added Lod (SamplesPerMapblock={0})", entry.SamplesPerMapblock));
                     if ((error != null) && (error.Length > 0))
                     {
-                        MessageBox.Show(String.Format(error + " (tmp id: {0}; generated id: {1})", tmpId, entry.Primary));
+                        MessageBox.Show(String.Format(error + " (tmp id: {0}; generated id: {1})", tmpId, entry.LodId));
                         return;
                     }
                     else

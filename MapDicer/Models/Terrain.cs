@@ -26,13 +26,6 @@ namespace MapDicer.Models
         /// </summary>
         [Key, Column("TerrainId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int TerrainId { get; set; }
-        public int Primary
-        {
-            get
-            {
-                return TerrainId;
-            }
-        }
 
         [Required, Column("Name"), Index(IsUnique = true)]
         public string Name { get; set; }
@@ -197,8 +190,8 @@ namespace MapDicer.Models
             {
                 context.Database.CreateIfNotExists();
                 var existing = (from entry in context.Terrains
-                                where entry.Primary == id
-                                orderby entry.Primary ascending
+                                where entry.TerrainId == id
+                                // orderby entry.TerrainId ascending
                                 select entry).FirstOrDefault();
                 return existing;
             }

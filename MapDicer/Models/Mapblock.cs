@@ -324,7 +324,7 @@ namespace MapDicer.Models
             */
             return null;
         }
-        public static Mapblock GetById(long matchId)
+        public static Mapblock GetById(long id)
         {
             try
             {
@@ -337,7 +337,7 @@ namespace MapDicer.Models
                     // https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/sql/linq/insert-update-and-delete-operations
                     var existing =
                         (from v in context.Mapblocks
-                         where v.MapblockId == matchId
+                         where v.MapblockId == id
                          select v).FirstOrDefault();
                     // FirstOrDefault can handle null without throwing an exception.
                     // Only use it when you do not need a record.

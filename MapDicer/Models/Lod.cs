@@ -33,13 +33,7 @@ namespace MapDicer.Models
 
         [Key, Column("LodId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LodId { get; set; }
-        public short Primary
-        {
-            get
-            {
-                return LodId;
-            }
-        }
+
         /// <summary>
         /// The name of this level of detail, such as World or Continent
         /// </summary>
@@ -203,8 +197,8 @@ namespace MapDicer.Models
             {
                 context.Database.CreateIfNotExists();
                 var existing = (from entry in context.Lods
-                                where entry.Primary == id
-                                orderby entry.Primary ascending
+                                where entry.LodId == id
+                                orderby entry.LodId ascending
                                 select entry).FirstOrDefault();
                 return existing;
             }

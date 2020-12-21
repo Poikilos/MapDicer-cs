@@ -19,13 +19,6 @@ namespace MapDicer.Models
     {
         [Key, Column("LayerId"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public short LayerId { get; set; }
-        public short Primary
-        {
-            get
-            {
-                return LayerId;
-            }
-        }
 
         [Required, Column("Num"), Index(IsUnique = true)]
         public short Num { get; set; }
