@@ -102,6 +102,7 @@ namespace MapDicer
         }
         /// <summary>
         /// Save the bitmapsource as a png file.
+        /// Use SaveWriteableBitmap instead of sending a WriteableBitmap directly.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="source">Any bitmap source such as from a WriteableBitmap's overloaded Clone method.</param>
@@ -128,6 +129,11 @@ namespace MapDicer
                 catch (System.IO.DirectoryNotFoundException ex)
                 {
                     error = String.Format("The directory was not ensured to exist: {0}", path);
+                }
+                catch (System.IO.IOException ex)
+                {
+                    // File is in use
+                    error = String.Format("{0}", ex.Message);
                 }
             }
             return error;

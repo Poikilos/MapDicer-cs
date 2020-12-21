@@ -58,7 +58,12 @@ namespace MapDicer
             }
             return (long)((ulong)Z * 0x1000000 +
                 (ulong)Y * 0x1000 +
-                (ulong)Z);
+                (ulong)X);
+        }
+
+        internal object Dump()
+        {
+            return String.Format("LodId={0,2},LayerId={1,2},X={2,2},Z={3,2}", LodId, LayerId, X, Z);
         }
     }
 }

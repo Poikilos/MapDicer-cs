@@ -642,8 +642,8 @@ namespace MapDicer
                     Int32Rect srcRect = new Int32Rect();
                     srcRect.Width = 1;
                     srcRect.Height = 1;
-                    Lod childLod = entry.Lod.Child;
-                    Lod parentLod = entry.Lod.Parent;
+                    Lod childLod = Lod.GetChild(entry.LodId);
+                    Lod parentLod =  Lod.GetById(entry.LodId).Parent;
                     int childSamplesPerMapblock = 1;
                     if (childLod != null)
                     {
@@ -654,21 +654,8 @@ namespace MapDicer
                     {
                         parentSamplesPerMapblock = parentLod.SamplesPerMapblock;
                     }
-                    MapDicerPos microPos = new MapDicerPos
-                    {
-                        LodId = (short)(macroPos.LodId - 1), // TODO: Improve this--this is usually correct though.
-                        LayerId = macroPos.LayerId,
-                        X = (short)(macroPos.X * lod.SamplesPerMapblock),
-                        Z = (short)(macroPos.Z * lod.SamplesPerMapblock),
-                    };
-                    // ^ The microPos must become a bigger number since it is in the on-screen tile size.
-                    int offsetX = macroPos.X * lod.SamplesPerMapblock;
-                    int offsetY = macroPos.Z * lod.SamplesPerMapblock;
-                    int imageX = microPos.X - offsetX;
-                    int imageY = microPos.Z - offsetY;
-
-                    msg = String.Format("  + mapblock:{0},{1} global:{2},{3} offset:{4},{5} relative:{6},{7}",
-                                        macroPos.X, macroPos.Y, microPos.X, microPos.Y, offsetX, offsetY, imageX, imageY);
+                    msg = String.Format("  > mapblock:{0},{1}",
+                                        macroPos.X, macroPos.Y);
                     Console.Error.WriteLine(msg);
                     byte[] pixel = new byte[4];
                     int width = (int)wb.Width;
@@ -678,7 +665,24 @@ namespace MapDicer
                         srcRect.X = 0;
                         for (int x = 0; x < height; x++)
                         {
+                            MapDicerPos microPos = new MapDicerPos
+                            {
+                                LodId = (short)(macroPos.LodId - 1), // TODO: Improve this--this is usually correct though.
+                                LayerId = macroPos.LayerId,
+                                X = (short)(macroPos.X * lod.SamplesPerMapblock + x),
+                                Z = (short)(macroPos.Z * lod.SamplesPerMapblock + y),
+                            };
+                            // ^ The microPos must become a bigger number since it is in the on-screen tile size.
+                            int offsetX = macroPos.X * lod.SamplesPerMapblock;
+                            int offsetY = macroPos.Z * lod.SamplesPerMapblock;
+                            int imageX = microPos.X - offsetX;
+                            int imageY = microPos.Z - offsetY;
 
+                            /*
+                            msg = String.Format("  + mapblock:{0},{1} global:{2},{3} offset:{4},{5} relative:{6},{7}",
+                                                macroPos.X, macroPos.Y, microPos.X, microPos.Y, offsetX, offsetY, imageX, imageY);
+                            Console.Error.WriteLine(msg);
+                            */
                             try
                             {
                                 wb.CopyPixels(srcRect, pixel, 4, 0);
@@ -697,6 +701,14 @@ namespace MapDicer
                                 if (mbVisuals.TryGetValue(microPos.getSliceAsInteger(), out visual))
                                 {
                                     mapViewer.RemoveVisual(visual);
+                                    mbVisuals.Remove(microPos.getSliceAsInteger());
+                                    Console.Error.WriteLine(String.Format(
+                                        "ERROR: Duplicate sub-id (micro-scale MapblockId) {0} for {1} in Mapblock {2} with {3} samples per mapblock",
+                                        microPos.getSliceAsInteger(),
+                                        microPos.Dump(),
+                                        macroPos.Dump(),
+                                        lod.SamplesPerMapblock
+                                    ));
                                 }
 
                                 Point relativeMVPoint = mapViewer.GetPxPos(microPos);
