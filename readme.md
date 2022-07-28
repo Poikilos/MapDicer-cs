@@ -154,8 +154,6 @@ There is a separate (WIP) SharpDevelop branch, created primarily for the code co
   - System.Data.SQLite.EF6.1.0.113
   - System.Data.SQLite.1.0.113.6
 
-
-
 ### UWP branch (deprecated) Dependencies (NuGet)
 - Uno.SQLitePCLRaw.wasm for cross-platform SQLite support.
   - SQLitePCLRaw.core.2.0.3
@@ -166,7 +164,6 @@ There is a separate (WIP) SharpDevelop branch, created primarily for the code co
   - Uno.SQLitePCLRaw.provider.wasm.3.0.14
 - Microsoft.EntityFrameworkCore.5.0.1
   - Apache 2.0 license, by Microsoft
-
 
 ### SharpVectors Notes (WPF only)
 #### Building Samples
