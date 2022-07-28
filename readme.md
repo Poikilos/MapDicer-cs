@@ -114,6 +114,16 @@ Windows Registry Editor Version 5.00
 
 ## Developer Notes
 
+### SharpDevelop
+There is a separate (WIP) SharpDevelop branch, created primarily for the code conversion (to convert C# to Python for [voxboxor](https://github.com/poikilos/voxboxor) and/or a Python version of MapDicer). The following files were created for that:
+- `MapDicer.SharpDevelop.sln`
+- `MapDicer\MapDicer.SharpDevelop.csproj`
+- `MapDicer\MainForm.cs` and `MapDicer\MainForm.Designer.cs`
+  - equivalent to `MapDicer\MainWindow.xaml.cs`
+- `MapDicer\Program.cs`
+- `MapDicer\Properties\AssemblyInfo.SharpDevelop.cs`
+- `MapDicer\Assets\gear-simple.png`
+
 ### Image Buttons
 - Binding the Width and Height to something will only work if the
   element is declared previously. Therefore, placing it inside of a 

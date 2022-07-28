@@ -6,6 +6,16 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+// ^ WindowsBase.dll adds Int32Rect to System.Windows.Media.Imaging
+
+// Added for SharpDevelop:
+// - [x] WriteableBitmap requires System.Windows.Media.Imaging from PresentationCore.dll
+// (See <https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.imaging.writeablebitmap?view=windowsdesktop-6.0>).
+// - The rest is actually not necessary:
+//   See <https://stackoverflow.com/a/27085332>:
+// using Windows.UI.Xaml.Media;
+// using Windows.UI.Xaml.Media.Imaging;
+// using System.Drawing;  // Color
 
 namespace MapDicer
 {

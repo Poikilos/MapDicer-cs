@@ -241,8 +241,10 @@ namespace MapDicer
                 }
             }
         }
+
         private void brushTerrainCB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // deprecated: See terrainCB instead.
             ShowTerrain((Terrain)this.terrainCBx.SelectedItem);
         }
 
