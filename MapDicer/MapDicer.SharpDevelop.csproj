@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{092144A4-0DF7-43AD-891B-CBA72FE8F8BE}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MapDicer</RootNamespace>
+    <AssemblyName>MapDicer</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>True</Prefer32Bit>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ByteMap.cs" />
+    <Compile Include="IrrCompat\IrrcompatTypes.cs" />
+    <Compile Include="MainForm.cs" />
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapDicerTypes.cs" />
+    <Compile Include="MapViewer.cs" />
+    <Compile Include="Models\Layer.cs" />
+    <Compile Include="Models\Lod.cs" />
+    <Compile Include="Models\Mapblock.cs" />
+    <Compile Include="Models\MapDicerContext.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\SettingModel.cs" />
+    <Compile Include="Models\SQLiteConfiguration.cs" />
+    <Compile Include="Models\Terrain.cs" />
+    <Compile Include="MtCompat\ContentFeatures.cs" />
+    <Compile Include="MtCompat\Database.cs" />
+    <Compile Include="MtCompat\MapNode.cs" />
+    <Compile Include="MtCompat\NodeDef.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.SharpDevelop.cs" />
+    <Compile Include="SettingController.cs" />
+    <Compile Include="TerrainButton.cs" />
+    <Compile Include="ViewsWinForms\EditorSettingsWindow.cs" />
+    <Compile Include="ViewsWinForms\EditorSettingsWindow.Designer.cs">
+      <DependentUpon>EditorSettingsWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewsWinForms\LodWindow.cs" />
+    <Compile Include="ViewsWinForms\LodWindow.Designer.cs">
+      <DependentUpon>LodWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewsWinForms\MapblockWindow.cs" />
+    <Compile Include="ViewsWinForms\MapblockWindow.Designer.cs">
+      <DependentUpon>MapblockWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewsWinForms\NewTerrainWindow.cs" />
+    <Compile Include="ViewsWinForms\NewTerrainWindow.Designer.cs">
+      <DependentUpon>NewTerrainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewsWinForms\RegionWindow.cs" />
+    <Compile Include="ViewsWinForms\RegionWindow.Designer.cs">
+      <DependentUpon>RegionWindow.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.SharpDevelop.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IrrCompat" />
+    <Folder Include="Models" />
+    <Folder Include="MtCompat" />
+    <Folder Include="ViewsWinForms" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
